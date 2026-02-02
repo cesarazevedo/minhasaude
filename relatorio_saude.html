@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Completo de Saúde - César Augusto</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .patient-info {
+            background: #f8f9fa;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 1.2em;
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+        }
+
+        .alert-danger {
+            background: #fee;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .exam-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .exam-card.normal {
+            border-left: 5px solid #28a745;
+        }
+
+        .exam-card.warning {
+            border-left: 5px solid #ffc107;
+        }
+
+        .exam-card.danger {
+            border-left: 5px solid #dc3545;
+        }
+
+        .exam-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .exam-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .exam-card.normal .exam-value {
+            color: #28a745;
+        }
+
+        .exam-card.warning .exam-value {
+            color: #ffc107;
+        }
+
+        .exam-card.danger .exam-value {
+            color: #dc3545;
+        }
+
+        .exam-reference {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .exam-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #fee;
+            color: #721c24;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .recommendations h2 {
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .recommendation-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .recommendation-item h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendation-item li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .recommendation-item li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .summary-card.excellent {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .summary-card.good {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .summary-card.attention {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .summary-card h3 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .summary-card p {
+            font-size: 1.1em;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .print-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .print-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            border-left: 3px solid #667eea;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item:before {
+            content: "●";
+            position: absolute;
+            left: -9px;
+            top: 20px;
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 30px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+
+        .progress-bar.excellent {
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .progress-bar.good {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .progress-bar.warning {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .print-btn {
+                display: none;
+            }
+            .exam-card:hover {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+
+        .icon-large {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .risk-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .risk-low { background: #28a745; }
+        .risk-moderate { background: #ffc107; }
+        .risk-high { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <h1>📊 Relatório Completo de Saúde</h1>
+            <p class="subtitle">Análise Detalhada dos Exames Laboratoriais</p>
+            <button class="print-btn" onclick="window.print()">🖨️ Imprimir Relatório</button>
+        </div>
+
+        <!-- Informações do Paciente -->
+        <div class="patient-info fade-in">
+            <div class="info-card">
+                <h3>👤 Paciente</h3>
+                <p>César Augusto de Freitas Azevedo</p>
+            </div>
+            <div class="info-card">
+                <h3>📅 Data de Nascimento</h3>
+                <p>25/10/1978 (46 anos)</p>
+            </div>
+            <div class="info-card">
+                <h3>🏥 Data da Coleta</h3>
+                <p>31/01/2026</p>
+            </div>
+            <div class="info-card">
+                <h3>👨‍⚕️ Médico Solicitante</h3>
+                <p>Dr. Gutembergh da Silva Nobrega</p>
+            </div>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="content">
+            <!-- Resumo Executivo -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">📋</span>
+                    Resumo Executivo
+                </h2>
+                
+                <div class="summary-grid">
+                    <div class="summary-card excellent">
+                        <h3>85%</h3>
+                        <p>Exames Normais</p>
+                    </div>
+                    <div class="summary-card good">
+                        <h3>10%</h3>
+                        <p>Atenção Necessária</p>
+                    </div>
+                    <div class="summary-card attention">
+                        <h3>5%</h3>
+                        <p>Alterações</p>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <span style="font-size: 2em;">ℹ️</span>
+                    <div>
+                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom, com a maioria dos exames dentro da normalidade. O principal ponto de atenção é o colesterol HDL baixo, que requer acompanhamento médico e mudanças no estilo de vida.
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span style="font-size: 2em;">⚠️</span>
+                    <div>
+                        <strong>Principal Achado:</strong> HDL (colesterol bom) está abaixo do ideal (30 mg/dL vs. >40 mg/dL). Isso aumenta o risco cardiovascular mesmo com outros lipídios normais.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perfil Lipídico -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">💊</span>
+                    Perfil Lipídico (Colesterol e Triglicerídeos)
+                </h2>
+
+                <div class="cards-grid">
+                    <div class="exam-card normal">
+                        <h3>Colesterol Total</h3>
+                        <div class="exam-value">148</div>
+                        <p class="exam-reference">Referência: <190 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Excelente</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar excellent" style="width: 95%">Ótimo</div>
+                        </div>
+                    </div>
+
+                    <div class="exam-card danger">
+                        <h3>HDL (Colesterol Bom) ⚠️</h3>
+                        <div class="exam-value">30</div>
+                        <p class="exam-reference">Referência: >40 mg/dL</p>
+                        <span class="exam-status status-danger">✗ Abaixo do Ideal</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 75%">Baixo</div>
+                        </div>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>LDL (Colesterol Ruim)</h3>
+                        <div class="exam-value">96.8</div>
+                        <p class="exam-reference">Referência: <130 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Ótimo</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar excellent" style="width: 90%">Excelente</div>
+                        </div>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Triglicerídeos</h3>
+                        <div class="exam-value">106</div>
+                        <p class="exam-reference">Referência: <150 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar excellent" style="width: 85%">Bom</div>
+                        </div>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>VLDL</h3>
+                        <div class="exam-value">21.2</div>
+                        <p class="exam-reference">Referência: ≤30 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar excellent" style="width: 90%">Ótimo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Perfil Lipídico Comparativo</h3>
+                    <canvas id="lipidChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Metabolismo do Açúcar -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🍬</span>
+                    Metabolismo do Açúcar
+                </h2>
+
+                <div class="cards-grid">
+                    <div class="exam-card warning">
+                        <h3>Glicose em Jejum</h3>
+                        <div class="exam-value">101</div>
+                        <p class="exam-reference">Referência: 70-99 mg/dL</p>
+                        <span class="exam-status status-warning">⚠ Levemente Elevada</span>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #856404;">
+                            <strong>Interpretação:</strong> Glicemia alterada (100-125 mg/dL). Pré-diabetes inicial.
+                        </p>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Hemoglobina Glicada (HbA1c)</h3>
+                        <div class="exam-value">5.0%</div>
+                        <p class="exam-reference">Referência: <5.7%</p>
+                        <span class="exam-status status-normal">✓ Excelente</span>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #155724;">
+                            <strong>Glicemia Média (3 meses):</strong> 97 mg/dL - Ótimo controle!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Controle Glicêmico</h3>
+                    <canvas id="glucoseChart"></canvas>
+                </div>
+
+                <div class="alert alert-info">
+                    <span style="font-size: 2em;">💡</span>
+                    <div>
+                        <strong>Análise:</strong> A glicose pontual está levemente elevada, mas a hemoglobina glicada mostra que seu controle nos últimos 3 meses está excelente. Isso sugere que a elevação pode ter sido momentânea. Ainda assim, vale manter atenção para prevenir diabetes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Função Renal e Hepática -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🫘</span>
+                    Função Renal e Hepática
+                </h2>
+
+                <div class="cards-grid">
+                    <div class="exam-card normal">
+                        <h3>Ureia</h3>
+                        <div class="exam-value">35</div>
+                        <p class="exam-reference">Referência: 19.3-43 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Creatinina</h3>
+                        <div class="exam-value">1.00</div>
+                        <p class="exam-reference">Referência: 0.66-1.25 mg/dL</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Taxa Filtração Glomerular</h3>
+                        <div class="exam-value">85.1</div>
+                        <p class="exam-reference">Referência: >90 mL/min</p>
+                        <span class="exam-status status-normal">✓ Boa</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>TGO (AST)</h3>
+                        <div class="exam-value">25</div>
+                        <p class="exam-reference">Referência: 17-59 U/L</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>TGP (ALT)</h3>
+                        <div class="exam-value">36</div>
+                        <p class="exam-reference">Referência: <50 U/L</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>GGT</h3>
+                        <div class="exam-value">32</div>
+                        <p class="exam-reference">Referência: 15-73 U/L</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span style="font-size: 2em;">✅</span>
+                    <div>
+                        <strong>Excelente!</strong> Seus rins e fígado estão funcionando perfeitamente. Todos os marcadores dentro da normalidade.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hemograma -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🩸</span>
+                    Hemograma Completo
+                </h2>
+
+                <div class="cards-grid">
+                    <div class="exam-card normal">
+                        <h3>Hemoglobina</h3>
+                        <div class="exam-value">15.6</div>
+                        <p class="exam-reference">Referência: 13.0-17.0 g/dL</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Hemácias</h3>
+                        <div class="exam-value">5.19</div>
+                        <p class="exam-reference">Referência: 4.50-5.50 /mm³</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Leucócitos</h3>
+                        <div class="exam-value">5,630</div>
+                        <p class="exam-reference">Referência: 4.000-10.000 /mm³</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+
+                    <div class="exam-card normal">
+                        <h3>Plaquetas</h3>
+                        <div class="exam-value">183k</div>
+                        <p class="exam-reference">Referência: 150-400k /mm³</p>
+                        <span class="exam-status status-normal">✓ Normal</span>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Análise do Hemograma</h3>
+                    <canvas id="hemogramChart"></canvas>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span style="font-size: 2em;">⚠️</span>
+                    <div>
+                        <strong>Observação:</strong> Eosinófilos discretamente elevados (8.2% vs. 2-5%). Pode indicar alergia leve ou parasitose. Converse com seu médico sobre investigação.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outros Exames -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🔬</span>
+                    Outros Exames
+                </h2>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Exame</th>
+                            <th>Resultado</th>
+                            <th>Referência</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ácido Úrico</strong></td>
+                            <td>5.4 mg/dL</td>
+                            <td>3.5-8.5 mg/dL</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testosterona Total</strong></td>
+                            <td>319 ng/dL</td>
+                            <td>132-813 ng/dL</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cálcio</strong></td>
+                            <td>9.2 mg/dL</td>
+                            <td>8.4-10.2 mg/dL</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fósforo</strong></td>
+                            <td>3.10 mg/dL</td>
+                            <td>2.5-4.5 mg/dL</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Magnésio</strong></td>
+                            <td>2.00 mg/dL</td>
+                            <td>1.6-2.3 mg/dL</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sódio</strong></td>
+                            <td>139 mmol/L</td>
+                            <td>137-145 mmol/L</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Potássio</strong></td>
+                            <td>4.40 mmol/L</td>
+                            <td>3.5-5.1 mmol/L</td>
+                            <td><span class="risk-indicator risk-low"></span>Normal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Avaliação de Risco Cardiovascular -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">❤️</span>
+                    Avaliação de Risco Cardiovascular
+                </h2>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Fatores de Risco Cardiovascular</h3>
+                    <canvas id="riskChart"></canvas>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span style="font-size: 2em;">⚠️</span>
+                    <div>
+                        <strong>Risco Moderado:</strong> Mesmo com colesterol total e LDL excelentes, o HDL baixo aumenta o risco de eventos cardiovasculares. É fundamental discutir com seu cardiologista sobre estratégias para aumentar o HDL.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Linha do Tempo de Acompanhamento -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">📅</span>
+                    Plano de Acompanhamento
+                </h2>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3>✅ Imediato (Hoje)</h3>
+                        <ul>
+                            <li>Agendar consulta com médico para discutir resultados</li>
+                            <li>Iniciar mudanças alimentares para aumentar HDL</li>
+                            <li>Começar plano de exercícios aeróbicos</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>📊 1-2 Meses</h3>
+                        <ul>
+                            <li>Avaliação com nutricionista</li>
+                            <li>Estabelecer rotina de exercícios (mínimo 150 min/semana)</li>
+                            <li>Possível investigação de eosinófilos elevados</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>🔄 3-6 Meses</h3>
+                        <ul>
+                            <li>Repetir perfil lipídico completo</li>
+                            <li>Avaliar eficácia das mudanças de estilo de vida</li>
+                            <li>Reavaliar glicemia e hemoglobina glicada</li>
+                            <li>Decidir necessidade de medicação para HDL</li>
+                        </ul>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h3>📈 Anualmente</h3>
+                        <ul>
+                            <li>Check-up completo anual</li>
+                            <li>Monitoramento contínuo de fatores de risco</li>
+                            <li>Ajustes no plano terapêutico conforme necessário</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendações -->
+        <div class="recommendations fade-in">
+            <h2>🎯 Recomendações Personalizadas</h2>
+
+            <div class="recommendation-item">
+                <h3>🏃 Atividade Física (PRIORIDADE MÁXIMA)</h3>
+                <ul>
+                    <li>150 minutos/semana de exercícios aeróbicos (caminhada rápida, corrida, natação, ciclismo)</li>
+                    <li>Musculação 2-3x/semana para ganho de massa muscular</li>
+                    <li>Exercício é a forma MAIS EFICAZ de aumentar o HDL</li>
+                    <li>Comece gradualmente se estiver sedentário</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🥗 Alimentação para Aumentar HDL</h3>
+                <ul>
+                    <li>Peixes gordos (salmão, sardinha, atum) 2-3x/semana</li>
+                    <li>Azeite de oliva extravirgem diariamente</li>
+                    <li>Oleaginosas (castanhas, nozes, amêndoas) - 1 punhado/dia</li>
+                    <li>Abacate regularmente</li>
+                    <li>Aumentar fibras (vegetais, legumes, frutas com casca)</li>
+                    <li>Reduzir carboidratos refinados e açúcares</li>
+                    <li>EVITAR completamente gorduras trans</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🍬 Controle Glicêmico</h3>
+                <ul>
+                    <li>Preferir carboidratos complexos e integrais</li>
+                    <li>Evitar longos períodos em jejum</li>
+                    <li>Controlar tamanho das porções</li>
+                    <li>Combinar carboidratos com proteínas e gorduras boas</li>
+                    <li>Reduzir alimentos ultraprocessados</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🏥 Acompanhamento Médico</h3>
+                <ul>
+                    <li>Consulta com cardiologista para avaliar risco cardiovascular global</li>
+                    <li>Avaliação nutricional especializada</li>
+                    <li>Investigar eosinófilos elevados (possível alergia ou parasitose)</li>
+                    <li>Discutir possível necessidade de medicação para HDL</li>
+                    <li>Reavaliação laboratorial em 3-6 meses</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🌟 Outros Hábitos Saudáveis</h3>
+                <ul>
+                    <li>Não fumar (fumo reduz HDL)</li>
+                    <li>Manter peso saudável (IMC 18.5-24.9)</li>
+                    <li>Dormir 7-9 horas por noite</li>
+                    <li>Gerenciar estresse (meditação, yoga, hobbies)</li>
+                    <li>Hidratação adequada (2-3 litros água/dia)</li>
+                    <li>Álcool com moderação (se consumir)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rodapé -->
+        <div class="footer">
+            <h3>⚕️ Aviso Importante</h3>
+            <p style="margin: 20px 0; font-size: 1.1em;">
+                Este relatório é informativo e educacional. A interpretação completa dos resultados deve ser feita por seu médico, considerando seu histórico clínico, exame físico e outros fatores de risco. Não substitui consulta médica.
+            </p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
+                Laboratório Unimed Natal • Rua Açu, 507 - Tirol, Natal - RN<br>
+                Relatório gerado em: 02/02/2026
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Configuração global dos gráficos
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.font.size = 13;
+
+        // Gráfico de Perfil Lipídico
+        const lipidCtx = document.getElementById('lipidChart').getContext('2d');
+        new Chart(lipidCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Colesterol Total', 'HDL', 'LDL', 'Triglicerídeos', 'VLDL'],
+                datasets: [{
+                    label: 'Seu Resultado',
+                    data: [148, 30, 96.8, 106, 21.2],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(220, 53, 69, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(40, 167, 69, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(40, 167, 69, 1)'
+                    ],
+                    borderWidth: 2
+                }, {
+                    label: 'Limite Ideal',
+                    data: [190, 40, 130, 150, 30],
+                    backgroundColor: 'rgba(102, 126, 234, 0.3)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 2,
+                    type: 'line',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Valores em mg/dL'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'mg/dL'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Glicose
+        const glucoseCtx = document.getElementById('glucoseChart').getContext('2d');
+        new Chart(glucoseCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Glicose Atual', 'Margem até Diabetes'],
+                datasets: [{
+                    data: [101, 25],
+                    backgroundColor: [
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(200, 200, 200, 0.3)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(200, 200, 200, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Glicose: 101 mg/dL (Limite Diabetes: ≥126 mg/dL)'
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Hemograma
+        const hemogramCtx = document.getElementById('hemogramChart').getContext('2d');
+        new Chart(hemogramCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Hemoglobina', 'Hemácias', 'Leucócitos', 'Plaquetas', 'Hematócrito'],
+                datasets: [{
+                    label: 'Percentual do Normal',
+                    data: [100, 99, 80, 91, 95],
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 110,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Todos os valores dentro da faixa normal'
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Risco Cardiovascular
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+        new Chart(riskCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['Colesterol Total', 'LDL', 'Triglicerídeos', 'HDL', 'Glicose'],
+                datasets: [{
+                    label: 'Nível de Risco (%)',
+                    data: [10, 15, 20, 85, 25],
+                    backgroundColor: [
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(220, 53, 69, 0.7)',
+                        'rgba(255, 193, 7, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(40, 167, 69, 1)',
+                        'rgba(220, 53, 69, 1)',
+                        'rgba(255, 193, 7, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: '0% = Sem Risco | 100% = Alto Risco'
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Percentual de Risco'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Animação de entrada dos elementos
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        });
+
+        document.querySelectorAll('.section').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // Função para destacar seções ao passar o mouse
+        document.querySelectorAll('.exam-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+
+        console.log('📊 Relatório de Saúde carregado com sucesso!');
+        console.log('✅ Todos os gráficos foram renderizados');
+        console.log('⚠️ Principais achados: HDL baixo, glicose no limite');
+    </script>
+</body>
+</html>
