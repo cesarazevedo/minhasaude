@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -398,51 +399,6 @@
             background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
         }
 
-        @media print {
-            body {
-                background: white;
-            }
-            .print-btn {
-                display: none;
-            }
-            .exam-card:hover {
-                transform: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .content {
-                padding: 20px;
-            }
-        }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.5em;
-            color: #667eea;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease;
-        }
-
-        .icon-large {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
@@ -470,17 +426,83 @@
             background: #f8f9fa;
         }
 
-        .risk-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
+        .endoscopy-findings {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
         }
 
-        .risk-low { background: #28a745; }
-        .risk-moderate { background: #ffc107; }
-        .risk-high { background: #dc3545; }
+        .endoscopy-findings h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .endoscopy-findings ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .endoscopy-findings li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .endoscopy-findings li:before {
+            content: "▪";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        .exam-date {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .print-btn {
+                display: none;
+            }
+            .exam-card:hover {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
     </style>
 </head>
 <body>
@@ -488,7 +510,7 @@
         <!-- Cabeçalho -->
         <div class="header">
             <h1>📊 Relatório Completo de Saúde</h1>
-            <p class="subtitle">Análise Detalhada dos Exames Laboratoriais</p>
+            <p class="subtitle">Análise Detalhada - Exames Laboratoriais e Endoscópicos</p>
             <button class="print-btn" onclick="window.print()">🖨️ Imprimir Relatório</button>
         </div>
 
@@ -503,12 +525,12 @@
                 <p>25/10/1978 (47 anos)</p>
             </div>
             <div class="info-card">
-                <h3>🏥 Data da Coleta</h3>
-                <p>31/01/2026</p>
+                <h3>🏥 Exames Realizados</h3>
+                <p>26-31/01/2026</p>
             </div>
             <div class="info-card">
                 <h3>👨‍⚕️ Médico Solicitante</h3>
-                <p>Dr. Gutembergh da Silva Nobrega</p>
+                <p>Dr. Gutembergh Nóbrega</p>
             </div>
         </div>
 
@@ -523,31 +545,131 @@
                 
                 <div class="summary-grid">
                     <div class="summary-card excellent">
-                        <h3>85%</h3>
+                        <h3>80%</h3>
                         <p>Exames Normais</p>
                     </div>
-                    <div class="summary-card good">
-                        <h3>10%</h3>
+                    <div class="summary-card attention">
+                        <h3>15%</h3>
                         <p>Atenção Necessária</p>
                     </div>
-                    <div class="summary-card attention">
+                    <div class="summary-card good">
                         <h3>5%</h3>
-                        <p>Alterações</p>
+                        <p>Alterações Leves</p>
                     </div>
                 </div>
 
                 <div class="alert alert-info">
                     <span style="font-size: 2em;">ℹ️</span>
                     <div>
-                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom, com a maioria dos exames dentro da normalidade. O principal ponto de atenção é o colesterol HDL baixo, que requer acompanhamento médico e mudanças no estilo de vida.
+                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom. Os exames laboratoriais mostram a maioria dos valores dentro da normalidade. Os exames endoscópicos revelaram achados leves que requerem acompanhamento médico.
                     </div>
                 </div>
 
                 <div class="alert alert-warning">
                     <span style="font-size: 2em;">⚠️</span>
                     <div>
-                        <strong>Principal Achado:</strong> HDL (colesterol bom) está abaixo do ideal (30 mg/dL vs. >40 mg/dL). Isso aumenta o risco cardiovascular mesmo com outros lipídios normais.
+                        <strong>Principais Achados:</strong> 
+                        <ul style="margin-top: 10px;">
+                            <li>HDL (colesterol bom) baixo - risco cardiovascular aumentado</li>
+                            <li>Esofagite leve + Hérnia de Hiato - necessita tratamento</li>
+                            <li>Gastrite leve - necessita tratamento e investigação de H. pylori</li>
+                            <li>Glicose no limite superior - monitorar para prevenir diabetes</li>
+                        </ul>
                     </div>
+                </div>
+            </div>
+
+            <!-- Exames Endoscópicos -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🔬</span>
+                    Exames Endoscópicos
+                </h2>
+
+                <!-- Colonoscopia -->
+                <div class="endoscopy-findings">
+                    <span class="exam-date">📅 Colonoscopia - 26/01/2026</span>
+                    <h4>✅ RESULTADO: EXAME NORMAL</h4>
+                    <p style="margin: 15px 0; font-weight: 500; color: #28a745;">
+                        Excelente notícia! Seu intestino grosso está completamente saudável.
+                    </p>
+                    
+                    <h4 style="margin-top: 20px;">Detalhes do Exame:</h4>
+                    <ul>
+                        <li><strong>Preparo:</strong> Adequado (Escala de Boston: 9 pontos - excelente)</li>
+                        <li><strong>Tempo de retirada:</strong> Maior que 7 minutos (tempo ideal para avaliação detalhada)</li>
+                        <li><strong>Ceco alcançado:</strong> Sim, com dupla checagem</li>
+                        <li><strong>Válvula ileocecal:</strong> Normal e permeável</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">Avaliação:</h4>
+                    <ul>
+                        <li>✅ <strong>Sem pólipos</strong> - não foram encontradas lesões</li>
+                        <li>✅ <strong>Sem divertículos</strong> - parede intestinal íntegra</li>
+                        <li>✅ <strong>Sem inflamação</strong> - mucosa saudável</li>
+                        <li>✅ <strong>Sem tumores</strong> - todos os segmentos normais</li>
+                    </ul>
+
+                    <div class="alert alert-success" style="margin-top: 20px;">
+                        <span style="font-size: 2em;">🎉</span>
+                        <div>
+                            <strong>Conclusão:</strong> Exame preventivo de câncer colorretal NEGATIVO. Próximo exame recomendado em 5-10 anos (conforme orientação médica).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endoscopia Digestiva Alta -->
+                <div class="endoscopy-findings" style="margin-top: 30px;">
+                    <span class="exam-date">📅 Endoscopia Digestiva Alta (EDA) - 27/01/2026</span>
+                    <h4>⚠️ ACHADOS: ALTERAÇÕES LEVES</h4>
+                    
+                    <div class="alert alert-warning" style="margin: 15px 0;">
+                        <span style="font-size: 2em;">⚠️</span>
+                        <div>
+                            <strong>Foram encontradas alterações que necessitam tratamento:</strong>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">1️⃣ Esofagite Péptica Grau A (Los Angeles)</h4>
+                    <ul>
+                        <li><strong>O que é:</strong> Inflamação leve do esôfago causada pelo refluxo de ácido do estômago</li>
+                        <li><strong>Achados:</strong> Pequenas erosões (menos de 5mm) no terço inferior do esôfago</li>
+                        <li><strong>Gravidade:</strong> LEVE (Grau A é o mais leve na classificação)</li>
+                        <li><strong>Sintomas comuns:</strong> Azia, queimação, dor no peito, regurgitação</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">2️⃣ Hérnia de Hiato Tipo I</h4>
+                    <ul>
+                        <li><strong>O que é:</strong> Parte do estômago "sobe" para o tórax através do diafragma</li>
+                        <li><strong>Achados:</strong> Junção esofagogástrica a 38cm (não coincidente com o diafragma)</li>
+                        <li><strong>Classificação:</strong> Grau II de Hill (hérnia presente mas não muito grave)</li>
+                        <li><strong>Consequência:</strong> Facilita o refluxo ácido, causando a esofagite</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">3️⃣ Pangastrite Enantematosa Leve</h4>
+                    <ul>
+                        <li><strong>O que é:</strong> Inflamação leve que afeta todo o estômago (antro e corpo)</li>
+                        <li><strong>Achados:</strong> Pontos de hiperemia (vermelhidão) e edema leve</li>
+                        <li><strong>Gravidade:</strong> LEVE</li>
+                        <li><strong>Causa comum:</strong> Pode ser causada pela bactéria H. pylori (aguardando resultado)</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">🔬 Biópsias Realizadas:</h4>
+                    <ul>
+                        <li>Coletados 6 fragmentos (2 do antro + 2 do corpo + 2 da incisura angular)</li>
+                        <li>Enviados para análise histopatológica</li>
+                        <li>Pesquisa de Helicobacter pylori (H. pylori)</li>
+                        <li><strong>Aguardando resultados</strong> - fundamental para definir tratamento</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">✅ Áreas Normais:</h4>
+                    <ul>
+                        <li>✅ Cavidade oral, faringe e hipofaringe: normais</li>
+                        <li>✅ Esôfago proximal e médio: normais</li>
+                        <li>✅ Piloro: centrado e funcionando bem</li>
+                        <li>✅ Duodeno: sem úlceras ou deformidades</li>
+                        <li>✅ Papila duodenal: normal</li>
+                    </ul>
                 </div>
             </div>
 
@@ -598,16 +720,6 @@
                             <div class="progress-bar excellent" style="width: 85%">Bom</div>
                         </div>
                     </div>
-
-                    <div class="exam-card normal">
-                        <h3>VLDL</h3>
-                        <div class="exam-value">21.2</div>
-                        <p class="exam-reference">Referência: ≤30 mg/dL</p>
-                        <span class="exam-status status-normal">✓ Normal</span>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar excellent" style="width: 90%">Ótimo</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="chart-container">
@@ -630,7 +742,7 @@
                         <p class="exam-reference">Referência: 70-99 mg/dL</p>
                         <span class="exam-status status-warning">⚠ Levemente Elevada</span>
                         <p style="margin-top: 10px; font-size: 0.9em; color: #856404;">
-                            <strong>Interpretação:</strong> Glicemia alterada (100-125 mg/dL). Pré-diabetes inicial.
+                            <strong>Interpretação:</strong> Glicemia alterada de jejum (100-125 mg/dL). Início de pré-diabetes.
                         </p>
                     </div>
 
@@ -653,7 +765,7 @@
                 <div class="alert alert-info">
                     <span style="font-size: 2em;">💡</span>
                     <div>
-                        <strong>Análise:</strong> A glicose pontual está levemente elevada, mas a hemoglobina glicada mostra que seu controle nos últimos 3 meses está excelente. Isso sugere que a elevação pode ter sido momentânea. Ainda assim, vale manter atenção para prevenir diabetes.
+                        <strong>Análise:</strong> A glicose pontual está levemente elevada, mas a hemoglobina glicada mostra que seu controle nos últimos 3 meses está excelente. A elevação pode ter sido momentânea, mas vale manter atenção para prevenir diabetes.
                     </div>
                 </div>
             </div>
@@ -681,13 +793,6 @@
                     </div>
 
                     <div class="exam-card normal">
-                        <h3>Taxa Filtração Glomerular</h3>
-                        <div class="exam-value">85.1</div>
-                        <p class="exam-reference">Referência: >90 mL/min</p>
-                        <span class="exam-status status-normal">✓ Boa</span>
-                    </div>
-
-                    <div class="exam-card normal">
                         <h3>TGO (AST)</h3>
                         <div class="exam-value">25</div>
                         <p class="exam-reference">Referência: 17-59 U/L</p>
@@ -698,13 +803,6 @@
                         <h3>TGP (ALT)</h3>
                         <div class="exam-value">36</div>
                         <p class="exam-reference">Referência: <50 U/L</p>
-                        <span class="exam-status status-normal">✓ Normal</span>
-                    </div>
-
-                    <div class="exam-card normal">
-                        <h3>GGT</h3>
-                        <div class="exam-value">32</div>
-                        <p class="exam-reference">Referência: 15-73 U/L</p>
                         <span class="exam-status status-normal">✓ Normal</span>
                     </div>
                 </div>
@@ -733,13 +831,6 @@
                     </div>
 
                     <div class="exam-card normal">
-                        <h3>Hemácias</h3>
-                        <div class="exam-value">5.19</div>
-                        <p class="exam-reference">Referência: 4.50-5.50 /mm³</p>
-                        <span class="exam-status status-normal">✓ Normal</span>
-                    </div>
-
-                    <div class="exam-card normal">
                         <h3>Leucócitos</h3>
                         <div class="exam-value">5,630</div>
                         <p class="exam-reference">Referência: 4.000-10.000 /mm³</p>
@@ -754,98 +845,10 @@
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <h3 class="chart-title">Análise do Hemograma</h3>
-                    <canvas id="hemogramChart"></canvas>
-                </div>
-
                 <div class="alert alert-warning">
                     <span style="font-size: 2em;">⚠️</span>
                     <div>
                         <strong>Observação:</strong> Eosinófilos discretamente elevados (8.2% vs. 2-5%). Pode indicar alergia leve ou parasitose. Converse com seu médico sobre investigação.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Outros Exames -->
-            <div class="section fade-in">
-                <h2 class="section-title">
-                    <span class="icon">🔬</span>
-                    Outros Exames
-                </h2>
-
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Exame</th>
-                            <th>Resultado</th>
-                            <th>Referência</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Ácido Úrico</strong></td>
-                            <td>5.4 mg/dL</td>
-                            <td>3.5-8.5 mg/dL</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Testosterona Total</strong></td>
-                            <td>319 ng/dL</td>
-                            <td>132-813 ng/dL</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cálcio</strong></td>
-                            <td>9.2 mg/dL</td>
-                            <td>8.4-10.2 mg/dL</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Fósforo</strong></td>
-                            <td>3.10 mg/dL</td>
-                            <td>2.5-4.5 mg/dL</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Magnésio</strong></td>
-                            <td>2.00 mg/dL</td>
-                            <td>1.6-2.3 mg/dL</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Sódio</strong></td>
-                            <td>139 mmol/L</td>
-                            <td>137-145 mmol/L</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Potássio</strong></td>
-                            <td>4.40 mmol/L</td>
-                            <td>3.5-5.1 mmol/L</td>
-                            <td><span class="risk-indicator risk-low"></span>Normal</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Avaliação de Risco Cardiovascular -->
-            <div class="section fade-in">
-                <h2 class="section-title">
-                    <span class="icon">❤️</span>
-                    Avaliação de Risco Cardiovascular
-                </h2>
-
-                <div class="chart-container">
-                    <h3 class="chart-title">Fatores de Risco Cardiovascular</h3>
-                    <canvas id="riskChart"></canvas>
-                </div>
-
-                <div class="alert alert-warning">
-                    <span style="font-size: 2em;">⚠️</span>
-                    <div>
-                        <strong>Risco Moderado:</strong> Mesmo com colesterol total e LDL excelentes, o HDL baixo aumenta o risco de eventos cardiovasculares. É fundamental discutir com seu cardiologista sobre estratégias para aumentar o HDL.
                     </div>
                 </div>
             </div>
@@ -861,18 +864,19 @@
                     <div class="timeline-item">
                         <h3>✅ Imediato (Hoje)</h3>
                         <ul>
-                            <li>Agendar consulta com médico para discutir resultados</li>
-                            <li>Iniciar mudanças alimentares para aumentar HDL</li>
+                            <li>Agendar consulta de retorno para discutir resultados completos</li>
+                            <li>Aguardar resultado das biópsias (H. pylori)</li>
+                            <li>Iniciar mudanças alimentares (refluxo e colesterol)</li>
                             <li>Começar plano de exercícios aeróbicos</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
-                        <h3>📊 1-2 Meses</h3>
+                        <h3>📊 1-2 Semanas</h3>
                         <ul>
-                            <li>Avaliação com nutricionista</li>
-                            <li>Estabelecer rotina de exercícios (mínimo 150 min/semana)</li>
-                            <li>Possível investigação de eosinófilos elevados</li>
+                            <li>Resultado das biópsias disponível</li>
+                            <li>Iniciar tratamento se H. pylori positivo</li>
+                            <li>Medicação para refluxo e gastrite (se não iniciada)</li>
                         </ul>
                     </div>
 
@@ -882,7 +886,7 @@
                             <li>Repetir perfil lipídico completo</li>
                             <li>Avaliar eficácia das mudanças de estilo de vida</li>
                             <li>Reavaliar glicemia e hemoglobina glicada</li>
-                            <li>Decidir necessidade de medicação para HDL</li>
+                            <li>EDA de controle (se sintomas persistirem)</li>
                         </ul>
                     </div>
 
@@ -891,7 +895,7 @@
                         <ul>
                             <li>Check-up completo anual</li>
                             <li>Monitoramento contínuo de fatores de risco</li>
-                            <li>Ajustes no plano terapêutico conforme necessário</li>
+                            <li>Próxima colonoscopia em 5-10 anos</li>
                         </ul>
                     </div>
                 </div>
@@ -903,25 +907,48 @@
             <h2>🎯 Recomendações Personalizadas</h2>
 
             <div class="recommendation-item">
-                <h3>🏃 Atividade Física (PRIORIDADE MÁXIMA)</h3>
+                <h3>💊 Tratamento Médico (FUNDAMENTAL)</h3>
                 <ul>
-                    <li>150 minutos/semana de exercícios aeróbicos (caminhada rápida, corrida, natação, ciclismo)</li>
-                    <li>Musculação 2-3x/semana para ganho de massa muscular</li>
-                    <li>Exercício é a forma MAIS EFICAZ de aumentar o HDL</li>
-                    <li>Comece gradualmente se estiver sedentário</li>
+                    <li><strong>Inibidor de bomba de prótons (IBP):</strong> Para tratar esofagite e gastrite (ex: omeprazol, pantoprazol)</li>
+                    <li><strong>Se H. pylori positivo:</strong> Tratamento antibiótico triplo por 14 dias</li>
+                    <li><strong>Protetor gástrico:</strong> Se necessário, conforme orientação médica</li>
+                    <li><strong>Discussão sobre HDL:</strong> Avaliar necessidade de medicação específica</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🥗 Alimentação para Aumentar HDL</h3>
+                <h3>🥗 Dieta para Refluxo e Gastrite</h3>
+                <ul>
+                    <li><strong>EVITAR:</strong> Café, refrigerantes, álcool, chocolate, menta, comidas gordurosas, frituras, pimenta, condimentos fortes</li>
+                    <li><strong>EVITAR:</strong> Cítricos (laranja, limão, abacaxi), tomate e seus derivados (molhos)</li>
+                    <li><strong>Comer devagar:</strong> Mastigar bem os alimentos</li>
+                    <li><strong>Refeições menores:</strong> 5-6 pequenas refeições ao dia em vez de 3 grandes</li>
+                    <li><strong>Não deitar logo após comer:</strong> Aguardar 2-3 horas</li>
+                    <li><strong>Elevar cabeceira da cama:</strong> 15-20cm (ajuda no refluxo noturno)</li>
+                    <li><strong>Evitar roupas apertadas:</strong> Não comprimir o abdômen</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🥗 Alimentação para HDL (Colesterol Bom)</h3>
                 <ul>
                     <li>Peixes gordos (salmão, sardinha, atum) 2-3x/semana</li>
                     <li>Azeite de oliva extravirgem diariamente</li>
                     <li>Oleaginosas (castanhas, nozes, amêndoas) - 1 punhado/dia</li>
-                    <li>Abacate regularmente</li>
-                    <li>Aumentar fibras (vegetais, legumes, frutas com casca)</li>
+                    <li>Abacate regularmente (mas com moderação devido ao refluxo)</li>
+                    <li>Aumentar fibras (vegetais, legumes, aveia)</li>
                     <li>Reduzir carboidratos refinados e açúcares</li>
-                    <li>EVITAR completamente gorduras trans</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-item">
+                <h3>🏃 Atividade Física (PRIORIDADE MÁXIMA)</h3>
+                <ul>
+                    <li>150 minutos/semana de exercícios aeróbicos (caminhada rápida, natação, ciclismo)</li>
+                    <li>Musculação 2-3x/semana</li>
+                    <li><strong>Exercício é a melhor forma de aumentar HDL</strong></li>
+                    <li>Comece gradualmente se estiver sedentário</li>
+                    <li><strong>Evitar exercícios logo após comer</strong> (pode piorar refluxo)</li>
                 </ul>
             </div>
 
@@ -929,20 +956,21 @@
                 <h3>🍬 Controle Glicêmico</h3>
                 <ul>
                     <li>Preferir carboidratos complexos e integrais</li>
-                    <li>Evitar longos períodos em jejum</li>
                     <li>Controlar tamanho das porções</li>
                     <li>Combinar carboidratos com proteínas e gorduras boas</li>
                     <li>Reduzir alimentos ultraprocessados</li>
+                    <li>Manter peso saudável</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🏥 Acompanhamento Médico</h3>
+                <h3>🏥 Próximos Passos Médicos</h3>
                 <ul>
-                    <li>Consulta com cardiologista para avaliar risco cardiovascular global</li>
+                    <li>Aguardar resultado das biópsias para H. pylori</li>
+                    <li>Consulta de retorno para avaliar tratamento</li>
                     <li>Avaliação nutricional especializada</li>
-                    <li>Investigar eosinófilos elevados (possível alergia ou parasitose)</li>
-                    <li>Discutir possível necessidade de medicação para HDL</li>
+                    <li>Investigar eosinófilos elevados</li>
+                    <li>Avaliação cardiológica (HDL baixo)</li>
                     <li>Reavaliação laboratorial em 3-6 meses</li>
                 </ul>
             </div>
@@ -950,12 +978,12 @@
             <div class="recommendation-item">
                 <h3>🌟 Outros Hábitos Saudáveis</h3>
                 <ul>
-                    <li>Não fumar (fumo reduz HDL)</li>
-                    <li>Manter peso saudável (IMC 18.5-24.9)</li>
+                    <li>Não fumar (piora refluxo e reduz HDL)</li>
+                    <li>Manter peso saudável (obesidade piora refluxo)</li>
                     <li>Dormir 7-9 horas por noite</li>
-                    <li>Gerenciar estresse (meditação, yoga, hobbies)</li>
-                    <li>Hidratação adequada (2-3 litros água/dia)</li>
-                    <li>Álcool com moderação (se consumir)</li>
+                    <li>Gerenciar estresse (piora gastrite)</li>
+                    <li>Hidratação adequada</li>
+                    <li>Evitar álcool (piora refluxo e gastrite)</li>
                 </ul>
             </div>
         </div>
@@ -964,10 +992,13 @@
         <div class="footer">
             <h3>⚕️ Aviso Importante</h3>
             <p style="margin: 20px 0; font-size: 1.1em;">
-                Este relatório é informativo e educacional. A interpretação completa dos resultados deve ser feita por seu médico, considerando seu histórico clínico, exame físico e outros fatores de risco. Não substitui consulta médica.
+                Este relatório é informativo e educacional. A interpretação completa dos resultados deve ser feita por seu médico, considerando seu histórico clínico, exame físico e outros fatores. Não substitui consulta médica.
+            </p>
+            <p style="margin-top: 20px;">
+                <strong>Importante:</strong> Aguarde o resultado das biópsias antes de definir o tratamento completo. A presença ou ausência de H. pylori mudará significativamente o plano terapêutico.
             </p>
             <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
-                Laboratório Unimed Natal • Rua Açu, 507 - Tirol, Natal - RN<br>
+                Exames realizados: Laboratório Unimed Natal e Hospital Gastroprocto<br>
                 Relatório gerado em: 02/02/2026
             </p>
         </div>
@@ -983,14 +1014,13 @@
         new Chart(lipidCtx, {
             type: 'bar',
             data: {
-                labels: ['Colesterol Total', 'HDL', 'LDL', 'Triglicerídeos', 'VLDL'],
+                labels: ['Colesterol Total', 'HDL', 'LDL', 'Triglicerídeos'],
                 datasets: [{
                     label: 'Seu Resultado',
-                    data: [148, 30, 96.8, 106, 21.2],
+                    data: [148, 30, 96.8, 106],
                     backgroundColor: [
                         'rgba(40, 167, 69, 0.7)',
                         'rgba(220, 53, 69, 0.7)',
-                        'rgba(40, 167, 69, 0.7)',
                         'rgba(40, 167, 69, 0.7)',
                         'rgba(40, 167, 69, 0.7)'
                     ],
@@ -998,13 +1028,12 @@
                         'rgba(40, 167, 69, 1)',
                         'rgba(220, 53, 69, 1)',
                         'rgba(40, 167, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
                         'rgba(40, 167, 69, 1)'
                     ],
                     borderWidth: 2
                 }, {
                     label: 'Limite Ideal',
-                    data: [190, 40, 130, 150, 30],
+                    data: [190, 40, 130, 150],
                     backgroundColor: 'rgba(102, 126, 234, 0.3)',
                     borderColor: 'rgba(102, 126, 234, 1)',
                     borderWidth: 2,
@@ -1069,98 +1098,6 @@
             }
         });
 
-        // Gráfico de Hemograma
-        const hemogramCtx = document.getElementById('hemogramChart').getContext('2d');
-        new Chart(hemogramCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Hemoglobina', 'Hemácias', 'Leucócitos', 'Plaquetas', 'Hematócrito'],
-                datasets: [{
-                    label: 'Percentual do Normal',
-                    data: [100, 99, 80, 91, 95],
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(40, 167, 69, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(40, 167, 69, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 110,
-                        ticks: {
-                            stepSize: 20
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'Todos os valores dentro da faixa normal'
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Risco Cardiovascular
-        const riskCtx = document.getElementById('riskChart').getContext('2d');
-        new Chart(riskCtx, {
-            type: 'horizontalBar',
-            data: {
-                labels: ['Colesterol Total', 'LDL', 'Triglicerídeos', 'HDL', 'Glicose'],
-                datasets: [{
-                    label: 'Nível de Risco (%)',
-                    data: [10, 15, 20, 85, 25],
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(40, 167, 69, 0.7)',
-                        'rgba(220, 53, 69, 0.7)',
-                        'rgba(255, 193, 7, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(220, 53, 69, 1)',
-                        'rgba(255, 193, 7, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: '0% = Sem Risco | 100% = Alto Risco'
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                            text: 'Percentual de Risco'
-                        }
-                    }
-                }
-            }
-        });
-
         // Animação de entrada dos elementos
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1174,16 +1111,8 @@
             observer.observe(section);
         });
 
-        // Função para destacar seções ao passar o mouse
-        document.querySelectorAll('.exam-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transition = 'all 0.3s ease';
-            });
-        });
-
-        console.log('📊 Relatório de Saúde carregado com sucesso!');
-        console.log('✅ Todos os gráficos foram renderizados');
-        console.log('⚠️ Principais achados: HDL baixo, glicose no limite');
+        console.log('📊 Relatório Completo de Saúde carregado!');
+        console.log('✅ Exames laboratoriais e endoscópicos integrados');
     </script>
 </body>
 </html>
