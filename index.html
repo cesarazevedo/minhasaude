@@ -105,7 +105,7 @@
             border-radius: 10px;
             margin-bottom: 30px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 15px;
             font-weight: 500;
         }
@@ -132,6 +132,11 @@
             background: #d1ecf1;
             border-left: 5px solid #17a2b8;
             color: #0c5460;
+        }
+
+        .alert ul {
+            margin-top: 10px;
+            margin-left: 20px;
         }
 
         .cards-grid {
@@ -526,7 +531,7 @@
             </div>
             <div class="info-card">
                 <h3>🏥 Exames Realizados</h3>
-                <p>26-31/01/2026</p>
+                <p>26-31/01 + 05/02/2026</p>
             </div>
             <div class="info-card">
                 <h3>👨‍⚕️ Médico Solicitante</h3>
@@ -545,11 +550,11 @@
                 
                 <div class="summary-grid">
                     <div class="summary-card excellent">
-                        <h3>80%</h3>
+                        <h3>85%</h3>
                         <p>Exames Normais</p>
                     </div>
                     <div class="summary-card attention">
-                        <h3>15%</h3>
+                        <h3>10%</h3>
                         <p>Atenção Necessária</p>
                     </div>
                     <div class="summary-card good">
@@ -558,22 +563,29 @@
                     </div>
                 </div>
 
+                <div class="alert alert-success">
+                    <span style="font-size: 2em;">🎉</span>
+                    <div>
+                        <strong>ÓTIMA NOTÍCIA!</strong> O resultado da biópsia veio negativo para H. pylori! Isso significa que você não precisa fazer tratamento com antibióticos, apenas tratamento sintomático para refluxo e gastrite.
+                    </div>
+                </div>
+
                 <div class="alert alert-info">
                     <span style="font-size: 2em;">ℹ️</span>
                     <div>
-                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom. Os exames laboratoriais mostram a maioria dos valores dentro da normalidade. Os exames endoscópicos revelaram achados leves que requerem acompanhamento médico.
+                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom. Os exames laboratoriais mostram a maioria dos valores dentro da normalidade. Os exames endoscópicos revelaram alterações leves que requerem tratamento sintomático.
                     </div>
                 </div>
 
                 <div class="alert alert-warning">
                     <span style="font-size: 2em;">⚠️</span>
                     <div>
-                        <strong>Principais Achados:</strong> 
-                        <ul style="margin-top: 10px;">
-                            <li>HDL (colesterol bom) baixo - risco cardiovascular aumentado</li>
-                            <li>Esofagite leve + Hérnia de Hiato - necessita tratamento</li>
-                            <li>Gastrite leve - necessita tratamento e investigação de H. pylori</li>
-                            <li>Glicose no limite superior - monitorar para prevenir diabetes</li>
+                        <strong>Principais Achados que Precisam de Atenção:</strong> 
+                        <ul>
+                            <li><strong>HDL (colesterol bom) baixo</strong> - risco cardiovascular aumentado</li>
+                            <li><strong>Esofagite leve + Hérnia de Hiato</strong> - necessita tratamento para refluxo</li>
+                            <li><strong>Gastrite leve</strong> - H. pylori negativo (boa notícia!)</li>
+                            <li><strong>Glicose no limite superior</strong> - monitorar para prevenir diabetes</li>
                         </ul>
                     </div>
                 </div>
@@ -651,16 +663,30 @@
                         <li><strong>O que é:</strong> Inflamação leve que afeta todo o estômago (antro e corpo)</li>
                         <li><strong>Achados:</strong> Pontos de hiperemia (vermelhidão) e edema leve</li>
                         <li><strong>Gravidade:</strong> LEVE</li>
-                        <li><strong>Causa comum:</strong> Pode ser causada pela bactéria H. pylori (aguardando resultado)</li>
+                        <li><strong>Resultado biópsia:</strong> H. pylori NEGATIVO (não precisa antibiótico!)</li>
                     </ul>
 
-                    <h4 style="margin-top: 20px;">🔬 Biópsias Realizadas:</h4>
+                    <h4 style="margin-top: 20px;">🔬 Biópsias Realizadas - ✅ RESULTADOS DISPONÍVEIS (05/02/2026):</h4>
                     <ul>
                         <li>Coletados 6 fragmentos (2 do antro + 2 do corpo + 2 da incisura angular)</li>
                         <li>Enviados para análise histopatológica</li>
                         <li>Pesquisa de Helicobacter pylori (H. pylori)</li>
-                        <li><strong>Aguardando resultados</strong> - fundamental para definir tratamento</li>
+                        <li><strong>✅ H. pylori: NEGATIVO</strong></li>
                     </ul>
+
+                    <div class="alert alert-success" style="margin-top: 20px;">
+                        <span style="font-size: 2em;">🎉</span>
+                        <div>
+                            <strong>EXCELENTES NOTÍCIAS - Resultado da Biópsia:</strong>
+                            <ul style="margin-top: 10px;">
+                                <li>✅ <strong>H. pylori NEGATIVO</strong> - Não precisa fazer tratamento com antibióticos!</li>
+                                <li>✅ <strong>Gastrite crônica LEVE</strong> em todas as áreas examinadas</li>
+                                <li>✅ <strong>SEM metaplasia intestinal</strong> - não há alterações pré-cancerosas</li>
+                                <li>✅ <strong>SEM atrofia da mucosa</strong> - mucosa preservada (score 0 pela classificação OLGA)</li>
+                                <li>✅ <strong>Atividade neutrofílica ausente</strong> - sem inflamação aguda ativa</li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <h4 style="margin-top: 20px;">✅ Áreas Normais:</h4>
                     <ul>
@@ -670,6 +696,54 @@
                         <li>✅ Duodeno: sem úlceras ou deformidades</li>
                         <li>✅ Papila duodenal: normal</li>
                     </ul>
+                </div>
+
+                <!-- Detalhes Histopatológicos -->
+                <div class="endoscopy-findings" style="margin-top: 30px; background: #e8f5e9;">
+                    <span class="exam-date">📅 Análise Histopatológica (Biópsia) - 05/02/2026</span>
+                    <h4>📊 Detalhes Microscópicos</h4>
+                    <p style="margin: 15px 0;"><strong>Laboratório:</strong> Laboratório de Citopatologia<br>
+                    <strong>Patologista:</strong> Dra. Maria Goretti Freire de Carvalho (CRM 803)</p>
+                    
+                    <h4 style="margin-top: 20px;">📍 1. Antro Gástrico (entrada do estômago):</h4>
+                    <ul>
+                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de padrão antral</li>
+                        <li><strong>Atividade inflamatória aguda:</strong> Ausente (sem neutrófilos)</li>
+                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
+                        <li><strong>Atrofia da mucosa:</strong> Ausente - Score A0 ✅</li>
+                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">📍 2. Incisura Angular (meio do estômago):</h4>
+                    <ul>
+                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de incisura</li>
+                        <li><strong>Atividade inflamatória aguda:</strong> Ausente</li>
+                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
+                        <li><strong>Atrofia da mucosa:</strong> Ausente ✅</li>
+                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">📍 3. Corpo Gástrico/Fundo (fundo do estômago):</h4>
+                    <ul>
+                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de padrão fúndico</li>
+                        <li><strong>Atividade inflamatória aguda:</strong> Ausente</li>
+                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
+                        <li><strong>Atrofia da mucosa:</strong> Ausente - Score C0 ✅</li>
+                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
+                    </ul>
+
+                    <div class="alert alert-info" style="margin-top: 20px; background: white;">
+                        <span style="font-size: 2em;">📘</span>
+                        <div>
+                            <strong>Classificação OLGA (Operative Link on Gastritis Assessment):</strong><br>
+                            <strong>Score de Atrofia: Estágio 0 (zero)</strong> - O MELHOR RESULTADO POSSÍVEL!<br><br>
+                            <strong>O que isso significa:</strong><br>
+                            ✅ Você tem o menor risco possível de câncer gástrico associado à gastrite<br>
+                            ✅ Sua mucosa está preservada, sem atrofia<br>
+                            ✅ Não há alterações pré-cancerosas (metaplasia)<br><br>
+                            A classificação OLGA vai de 0 (sem atrofia/risco baixo) até 4 (atrofia severa/risco alto). Você está no estágio 0!
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -865,28 +939,29 @@
                         <h3>✅ Imediato (Hoje)</h3>
                         <ul>
                             <li>Agendar consulta de retorno para discutir resultados completos</li>
-                            <li>Aguardar resultado das biópsias (H. pylori)</li>
-                            <li>Iniciar mudanças alimentares (refluxo e colesterol)</li>
-                            <li>Começar plano de exercícios aeróbicos</li>
+                            <li><strong>✅ Resultado da biópsia recebido: H. pylori NEGATIVO!</strong></li>
+                            <li>Iniciar tratamento com inibidor de bomba de prótons (IBP)</li>
+                            <li>Começar mudanças alimentares para refluxo e gastrite</li>
+                            <li>Iniciar plano de exercícios aeróbicos para aumentar HDL</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
                         <h3>📊 1-2 Semanas</h3>
                         <ul>
-                            <li>Resultado das biópsias disponível</li>
-                            <li>Iniciar tratamento se H. pylori positivo</li>
-                            <li>Medicação para refluxo e gastrite (se não iniciada)</li>
+                            <li>Avaliar resposta ao tratamento com IBP</li>
+                            <li>Manter dieta para refluxo rigorosamente</li>
+                            <li>Estabelecer rotina de exercícios</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
                         <h3>🔄 3-6 Meses</h3>
                         <ul>
-                            <li>Repetir perfil lipídico completo</li>
+                            <li>Repetir perfil lipídico completo (avaliar HDL)</li>
                             <li>Avaliar eficácia das mudanças de estilo de vida</li>
                             <li>Reavaliar glicemia e hemoglobina glicada</li>
-                            <li>EDA de controle (se sintomas persistirem)</li>
+                            <li>EDA de controle se sintomas persistirem</li>
                         </ul>
                     </div>
 
@@ -907,70 +982,78 @@
             <h2>🎯 Recomendações Personalizadas</h2>
 
             <div class="recommendation-item">
-                <h3>💊 Tratamento Médico (FUNDAMENTAL)</h3>
+                <h3>💊 Tratamento Médico (SIMPLIFICADO - H. pylori NEGATIVO)</h3>
                 <ul>
-                    <li><strong>Inibidor de bomba de prótons (IBP):</strong> Para tratar esofagite e gastrite (ex: omeprazol, pantoprazol)</li>
-                    <li><strong>Se H. pylori positivo:</strong> Tratamento antibiótico triplo por 14 dias</li>
-                    <li><strong>Protetor gástrico:</strong> Se necessário, conforme orientação médica</li>
-                    <li><strong>Discussão sobre HDL:</strong> Avaliar necessidade de medicação específica</li>
+                    <li><strong>Inibidor de bomba de prótons (IBP):</strong> Para tratar esofagite e gastrite (ex: omeprazol 20-40mg, pantoprazol 40mg, esomeprazol 40mg) - tomar 30-60 minutos ANTES do café da manhã</li>
+                    <li><strong>✅ NÃO precisa antibiótico:</strong> H. pylori negativo!</li>
+                    <li><strong>Antiácido de alívio:</strong> Se necessário para sintomas agudos (hidróxido de alumínio/magnésio)</li>
+                    <li><strong>Discussão sobre HDL:</strong> Avaliar com cardiologista necessidade de medicação específica (ex: fibratos, niacina)</li>
+                    <li><strong>Duração do tratamento:</strong> Mínimo 8 semanas de IBP, depois avaliar redução gradual</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🥗 Dieta para Refluxo e Gastrite</h3>
+                <h3>🥗 Dieta para Refluxo e Gastrite (FUNDAMENTAL!)</h3>
                 <ul>
-                    <li><strong>EVITAR:</strong> Café, refrigerantes, álcool, chocolate, menta, comidas gordurosas, frituras, pimenta, condimentos fortes</li>
-                    <li><strong>EVITAR:</strong> Cítricos (laranja, limão, abacaxi), tomate e seus derivados (molhos)</li>
-                    <li><strong>Comer devagar:</strong> Mastigar bem os alimentos</li>
+                    <li><strong>EVITAR SEMPRE:</strong> Café, refrigerantes, álcool, chocolate, menta, comidas gordurosas, frituras, pimenta, condimentos fortes</li>
+                    <li><strong>EVITAR:</strong> Cítricos (laranja, limão, abacaxi), tomate e derivados (molhos, ketchup), alho e cebola crus</li>
+                    <li><strong>Comer devagar:</strong> Mastigar bem os alimentos (20-30 vezes cada garfada)</li>
                     <li><strong>Refeições menores:</strong> 5-6 pequenas refeições ao dia em vez de 3 grandes</li>
-                    <li><strong>Não deitar logo após comer:</strong> Aguardar 2-3 horas</li>
-                    <li><strong>Elevar cabeceira da cama:</strong> 15-20cm (ajuda no refluxo noturno)</li>
-                    <li><strong>Evitar roupas apertadas:</strong> Não comprimir o abdômen</li>
+                    <li><strong>Não deitar após comer:</strong> Aguardar 2-3 horas para deitar</li>
+                    <li><strong>Elevar cabeceira da cama:</strong> 15-20cm com calços (ajuda MUITO no refluxo noturno)</li>
+                    <li><strong>Evitar roupas apertadas:</strong> Não comprimir o abdômen (cintos, calças apertadas)</li>
+                    <li><strong>Última refeição:</strong> 3 horas antes de dormir (no máximo lanches leves como pão integral com queijo branco)</li>
+                    <li><strong>Alimentos permitidos:</strong> Arroz, macarrão, batata, inhame, carnes magras grelhadas, frango, peixe, ovos cozidos, leite desnatado, queijos brancos, pão integral, banana, maçã, pera, mamão, melão, aveia</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🥗 Alimentação para HDL (Colesterol Bom)</h3>
+                <h3>🥗 Alimentação para Aumentar HDL (PRIORIDADE MÁXIMA)</h3>
                 <ul>
-                    <li>Peixes gordos (salmão, sardinha, atum) 2-3x/semana</li>
-                    <li>Azeite de oliva extravirgem diariamente</li>
-                    <li>Oleaginosas (castanhas, nozes, amêndoas) - 1 punhado/dia</li>
-                    <li>Abacate regularmente (mas com moderação devido ao refluxo)</li>
-                    <li>Aumentar fibras (vegetais, legumes, aveia)</li>
-                    <li>Reduzir carboidratos refinados e açúcares</li>
+                    <li><strong>Peixes gordos:</strong> Salmão, sardinha, atum, cavalinha - 2-3x/semana</li>
+                    <li><strong>Azeite de oliva extravirgem:</strong> 2 colheres/dia (cru, na salada)</li>
+                    <li><strong>Oleaginosas:</strong> Castanhas, nozes, amêndoas, amendoim - 1 punhado/dia (30g)</li>
+                    <li><strong>Abacate:</strong> Moderadamente (pode piorar refluxo em algumas pessoas - teste)</li>
+                    <li><strong>Fibras solúveis:</strong> Aveia, linhaça, chia diariamente</li>
+                    <li><strong>Reduzir drasticamente:</strong> Carboidratos refinados (açúcar, doces, pão branco, massas brancas)</li>
+                    <li><strong>Evitar totalmente:</strong> Gorduras trans (margarinas, produtos industrializados)</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🏃 Atividade Física (PRIORIDADE MÁXIMA)</h3>
+                <h3>🏃 Atividade Física (ESSENCIAL PARA HDL)</h3>
                 <ul>
-                    <li>150 minutos/semana de exercícios aeróbicos (caminhada rápida, natação, ciclismo)</li>
-                    <li>Musculação 2-3x/semana</li>
-                    <li><strong>Exercício é a melhor forma de aumentar HDL</strong></li>
-                    <li>Comece gradualmente se estiver sedentário</li>
-                    <li><strong>Evitar exercícios logo após comer</strong> (pode piorar refluxo)</li>
+                    <li><strong>META:</strong> 150 minutos/semana de exercícios aeróbicos moderados</li>
+                    <li><strong>Exemplos:</strong> Caminhada rápida (5-6 km/h), natação, ciclismo, corrida leve</li>
+                    <li><strong>Distribuição:</strong> 30 minutos, 5x/semana OU 50 minutos, 3x/semana</li>
+                    <li><strong>Musculação:</strong> 2-3x/semana (também ajuda a aumentar HDL)</li>
+                    <li><strong>IMPORTANTE:</strong> Exercício aeróbico é a MELHOR forma de aumentar HDL naturalmente</li>
+                    <li><strong>Evitar exercícios logo após comer:</strong> Aguardar 2 horas (pode piorar refluxo)</li>
+                    <li><strong>Se sedentário:</strong> Comece com 10-15 min/dia e aumente gradualmente</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
                 <h3>🍬 Controle Glicêmico</h3>
                 <ul>
-                    <li>Preferir carboidratos complexos e integrais</li>
-                    <li>Controlar tamanho das porções</li>
-                    <li>Combinar carboidratos com proteínas e gorduras boas</li>
-                    <li>Reduzir alimentos ultraprocessados</li>
-                    <li>Manter peso saudável</li>
+                    <li>Preferir sempre carboidratos integrais e complexos</li>
+                    <li>Controlar tamanho das porções (prato: 1/2 vegetais, 1/4 proteína, 1/4 carboidrato)</li>
+                    <li>Combinar carboidratos com proteínas e gorduras boas (retarda absorção)</li>
+                    <li>Reduzir alimentos ultraprocessados ao máximo</li>
+                    <li>Manter peso saudável (IMC entre 18.5-24.9)</li>
+                    <li>Monitorar glicemia a cada 3-6 meses</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
                 <h3>🏥 Próximos Passos Médicos</h3>
                 <ul>
-                    <li>Aguardar resultado das biópsias para H. pylori</li>
-                    <li>Consulta de retorno para avaliar tratamento</li>
+                    <li>✅ <strong>Resultado biópsia recebido:</strong> H. pylori NEGATIVO</li>
+                    <li>Consulta de retorno com gastroenterologista</li>
+                    <li>Iniciar tratamento com IBP por 8 semanas</li>
                     <li>Avaliação nutricional especializada</li>
-                    <li>Investigar eosinófilos elevados</li>
-                    <li>Avaliação cardiológica (HDL baixo)</li>
+                    <li>Consulta com cardiologista (HDL baixo)</li>
+                    <li>Investigar eosinófilos elevados (parasitológico de fezes)</li>
                     <li>Reavaliação laboratorial em 3-6 meses</li>
                 </ul>
             </div>
@@ -978,12 +1061,13 @@
             <div class="recommendation-item">
                 <h3>🌟 Outros Hábitos Saudáveis</h3>
                 <ul>
-                    <li>Não fumar (piora refluxo e reduz HDL)</li>
-                    <li>Manter peso saudável (obesidade piora refluxo)</li>
-                    <li>Dormir 7-9 horas por noite</li>
-                    <li>Gerenciar estresse (piora gastrite)</li>
-                    <li>Hidratação adequada</li>
-                    <li>Evitar álcool (piora refluxo e gastrite)</li>
+                    <li><strong>Não fumar:</strong> Piora refluxo e reduz HDL drasticamente</li>
+                    <li><strong>Peso saudável:</strong> Cada 5-10kg acima do ideal piora muito o refluxo</li>
+                    <li><strong>Dormir bem:</strong> 7-9 horas por noite (com cabeceira elevada)</li>
+                    <li><strong>Gerenciar estresse:</strong> Piora gastrite (meditação, yoga, hobbies)</li>
+                    <li><strong>Hidratação:</strong> 2-3 litros de água/dia (entre refeições, não durante)</li>
+                    <li><strong>Evitar álcool:</strong> Piora refluxo, gastrite e reduz HDL</li>
+                    <li><strong>Evitar medicamentos irritantes:</strong> Anti-inflamatórios (ibuprofeno, diclofenaco) - use paracetamol se precisar</li>
                 </ul>
             </div>
         </div>
@@ -995,11 +1079,11 @@
                 Este relatório é informativo e educacional. A interpretação completa dos resultados deve ser feita por seu médico, considerando seu histórico clínico, exame físico e outros fatores. Não substitui consulta médica.
             </p>
             <p style="margin-top: 20px;">
-                <strong>Importante:</strong> Aguarde o resultado das biópsias antes de definir o tratamento completo. A presença ou ausência de H. pylori mudará significativamente o plano terapêutico.
+                <strong>Atualização importante (05/02/2026):</strong> Resultado da biópsia recebido. H. pylori NEGATIVO. Tratamento simplificado com IBP + mudanças de estilo de vida. Não precisa antibióticos!
             </p>
             <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
-                Exames realizados: Laboratório Unimed Natal e Hospital Gastroprocto<br>
-                Relatório gerado em: 02/02/2026
+                Exames realizados: Laboratório Unimed Natal, Hospital Gastroprocto e Laboratório de Citopatologia<br>
+                Relatório atualizado em: 05/02/2026
             </p>
         </div>
     </div>
@@ -1111,8 +1195,8 @@
             observer.observe(section);
         });
 
-        console.log('📊 Relatório Completo de Saúde carregado!');
-        console.log('✅ Exames laboratoriais e endoscópicos integrados');
+        console.log('📊 Relatório Completo de Saúde atualizado!');
+        console.log('✅ Resultado da biópsia incluído: H. pylori NEGATIVO');
     </script>
 </body>
 </html>
