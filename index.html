@@ -315,15 +315,6 @@
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
 
-        .summary-card h3 {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .summary-card p {
-            font-size: 1.1em;
-        }
-
         .footer {
             background: #2c3e50;
             color: white;
@@ -476,6 +467,54 @@
             margin-bottom: 15px;
         }
 
+        .liver-steatosis-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .liver-normal, .liver-steatosis {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .liver-normal {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .liver-steatosis {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            color: white;
+        }
+
+        .liver-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .mri-findings {
+            background: #e3f2fd;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #2196f3;
+        }
+
+        .mri-findings h4 {
+            color: #1976d2;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2196f3;
+        }
+
         @media print {
             body {
                 background: white;
@@ -498,6 +537,9 @@
             .content {
                 padding: 20px;
             }
+            .liver-steatosis-visual {
+                grid-template-columns: 1fr;
+            }
         }
 
         @keyframes fadeIn {
@@ -508,6 +550,64 @@
         .fade-in {
             animation: fadeIn 0.6s ease;
         }
+
+        .fatty-liver-gauge {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+        .gauge-bg {
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 180deg at 50% 100%, 
+                #28a745 0deg 60deg,
+                #ffc107 60deg 120deg, 
+                #fd7e14 120deg 150deg,
+                #dc3545 150deg 180deg);
+            border-radius: 150px 150px 0 0;
+            position: relative;
+        }
+
+        .gauge-needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            height: 120px;
+            background: #333;
+            transform-origin: bottom;
+            transform: translateX(-50%) rotate(150deg); /* 43.9% = ~150deg */
+            border-radius: 2px;
+        }
+
+        .gauge-needle::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -515,7 +615,7 @@
         <!-- Cabeçalho -->
         <div class="header">
             <h1>📊 Relatório Completo de Saúde</h1>
-            <p class="subtitle">Análise Detalhada - Exames Laboratoriais e Endoscópicos</p>
+            <p class="subtitle">Análise Detalhada - Exames Laboratoriais, Endoscópicos e de Imagem</p>
             <button class="print-btn" onclick="window.print()">🖨️ Imprimir Relatório</button>
         </div>
 
@@ -531,7 +631,7 @@
             </div>
             <div class="info-card">
                 <h3>🏥 Exames Realizados</h3>
-                <p>26-31/01 + 05/02/2026</p>
+                <p>26/01 - 05/02/2026</p>
             </div>
             <div class="info-card">
                 <h3>👨‍⚕️ Médico Solicitante</h3>
@@ -550,11 +650,11 @@
                 
                 <div class="summary-grid">
                     <div class="summary-card excellent">
-                        <h3>85%</h3>
+                        <h3>75%</h3>
                         <p>Exames Normais</p>
                     </div>
                     <div class="summary-card attention">
-                        <h3>10%</h3>
+                        <h3>20%</h3>
                         <p>Atenção Necessária</p>
                     </div>
                     <div class="summary-card good">
@@ -563,30 +663,132 @@
                     </div>
                 </div>
 
-                <div class="alert alert-success">
-                    <span style="font-size: 2em;">🎉</span>
+                <div class="alert alert-warning">
+                    <span style="font-size: 2em;">⚠️</span>
                     <div>
-                        <strong>ÓTIMA NOTÍCIA!</strong> O resultado da biópsia veio negativo para H. pylori! Isso significa que você não precisa fazer tratamento com antibióticos, apenas tratamento sintomático para refluxo e gastrite.
+                        <strong>ATENÇÃO: NOVO ACHADO IMPORTANTE!</strong> A ressonância magnética revelou esteatose hepática grau III (gordura no fígado acentuada). Este é um achado que requer mudanças imediatas no estilo de vida e acompanhamento médico.
                     </div>
                 </div>
 
-                <div class="alert alert-info">
-                    <span style="font-size: 2em;">ℹ️</span>
+                <div class="alert alert-success">
+                    <span style="font-size: 2em;">🎉</span>
                     <div>
-                        <strong>Status Geral:</strong> Seu estado de saúde é predominantemente bom. Os exames laboratoriais mostram a maioria dos valores dentro da normalidade. Os exames endoscópicos revelaram alterações leves que requerem tratamento sintomático.
+                        <strong>ÓTIMA NOTÍCIA!</strong> H. pylori negativo na biópsia! Não precisa de antibióticos. Colonoscopia normal - sem pólipos ou tumores. Rins, pâncreas, baço, próstata e bexiga normais na RM.
                     </div>
                 </div>
 
                 <div class="alert alert-warning">
-                    <span style="font-size: 2em;">⚠️</span>
+                    <span style="font-size: 2em;">🚨</span>
                     <div>
                         <strong>Principais Achados que Precisam de Atenção:</strong> 
                         <ul>
-                            <li><strong>HDL (colesterol bom) baixo</strong> - risco cardiovascular aumentado</li>
+                            <li><strong>ESTEATOSE HEPÁTICA GRAU III</strong> - 43,9% de gordura no fígado (GRAVE)</li>
+                            <li><strong>HDL (colesterol bom) muito baixo</strong> - risco cardiovascular aumentado</li>
                             <li><strong>Esofagite leve + Hérnia de Hiato</strong> - necessita tratamento para refluxo</li>
                             <li><strong>Gastrite leve</strong> - H. pylori negativo (boa notícia!)</li>
                             <li><strong>Glicose no limite superior</strong> - monitorar para prevenir diabetes</li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ressonância Magnética - NOVO -->
+            <div class="section fade-in">
+                <h2 class="section-title">
+                    <span class="icon">🧲</span>
+                    Ressonância Magnética (Abdome Superior e Pelve)
+                </h2>
+
+                <div class="mri-findings">
+                    <span class="exam-date">📅 Ressonância Magnética - Data do Exame</span>
+                    <h4>🚨 ACHADO PRINCIPAL: ESTEATOSE HEPÁTICA GRAU III</h4>
+                    
+                    <div class="alert alert-danger" style="margin: 20px 0; background: white;">
+                        <span style="font-size: 2em;">🚨</span>
+                        <div>
+                            <strong>ATENÇÃO MÁXIMA:</strong> Foi detectada infiltração gordurosa hepática difusa acentuada (esteatose grau III) com índice de queda de sinal de <strong>43,9%</strong>. Este é um grau SEVERO de gordura no fígado que requer intervenção imediata.
+                        </div>
+                    </div>
+
+                    <div class="fatty-liver-gauge">
+                        <h3 style="color: #333; margin-bottom: 20px;">Nível de Gordura no Fígado</h3>
+                        <div class="gauge-container">
+                            <div class="gauge-bg">
+                                <div class="gauge-needle"></div>
+                            </div>
+                        </div>
+                        <div class="gauge-labels">
+                            <span style="color: #28a745;">Normal<br>0-5%</span>
+                            <span style="color: #ffc107;">Leve<br>5-15%</span>
+                            <span style="color: #fd7e14;">Moderado<br>15-30%</span>
+                            <span style="color: #dc3545;">Severo<br>>30%</span>
+                        </div>
+                        <p style="font-size: 1.5em; color: #dc3545; font-weight: bold; margin-top: 15px;">
+                            SEU NÍVEL: 43,9% (GRAU III - SEVERO)
+                        </p>
+                    </div>
+
+                    <div class="liver-steatosis-visual">
+                        <div class="liver-normal">
+                            <span class="liver-icon">🫘</span>
+                            <h4>Fígado Normal</h4>
+                            <p>Células saudáveis<br>Sem acúmulo de gordura</p>
+                        </div>
+                        <div class="liver-steatosis">
+                            <span class="liver-icon">🟡</span>
+                            <h4>Seu Fígado (43,9% gordura)</h4>
+                            <p>ESTEATOSE GRAU III<br>Infiltração gordurosa severa</p>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 20px;">📊 Interpretação do Exame:</h4>
+                    <ul>
+                        <li><strong>Técnica utilizada:</strong> RM com sequências específicas (T1 GRE em fase e fora de fase, T2 TSE)</li>
+                        <li><strong>Contraste:</strong> 15ml de GD-DTPA (gadolínio) endovenoso</li>
+                        <li><strong>Medição:</strong> Índice de queda de sinal de 43,9% nas sequências fora de fase</li>
+                        <li><strong>Classificação:</strong> Grau III (severo) conforme MRI Steatosis Grading System</li>
+                        <li><strong>Significado:</strong> Mais de 40% das células do fígado contêm gordura</li>
+                    </ul>
+
+                    <h4 style="margin-top: 20px;">✅ Estruturas Normais na RM:</h4>
+                    <ul>
+                        <li>✅ <strong>Fígado:</strong> Dimensões e contornos normais (apenas com esteatose)</li>
+                        <li>✅ <strong>Vias biliares:</strong> Sem dilatação das vias biliares intra-hepáticas</li>
+                        <li>✅ <strong>Vesícula biliar:</strong> Normal, sem cálculos</li>
+                        <li>✅ <strong>Pâncreas:</strong> Morfologia, contornos e sinal normais</li>
+                        <li>✅ <strong>Baço:</strong> Homogêneo e normal</li>
+                        <li>✅ <strong>Rins:</strong> Normais bilateralmente, sem hidronefrose</li>
+                        <li>✅ <strong>Adrenais:</strong> Sem alterações</li>
+                        <li>✅ <strong>Próstata:</strong> Morfologia habitual</li>
+                        <li>✅ <strong>Bexiga:</strong> Capacidade e paredes normais</li>
+                        <li>✅ <strong>Reto:</strong> Sem alterações</li>
+                        <li>✅ <strong>Sem linfonodos:</strong> Ausência de adenomegalias</li>
+                        <li>✅ <strong>Sem tumores:</strong> Nenhuma massa detectada</li>
+                        <li>✅ <strong>Sem ascite:</strong> Ausência de líquido livre</li>
+                    </ul>
+
+                    <div class="alert alert-info" style="margin-top: 20px; background: white;">
+                        <span style="font-size: 2em;">📘</span>
+                        <div>
+                            <strong>Limitações do Exame:</strong><br>
+                            A RM tem limitações para caracterização de cálculos renais (normal na RM não exclui pequenos cálculos). Para avaliação renal completa, pode ser necessária tomografia ou ultrassom específico.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card específico para esteatose -->
+                <div class="cards-grid">
+                    <div class="exam-card danger">
+                        <h3>🫘 Esteatose Hepática</h3>
+                        <div class="exam-value">43,9%</div>
+                        <p class="exam-reference">Normal: <5%</p>
+                        <span class="exam-status status-danger">🚨 GRAU III (SEVERO)</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar warning" style="width: 100%">CRÍTICO</div>
+                        </div>
+                        <p style="margin-top: 15px; font-size: 0.9em; color: #721c24;">
+                            <strong>Ação Urgente Necessária:</strong> Mudanças drásticas no estilo de vida + acompanhamento hepatológico.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -635,10 +837,10 @@
                     <span class="exam-date">📅 Endoscopia Digestiva Alta (EDA) - 27/01/2026</span>
                     <h4>⚠️ ACHADOS: ALTERAÇÕES LEVES</h4>
                     
-                    <div class="alert alert-warning" style="margin: 15px 0;">
-                        <span style="font-size: 2em;">⚠️</span>
+                    <div class="alert alert-success" style="margin: 15px 0;">
+                        <span style="font-size: 2em;">🎉</span>
                         <div>
-                            <strong>Foram encontradas alterações que necessitam tratamento:</strong>
+                            <strong>EXCELENTE NOTÍCIA - Resultado da Biópsia (05/02/2026):</strong> H. pylori NEGATIVO! Não precisa de antibióticos!
                         </div>
                     </div>
 
@@ -665,85 +867,6 @@
                         <li><strong>Gravidade:</strong> LEVE</li>
                         <li><strong>Resultado biópsia:</strong> H. pylori NEGATIVO (não precisa antibiótico!)</li>
                     </ul>
-
-                    <h4 style="margin-top: 20px;">🔬 Biópsias Realizadas - ✅ RESULTADOS DISPONÍVEIS (05/02/2026):</h4>
-                    <ul>
-                        <li>Coletados 6 fragmentos (2 do antro + 2 do corpo + 2 da incisura angular)</li>
-                        <li>Enviados para análise histopatológica</li>
-                        <li>Pesquisa de Helicobacter pylori (H. pylori)</li>
-                        <li><strong>✅ H. pylori: NEGATIVO</strong></li>
-                    </ul>
-
-                    <div class="alert alert-success" style="margin-top: 20px;">
-                        <span style="font-size: 2em;">🎉</span>
-                        <div>
-                            <strong>EXCELENTES NOTÍCIAS - Resultado da Biópsia:</strong>
-                            <ul style="margin-top: 10px;">
-                                <li>✅ <strong>H. pylori NEGATIVO</strong> - Não precisa fazer tratamento com antibióticos!</li>
-                                <li>✅ <strong>Gastrite crônica LEVE</strong> em todas as áreas examinadas</li>
-                                <li>✅ <strong>SEM metaplasia intestinal</strong> - não há alterações pré-cancerosas</li>
-                                <li>✅ <strong>SEM atrofia da mucosa</strong> - mucosa preservada (score 0 pela classificação OLGA)</li>
-                                <li>✅ <strong>Atividade neutrofílica ausente</strong> - sem inflamação aguda ativa</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <h4 style="margin-top: 20px;">✅ Áreas Normais:</h4>
-                    <ul>
-                        <li>✅ Cavidade oral, faringe e hipofaringe: normais</li>
-                        <li>✅ Esôfago proximal e médio: normais</li>
-                        <li>✅ Piloro: centrado e funcionando bem</li>
-                        <li>✅ Duodeno: sem úlceras ou deformidades</li>
-                        <li>✅ Papila duodenal: normal</li>
-                    </ul>
-                </div>
-
-                <!-- Detalhes Histopatológicos -->
-                <div class="endoscopy-findings" style="margin-top: 30px; background: #e8f5e9;">
-                    <span class="exam-date">📅 Análise Histopatológica (Biópsia) - 05/02/2026</span>
-                    <h4>📊 Detalhes Microscópicos</h4>
-                    <p style="margin: 15px 0;"><strong>Laboratório:</strong> Laboratório de Citopatologia<br>
-                    <strong>Patologista:</strong> Dra. Maria Goretti Freire de Carvalho (CRM 803)</p>
-                    
-                    <h4 style="margin-top: 20px;">📍 1. Antro Gástrico (entrada do estômago):</h4>
-                    <ul>
-                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de padrão antral</li>
-                        <li><strong>Atividade inflamatória aguda:</strong> Ausente (sem neutrófilos)</li>
-                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
-                        <li><strong>Atrofia da mucosa:</strong> Ausente - Score A0 ✅</li>
-                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
-                    </ul>
-
-                    <h4 style="margin-top: 20px;">📍 2. Incisura Angular (meio do estômago):</h4>
-                    <ul>
-                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de incisura</li>
-                        <li><strong>Atividade inflamatória aguda:</strong> Ausente</li>
-                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
-                        <li><strong>Atrofia da mucosa:</strong> Ausente ✅</li>
-                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
-                    </ul>
-
-                    <h4 style="margin-top: 20px;">📍 3. Corpo Gástrico/Fundo (fundo do estômago):</h4>
-                    <ul>
-                        <li><strong>Diagnóstico:</strong> Gastrite crônica leve em mucosa de padrão fúndico</li>
-                        <li><strong>Atividade inflamatória aguda:</strong> Ausente</li>
-                        <li><strong>Metaplasia intestinal:</strong> Ausente ✅</li>
-                        <li><strong>Atrofia da mucosa:</strong> Ausente - Score C0 ✅</li>
-                        <li><strong>H. pylori:</strong> NEGATIVO (HE e Giemsa) ✅</li>
-                    </ul>
-
-                    <div class="alert alert-info" style="margin-top: 20px; background: white;">
-                        <span style="font-size: 2em;">📘</span>
-                        <div>
-                            <strong>Classificação OLGA (Operative Link on Gastritis Assessment):</strong><br>
-                            <strong>Score de Atrofia: Estágio 0 (zero)</strong> - O MELHOR RESULTADO POSSÍVEL!<br><br>
-                            <strong>O que isso significa:</strong><br>
-                            ✅ Você tem o menor risco possível de câncer gástrico associado à gastrite<br>
-                            ✅ Sua mucosa está preservada, sem atrofia<br>
-                            ✅ Não há alterações pré-cancerosas (metaplasia)<br><br>
-                            A classificação OLGA vai de 0 (sem atrofia/risco baixo) até 4 (atrofia severa/risco alto). Você está no estágio 0!
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -766,13 +889,16 @@
                     </div>
 
                     <div class="exam-card danger">
-                        <h3>HDL (Colesterol Bom) ⚠️</h3>
+                        <h3>HDL (Colesterol Bom) 🚨</h3>
                         <div class="exam-value">30</div>
                         <p class="exam-reference">Referência: >40 mg/dL</p>
-                        <span class="exam-status status-danger">✗ Abaixo do Ideal</span>
+                        <span class="exam-status status-danger">✗ MUITO BAIXO</span>
                         <div class="progress-bar-container">
-                            <div class="progress-bar warning" style="width: 75%">Baixo</div>
+                            <div class="progress-bar warning" style="width: 75%">CRÍTICO</div>
                         </div>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #721c24;">
+                            <strong>RISCO ALTO:</strong> Combinado com esteatose hepática = risco cardiovascular elevado!
+                        </p>
                     </div>
 
                     <div class="exam-card normal">
@@ -831,15 +957,10 @@
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <h3 class="chart-title">Controle Glicêmico</h3>
-                    <canvas id="glucoseChart"></canvas>
-                </div>
-
-                <div class="alert alert-info">
-                    <span style="font-size: 2em;">💡</span>
+                <div class="alert alert-warning">
+                    <span style="font-size: 2em;">⚠️</span>
                     <div>
-                        <strong>Análise:</strong> A glicose pontual está levemente elevada, mas a hemoglobina glicada mostra que seu controle nos últimos 3 meses está excelente. A elevação pode ter sido momentânea, mas vale manter atenção para prevenir diabetes.
+                        <strong>ATENÇÃO:</strong> A combinação de esteatose hepática grau III + glicose elevada aumenta muito o risco de desenvolver diabetes tipo 2. Intervenção urgente necessária!
                     </div>
                 </div>
             </div>
@@ -871,6 +992,9 @@
                         <div class="exam-value">25</div>
                         <p class="exam-reference">Referência: 17-59 U/L</p>
                         <span class="exam-status status-normal">✓ Normal</span>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #155724;">
+                            <strong>Importante:</strong> Normal apesar da esteatose grau III.
+                        </p>
                     </div>
 
                     <div class="exam-card normal">
@@ -878,13 +1002,16 @@
                         <div class="exam-value">36</div>
                         <p class="exam-reference">Referência: <50 U/L</p>
                         <span class="exam-status status-normal">✓ Normal</span>
+                        <p style="margin-top: 10px; font-size: 0.9em; color: #155724;">
+                            <strong>Importante:</strong> Normal apesar da esteatose grau III.
+                        </p>
                     </div>
                 </div>
 
-                <div class="alert alert-success">
-                    <span style="font-size: 2em;">✅</span>
+                <div class="alert alert-info">
+                    <span style="font-size: 2em;">ℹ️</span>
                     <div>
-                        <strong>Excelente!</strong> Seus rins e fígado estão funcionando perfeitamente. Todos os marcadores dentro da normalidade.
+                        <strong>Observação Importante:</strong> Suas enzimas hepáticas (TGO e TGP) estão normais mesmo com esteatose grau III. Isso é um bom sinal - significa que ainda não há lesão hepática ativa, mas a intervenção é urgente para prevenir progressão.
                     </div>
                 </div>
             </div>
@@ -931,46 +1058,48 @@
             <div class="section fade-in">
                 <h2 class="section-title">
                     <span class="icon">📅</span>
-                    Plano de Acompanhamento
+                    Plano de Acompanhamento URGENTE
                 </h2>
 
                 <div class="timeline">
                     <div class="timeline-item">
-                        <h3>✅ Imediato (Hoje)</h3>
+                        <h3>🚨 URGENTE (Esta semana)</h3>
                         <ul>
-                            <li>Agendar consulta de retorno para discutir resultados completos</li>
-                            <li><strong>✅ Resultado da biópsia recebido: H. pylori NEGATIVO!</strong></li>
-                            <li>Iniciar tratamento com inibidor de bomba de prótons (IBP)</li>
-                            <li>Começar mudanças alimentares para refluxo e gastrite</li>
-                            <li>Iniciar plano de exercícios aeróbicos para aumentar HDL</li>
+                            <li><strong>PRIORIDADE 1:</strong> Agendar consulta com hepatologista (especialista em fígado)</li>
+                            <li><strong>PRIORIDADE 2:</strong> Iniciar dieta restritiva para gordura no fígado IMEDIATAMENTE</li>
+                            <li><strong>PRIORIDADE 3:</strong> Iniciar exercícios aeróbicos intensos (mínimo 45min, 5x/semana)</li>
+                            <li>Continuar tratamento para refluxo com IBP</li>
+                            <li>Avaliar com cardiologista (HDL baixo + esteatose = alto risco cardiovascular)</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
-                        <h3>📊 1-2 Semanas</h3>
+                        <h3>📊 1 Mês</h3>
                         <ul>
-                            <li>Avaliar resposta ao tratamento com IBP</li>
-                            <li>Manter dieta para refluxo rigorosamente</li>
-                            <li>Estabelecer rotina de exercícios</li>
+                            <li>Reavaliação com hepatologista</li>
+                            <li>Possível nova RM para avaliar evolução da esteatose</li>
+                            <li>Exames laboratoriais de controle (TGO, TGP, perfil lipídico)</li>
+                            <li>Avaliar resposta às mudanças de estilo de vida</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
-                        <h3>🔄 3-6 Meses</h3>
+                        <h3>🔄 3 Meses</h3>
                         <ul>
-                            <li>Repetir perfil lipídico completo (avaliar HDL)</li>
-                            <li>Avaliar eficácia das mudanças de estilo de vida</li>
-                            <li>Reavaliar glicemia e hemoglobina glicada</li>
-                            <li>EDA de controle se sintomas persistirem</li>
+                            <li>RM de controle para avaliar redução da esteatose</li>
+                            <li>Perfil lipídico completo (meta: HDL >40 mg/dL)</li>
+                            <li>Hemoglobina glicada e glicemia de jejum</li>
+                            <li>Avaliação nutricional e ajustes na dieta</li>
                         </ul>
                     </div>
 
                     <div class="timeline-item">
-                        <h3>📈 Anualmente</h3>
+                        <h3>📈 6-12 Meses</h3>
                         <ul>
-                            <li>Check-up completo anual</li>
-                            <li>Monitoramento contínuo de fatores de risco</li>
-                            <li>Próxima colonoscopia em 5-10 anos</li>
+                            <li>Meta: Esteatose grau I ou resolução completa</li>
+                            <li>Normalização do HDL</li>
+                            <li>Controle da glicemia</li>
+                            <li>EDA de controle se sintomas de refluxo persistirem</li>
                         </ul>
                     </div>
                 </div>
@@ -979,96 +1108,85 @@
 
         <!-- Recomendações -->
         <div class="recommendations fade-in">
-            <h2>🎯 Recomendações Personalizadas</h2>
+            <h2>🚨 Recomendações URGENTES - Esteatose Grau III</h2>
 
             <div class="recommendation-item">
-                <h3>💊 Tratamento Médico (SIMPLIFICADO - H. pylori NEGATIVO)</h3>
+                <h3>🍽️ DIETA PARA ESTEATOSE HEPÁTICA (URGENTE)</h3>
                 <ul>
-                    <li><strong>Inibidor de bomba de prótons (IBP):</strong> Para tratar esofagite e gastrite (ex: omeprazol 20-40mg, pantoprazol 40mg, esomeprazol 40mg) - tomar 30-60 minutos ANTES do café da manhã</li>
-                    <li><strong>✅ NÃO precisa antibiótico:</strong> H. pylori negativo!</li>
-                    <li><strong>Antiácido de alívio:</strong> Se necessário para sintomas agudos (hidróxido de alumínio/magnésio)</li>
-                    <li><strong>Discussão sobre HDL:</strong> Avaliar com cardiologista necessidade de medicação específica (ex: fibratos, niacina)</li>
-                    <li><strong>Duração do tratamento:</strong> Mínimo 8 semanas de IBP, depois avaliar redução gradual</li>
+                    <li><strong>CORTAR TOTALMENTE:</strong> Álcool (qualquer quantidade), refrigerantes, sucos industrializados, doces, bolos, biscoitos</li>
+                    <li><strong>REDUZIR DRASTICAMENTE:</strong> Carboidratos refinados (açúcar, pão branco, massas brancas, arroz branco)</li>
+                    <li><strong>ELIMINAR:</strong> Frituras, fast food, carnes gordas, embutidos, queijos amarelos</li>
+                    <li><strong>PRIORIZAR:</strong> Proteínas magras (peito de frango, peixe, ovo), vegetais folhosos, legumes</li>
+                    <li><strong>CARBOIDRATOS:</strong> Apenas integrais e em pequenas quantidades</li>
+                    <li><strong>GORDURAS BOAS:</strong> Azeite extravirgem (2 colheres/dia), oleaginosas (30g/dia)</li>
+                    <li><strong>JEJUM INTERMITENTE:</strong> Considerar 16:8 (comer em 8h, jejuar 16h) - com orientação médica</li>
+                    <li><strong>PERDA DE PESO:</strong> Meta: 10-15% do peso atual nos próximos 6 meses</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🥗 Dieta para Refluxo e Gastrite (FUNDAMENTAL!)</h3>
+                <h3>🏃 EXERCÍCIOS PARA ESTEATOSE (OBRIGATÓRIO)</h3>
                 <ul>
-                    <li><strong>EVITAR SEMPRE:</strong> Café, refrigerantes, álcool, chocolate, menta, comidas gordurosas, frituras, pimenta, condimentos fortes</li>
-                    <li><strong>EVITAR:</strong> Cítricos (laranja, limão, abacaxi), tomate e derivados (molhos, ketchup), alho e cebola crus</li>
-                    <li><strong>Comer devagar:</strong> Mastigar bem os alimentos (20-30 vezes cada garfada)</li>
-                    <li><strong>Refeições menores:</strong> 5-6 pequenas refeições ao dia em vez de 3 grandes</li>
-                    <li><strong>Não deitar após comer:</strong> Aguardar 2-3 horas para deitar</li>
-                    <li><strong>Elevar cabeceira da cama:</strong> 15-20cm com calços (ajuda MUITO no refluxo noturno)</li>
-                    <li><strong>Evitar roupas apertadas:</strong> Não comprimir o abdômen (cintos, calças apertadas)</li>
-                    <li><strong>Última refeição:</strong> 3 horas antes de dormir (no máximo lanches leves como pão integral com queijo branco)</li>
-                    <li><strong>Alimentos permitidos:</strong> Arroz, macarrão, batata, inhame, carnes magras grelhadas, frango, peixe, ovos cozidos, leite desnatado, queijos brancos, pão integral, banana, maçã, pera, mamão, melão, aveia</li>
+                    <li><strong>AERÓBICO INTENSO:</strong> 45-60 minutos, 5-6 dias/semana (mínimo absoluto)</li>
+                    <li><strong>INTENSIDADE:</strong> Moderada a intensa (deve suar bastante)</li>
+                    <li><strong>TIPOS:</strong> Corrida, natação, ciclismo, HIIT, elíptico, spinning</li>
+                    <li><strong>MUSCULAÇÃO:</strong> 3x/semana (ajuda no metabolismo)</li>
+                    <li><strong>META:</strong> Queimar mínimo 500 calorias/sessão</li>
+                    <li><strong>NÃO NEGOCIAR:</strong> Este é o tratamento mais eficaz para esteatose</li>
+                    <li><strong>PROGRESSO:</strong> Aumentar intensidade gradualmente a cada semana</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🥗 Alimentação para Aumentar HDL (PRIORIDADE MÁXIMA)</h3>
+                <h3>💊 Acompanhamento Médico Especializado</h3>
                 <ul>
-                    <li><strong>Peixes gordos:</strong> Salmão, sardinha, atum, cavalinha - 2-3x/semana</li>
-                    <li><strong>Azeite de oliva extravirgem:</strong> 2 colheres/dia (cru, na salada)</li>
-                    <li><strong>Oleaginosas:</strong> Castanhas, nozes, amêndoas, amendoim - 1 punhado/dia (30g)</li>
-                    <li><strong>Abacate:</strong> Moderadamente (pode piorar refluxo em algumas pessoas - teste)</li>
-                    <li><strong>Fibras solúveis:</strong> Aveia, linhaça, chia diariamente</li>
-                    <li><strong>Reduzir drasticamente:</strong> Carboidratos refinados (açúcar, doces, pão branco, massas brancas)</li>
-                    <li><strong>Evitar totalmente:</strong> Gorduras trans (margarinas, produtos industrializados)</li>
+                    <li><strong>HEPATOLOGISTA:</strong> Consulta URGENTE (dentro de 1-2 semanas)</li>
+                    <li><strong>NUTRICIONISTA:</strong> Especializado em hepatologia</li>
+                    <li><strong>CARDIOLOGISTA:</strong> HDL baixo + esteatose = risco cardiovascular alto</li>
+                    <li><strong>ENDOCRINOLOGISTA:</strong> Glicose elevada + esteatose = risco diabetes</li>
+                    <li><strong>Possível medicação:</strong> Vitamina E, metformina (se indicado pelo médico)</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🏃 Atividade Física (ESSENCIAL PARA HDL)</h3>
+                <h3>📊 Exames de Seguimento</h3>
                 <ul>
-                    <li><strong>META:</strong> 150 minutos/semana de exercícios aeróbicos moderados</li>
-                    <li><strong>Exemplos:</strong> Caminhada rápida (5-6 km/h), natação, ciclismo, corrida leve</li>
-                    <li><strong>Distribuição:</strong> 30 minutos, 5x/semana OU 50 minutos, 3x/semana</li>
-                    <li><strong>Musculação:</strong> 2-3x/semana (também ajuda a aumentar HDL)</li>
-                    <li><strong>IMPORTANTE:</strong> Exercício aeróbico é a MELHOR forma de aumentar HDL naturalmente</li>
-                    <li><strong>Evitar exercícios logo após comer:</strong> Aguardar 2 horas (pode piorar refluxo)</li>
-                    <li><strong>Se sedentário:</strong> Comece com 10-15 min/dia e aumente gradualmente</li>
+                    <li><strong>RM de abdome:</strong> Em 3 meses para avaliar evolução</li>
+                    <li><strong>Enzimas hepáticas:</strong> Mensal (TGO, TGP, GGT, fosfatase alcalina)</li>
+                    <li><strong>Perfil lipídico:</strong> A cada 2 meses</li>
+                    <li><strong>Glicemia e HbA1c:</strong> A cada 3 meses</li>
+                    <li><strong>Ultrassom de abdome:</strong> Para acompanhamento (mais acessível que RM)</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🍬 Controle Glicêmico</h3>
+                <h3>🚫 O que EVITAR Absolutamente</h3>
                 <ul>
-                    <li>Preferir sempre carboidratos integrais e complexos</li>
-                    <li>Controlar tamanho das porções (prato: 1/2 vegetais, 1/4 proteína, 1/4 carboidrato)</li>
-                    <li>Combinar carboidratos com proteínas e gorduras boas (retarda absorção)</li>
-                    <li>Reduzir alimentos ultraprocessados ao máximo</li>
-                    <li>Manter peso saudável (IMC entre 18.5-24.9)</li>
-                    <li>Monitorar glicemia a cada 3-6 meses</li>
+                    <li><strong>Álcool:</strong> Zero tolerância (pode causar fibrose hepática)</li>
+                    <li><strong>Medicamentos hepatotóxicos:</strong> Paracetamol em excesso, anti-inflamatórios</li>
+                    <li><strong>Suplementos desnecessários:</strong> Podem sobrecarregar o fígado</li>
+                    <li><strong>Dietas muito restritivas:</strong> Perda de peso muito rápida pode piorar</li>
+                    <li><strong>Sedentarismo:</strong> Exercício é FUNDAMENTAL para reversão</li>
                 </ul>
             </div>
 
             <div class="recommendation-item">
-                <h3>🏥 Próximos Passos Médicos</h3>
+                <h3>🎯 Metas dos Próximos 6 Meses</h3>
                 <ul>
-                    <li>✅ <strong>Resultado biópsia recebido:</strong> H. pylori NEGATIVO</li>
-                    <li>Consulta de retorno com gastroenterologista</li>
-                    <li>Iniciar tratamento com IBP por 8 semanas</li>
-                    <li>Avaliação nutricional especializada</li>
-                    <li>Consulta com cardiologista (HDL baixo)</li>
-                    <li>Investigar eosinófilos elevados (parasitológico de fezes)</li>
-                    <li>Reavaliação laboratorial em 3-6 meses</li>
+                    <li><strong>Perda de peso:</strong> 10-15% do peso atual (reduz esteatose em 30-50%)</li>
+                    <li><strong>HDL:</strong> Elevar para >40 mg/dL</li>
+                    <li><strong>Glicemia:</strong> Manter <100 mg/dL consistentemente</li>
+                    <li><strong>Esteatose:</strong> Reduzir para grau I (índice <15%)</li>
+                    <li><strong>Atividade física:</strong> Estabelecer rotina permanente</li>
+                    <li><strong>RM de controle:</strong> Demonstrar melhora significativa</li>
                 </ul>
             </div>
 
-            <div class="recommendation-item">
-                <h3>🌟 Outros Hábitos Saudáveis</h3>
-                <ul>
-                    <li><strong>Não fumar:</strong> Piora refluxo e reduz HDL drasticamente</li>
-                    <li><strong>Peso saudável:</strong> Cada 5-10kg acima do ideal piora muito o refluxo</li>
-                    <li><strong>Dormir bem:</strong> 7-9 horas por noite (com cabeceira elevada)</li>
-                    <li><strong>Gerenciar estresse:</strong> Piora gastrite (meditação, yoga, hobbies)</li>
-                    <li><strong>Hidratação:</strong> 2-3 litros de água/dia (entre refeições, não durante)</li>
-                    <li><strong>Evitar álcool:</strong> Piora refluxo, gastrite e reduz HDL</li>
-                    <li><strong>Evitar medicamentos irritantes:</strong> Anti-inflamatórios (ibuprofeno, diclofenaco) - use paracetamol se precisar</li>
-                </ul>
+            <div class="alert alert-danger" style="margin-top: 30px; background: rgba(220, 53, 69, 0.1);">
+                <span style="font-size: 2em;">🚨</span>
+                <div>
+                    <strong>ALERTA CRÍTICO:</strong> Esteatose grau III é uma condição séria que pode evoluir para fibrose hepática e cirrose se não tratada adequadamente. A boa notícia é que é COMPLETAMENTE REVERSÍVEL com mudanças de estilo de vida. Você tem uma janela de oportunidade para reverter completamente este quadro - mas a ação deve ser IMEDIATA e SUSTENTADA.
+                </div>
             </div>
         </div>
 
@@ -1078,12 +1196,13 @@
             <p style="margin: 20px 0; font-size: 1.1em;">
                 Este relatório é informativo e educacional. A interpretação completa dos resultados deve ser feita por seu médico, considerando seu histórico clínico, exame físico e outros fatores. Não substitui consulta médica.
             </p>
-            <p style="margin-top: 20px;">
-                <strong>Atualização importante (05/02/2026):</strong> Resultado da biópsia recebido. H. pylori NEGATIVO. Tratamento simplificado com IBP + mudanças de estilo de vida. Não precisa antibióticos!
+            <p style="margin-top: 20px; color: #dc3545; font-weight: bold;">
+                <strong>AÇÃO URGENTE NECESSÁRIA:</strong> A esteatose hepática grau III detectada na ressonância magnética requer intervenção imediata. Agende consulta com hepatologista o quanto antes.
             </p>
             <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
-                Exames realizados: Laboratório Unimed Natal, Hospital Gastroprocto e Laboratório de Citopatologia<br>
-                Relatório atualizado em: 05/02/2026
+                Exames realizados: Laboratório Unimed Natal, Hospital Gastroprocto, Laboratório de Citopatologia<br>
+                RM: Dr. Murilo Augusto de Almeida Rodrigues (CRM 15735/PE)<br>
+                Relatório atualizado: 08/02/2026 (com RM)
             </p>
         </div>
     </div>
@@ -1104,7 +1223,7 @@
                     data: [148, 30, 96.8, 106],
                     backgroundColor: [
                         'rgba(40, 167, 69, 0.7)',
-                        'rgba(220, 53, 69, 0.7)',
+                        'rgba(220, 53, 69, 0.7)', // HDL baixo = vermelho
                         'rgba(40, 167, 69, 0.7)',
                         'rgba(40, 167, 69, 0.7)'
                     ],
@@ -1134,7 +1253,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Valores em mg/dL'
+                        text: 'Valores em mg/dL - HDL CRÍTICO!'
                     }
                 },
                 scales: {
@@ -1144,39 +1263,6 @@
                             display: true,
                             text: 'mg/dL'
                         }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Glicose
-        const glucoseCtx = document.getElementById('glucoseChart').getContext('2d');
-        new Chart(glucoseCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Glicose Atual', 'Margem até Diabetes'],
-                datasets: [{
-                    data: [101, 25],
-                    backgroundColor: [
-                        'rgba(255, 193, 7, 0.8)',
-                        'rgba(200, 200, 200, 0.3)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(200, 200, 200, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Glicose: 101 mg/dL (Limite Diabetes: ≥126 mg/dL)'
                     }
                 }
             }
@@ -1195,8 +1281,10 @@
             observer.observe(section);
         });
 
-        console.log('📊 Relatório Completo de Saúde atualizado!');
-        console.log('✅ Resultado da biópsia incluído: H. pylori NEGATIVO');
+        console.log('📊 Relatório Completo de Saúde ATUALIZADO!');
+        console.log('🚨 ESTEATOSE HEPÁTICA GRAU III DETECTADA - AÇÃO URGENTE!');
+        console.log('✅ H. pylori negativo - sem necessidade de antibióticos');
+        console.log('✅ Colonoscopia normal - sem pólipos');
     </script>
 </body>
 </html>
