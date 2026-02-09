@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Saúde - César Augusto</title>
+    <title>Dashboard Saúde Completo - César Augusto</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* --- RESET E BASE --- */
@@ -96,6 +96,7 @@
             margin-bottom: 25px;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 2px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             padding: 12px 24px;
@@ -361,6 +362,9 @@
             .cards-grid {
                 grid-template-columns: 1fr;
             }
+            .tabs-nav {
+                overflow-x: auto;
+            }
         }
 
         /* --- FOOTER --- */
@@ -382,7 +386,7 @@
     <header class="top-header">
         <div class="brand">
             <span class="brand-icons">❤️💪</span>
-            <span class="brand-text">Health Dashboard</span>
+            <span class="brand-text">Health Dashboard Completo</span>
         </div>
         <div class="patient-info-header">
             <div style="text-align: right;">
@@ -398,6 +402,10 @@
             <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
             <button class="tab-btn" data-target="bioimpedancia">💪 Bioimpedância</button>
             <button class="tab-btn" data-target="laboratoriais">🔬 Exames Lab</button>
+            <button class="tab-btn" data-target="hormonios">🧬 Hormônios</button>
+            <button class="tab-btn" data-target="vitaminas">💊 Vitaminas</button>
+            <button class="tab-btn" data-target="eletrolitos">⚡ Eletrólitos</button>
+            <button class="tab-btn" data-target="hemograma">🩸 Hemograma</button>
             <button class="tab-btn" data-target="endoscopia">🔍 Endoscopia</button>
             <button class="tab-btn" data-target="ressonancia">🧲 Ressonância</button>
         </nav>
@@ -416,13 +424,13 @@
                 <span class="alert-icon">✅</span>
                 <div class="alert-content">
                     <h4>ÓTIMAS NOTÍCIAS!</h4>
-                    <p><strong>H. pylori NEGATIVO</strong> na biópsia (não precisa antibióticos) • <strong>Colonoscopia NORMAL</strong> (sem pólipos) • Rins, pâncreas, baço e próstata normais na RM</p>
+                    <p><strong>H. pylori NEGATIVO</strong> na biópsia • <strong>Colonoscopia NORMAL</strong> • Rins, pâncreas, baço e próstata normais • <strong>PSA excelente (0,46)</strong> • Função tireoidiana normal • Hemograma completo normal</p>
                 </div>
             </div>
 
             <div class="section-header">
                 <span class="section-icon">📋</span>
-                <h2>Resumo dos Indicadores</h2>
+                <h2>Indicadores Críticos</h2>
             </div>
 
             <div class="cards-grid">
@@ -444,16 +452,6 @@
                     <div class="card-value danger">40.5%</div>
                     <p class="card-reference">Normal: 8 - 19,9%</p>
                     <span class="status-badge danger">Muito Alto</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Massa Muscular</span>
-                        <span class="card-icon">💪</span>
-                    </div>
-                    <div class="card-value normal">26.2%</div>
-                    <p class="card-reference">Normal: 32,9 - 38,9%</p>
-                    <span class="status-badge warning">Abaixo do ideal</span>
                 </div>
 
                 <div class="health-card status-danger">
@@ -484,6 +482,16 @@
                     <div class="card-value danger">43.9%</div>
                     <p class="card-reference">Normal: <5%</p>
                     <span class="status-badge danger">Grau III - Severo</span>
+                </div>
+
+                <div class="health-card status-danger">
+                    <div class="card-header">
+                        <span class="card-title">Gordura Visceral</span>
+                        <span class="card-icon">🫀</span>
+                    </div>
+                    <div class="card-value danger">22</div>
+                    <p class="card-reference">Normal: ≤9</p>
+                    <span class="status-badge danger">Muito Alto</span>
                 </div>
             </div>
         </section>
@@ -529,7 +537,7 @@
                             <span class="card-icon">🫀</span>
                         </div>
                         <div class="card-value danger">22</div>
-                        <p class="card-reference">Normal: <=9</p>
+                        <p class="card-reference">Normal: ≤9</p>
                         <span class="status-badge danger">Muito Alto</span>
                     </div>
                 </div>
@@ -629,6 +637,16 @@
 
                 <div class="health-card status-normal">
                     <div class="card-header">
+                        <span class="card-title">VLDL</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">21.2</div>
+                    <p class="card-reference">Referência: ≤30 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
                         <span class="card-title">Triglicerídeos</span>
                         <span class="card-icon">📊</span>
                     </div>
@@ -664,6 +682,16 @@
                     <p class="card-reference">Referência: <5.7%</p>
                     <span class="status-badge normal">✓ Excelente</span>
                 </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Glicemia Estimada Média</span>
+                        <span class="card-icon">📈</span>
+                    </div>
+                    <div class="card-value normal">97</div>
+                    <p class="card-reference">mg/dL (média 3 meses)</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
             </div>
 
             <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🫘 Função Renal e Hepática</h3>
@@ -674,7 +702,7 @@
                         <span class="card-icon">🫘</span>
                     </div>
                     <div class="card-value normal">35</div>
-                    <p class="card-reference">Ref: 19.3-43 mg/dL</p>
+                    <p class="card-reference">Ref: 19,3-43 mg/dL</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -684,7 +712,17 @@
                         <span class="card-icon">🫘</span>
                     </div>
                     <div class="card-value normal">1.00</div>
-                    <p class="card-reference">Ref: 0.66-1.25 mg/dL</p>
+                    <p class="card-reference">Ref: 0,66-1,25 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">TFG (Taxa Filtração)</span>
+                        <span class="card-icon">💧</span>
+                    </div>
+                    <div class="card-value normal">85.1</div>
+                    <p class="card-reference">ml/min/1,73m²</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -706,6 +744,476 @@
                     <div class="card-value normal">36</div>
                     <p class="card-reference">Ref: <50 U/L</p>
                     <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">GGT</span>
+                        <span class="card-icon">🧪</span>
+                    </div>
+                    <div class="card-value normal">32</div>
+                    <p class="card-reference">Ref: 15-73 U/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Fosfatase Alcalina</span>
+                        <span class="card-icon">🧪</span>
+                    </div>
+                    <div class="card-value normal">47</div>
+                    <p class="card-reference">Ref: 38-126 U/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">LDH</span>
+                        <span class="card-icon">🧪</span>
+                    </div>
+                    <div class="card-value normal">162</div>
+                    <p class="card-reference">Ref: 120-246 U/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🟡 Bilirrubinas</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Bilirrubina Total</span>
+                        <span class="card-icon">🟡</span>
+                    </div>
+                    <div class="card-value normal">0.98</div>
+                    <p class="card-reference">Ref: 0,2-1,3 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">Bilirrubina Direta</span>
+                        <span class="card-icon">🟡</span>
+                    </div>
+                    <div class="card-value warning">0.34</div>
+                    <p class="card-reference">Ref: ≤0,3 mg/dL</p>
+                    <span class="status-badge warning">⚠ Leve elevação</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Bilirrubina Indireta</span>
+                        <span class="card-icon">🟡</span>
+                    </div>
+                    <div class="card-value normal">0.64</div>
+                    <p class="card-reference">Ref: ≤1,1 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🧪 Outros Exames</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Ácido Úrico</span>
+                        <span class="card-icon">💎</span>
+                    </div>
+                    <div class="card-value normal">5.4</div>
+                    <p class="card-reference">Ref: 3,5-8,5 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Ferritina</span>
+                        <span class="card-icon">🧲</span>
+                    </div>
+                    <div class="card-value normal">139.5</div>
+                    <p class="card-reference">Ref: 23,9-336,2 ng/mL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PSA Total</span>
+                        <span class="card-icon">🔬</span>
+                    </div>
+                    <div class="card-value normal">0.46</div>
+                    <p class="card-reference">Ref: <2,5 ng/mL</p>
+                    <span class="status-badge normal">✓ Excelente</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PSA Livre/Total</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">24%</div>
+                    <p class="card-reference">Ref: ≥15%</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: HORMÔNIOS -->
+        <section id="hormonios" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">🧬</span>
+                <h2>Perfil Hormonal</h2>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🦋 Função Tireoidiana</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">TSH</span>
+                        <span class="card-icon">🦋</span>
+                    </div>
+                    <div class="card-value normal">1.82</div>
+                    <p class="card-reference">Ref: 0,38-5,33 µUI/mL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">T4 Livre</span>
+                        <span class="card-icon">🦋</span>
+                    </div>
+                    <div class="card-value normal">1.02</div>
+                    <p class="card-reference">Ref: 0,54-1,24 ng/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">💪 Hormônios Sexuais</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Testosterona Total</span>
+                        <span class="card-icon">💪</span>
+                    </div>
+                    <div class="card-value normal">319</div>
+                    <p class="card-reference">Ref: 132-813 ng/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Testosterona Livre</span>
+                        <span class="card-icon">💪</span>
+                    </div>
+                    <div class="card-value normal">8.95</div>
+                    <p class="card-reference">Ref: 3,4-24,6 ng/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">SHBG</span>
+                        <span class="card-icon">🔗</span>
+                    </div>
+                    <div class="card-value warning">16.7</div>
+                    <p class="card-reference">Ref: 13,2-89,5 nmol/L</p>
+                    <span class="status-badge warning">⚠ Limite inferior</span>
+                </div>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">✅</span>
+                <div class="alert-content">
+                    <h4>Função Hormonal Adequada</h4>
+                    <p>Tireoide funcionando normalmente (TSH e T4 livre dentro da faixa). Testosterona total e livre em níveis adequados para a idade. SHBG no limite inferior pode estar relacionado ao excesso de gordura corporal.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: VITAMINAS -->
+        <section id="vitaminas" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">💊</span>
+                <h2>Perfil de Vitaminas</h2>
+            </div>
+
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Vitamina D</span>
+                        <span class="card-icon">☀️</span>
+                    </div>
+                    <div class="card-value normal">37.6</div>
+                    <p class="card-reference">Ideal: 30-60 ng/mL</p>
+                    <span class="status-badge normal">✓ Adequado</span>
+                </div>
+
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">Vitamina B12</span>
+                        <span class="card-icon">💊</span>
+                    </div>
+                    <div class="card-value warning">192</div>
+                    <p class="card-reference">Ref: 130-868 pg/mL</p>
+                    <span class="status-badge warning">⚠ Limite inferior</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Vitamina A</span>
+                        <span class="card-icon">🥕</span>
+                    </div>
+                    <div class="card-value normal">0.84</div>
+                    <p class="card-reference">Ref: 0,3-0,7 mg/L</p>
+                    <span class="status-badge normal">✓ Adequado</span>
+                </div>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-content">
+                    <h4>Atenção à Vitamina B12</h4>
+                    <p><strong>B12 em 192 pg/mL</strong> está no limite inferior da normalidade. Considere suplementação ou aumento do consumo de alimentos ricos em B12 (carnes, ovos, laticínios) para evitar deficiência futura.</p>
+                    <p style="margin-top: 10px;"><strong>Vitamina D em 37,6 ng/mL</strong> está adequada, mas pode ser otimizada para 40-50 ng/mL com exposição solar moderada e/ou suplementação.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: ELETRÓLITOS -->
+        <section id="eletrolitos" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">⚡</span>
+                <h2>Eletrólitos e Minerais</h2>
+            </div>
+
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Sódio</span>
+                        <span class="card-icon">🧂</span>
+                    </div>
+                    <div class="card-value normal">139</div>
+                    <p class="card-reference">Ref: 137-145 mmol/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Potássio</span>
+                        <span class="card-icon">🍌</span>
+                    </div>
+                    <div class="card-value normal">4.40</div>
+                    <p class="card-reference">Ref: 3,5-5,1 mmol/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Cloro</span>
+                        <span class="card-icon">⚡</span>
+                    </div>
+                    <div class="card-value normal">105</div>
+                    <p class="card-reference">Ref: 98-107 mmol/L</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Cálcio</span>
+                        <span class="card-icon">🦴</span>
+                    </div>
+                    <div class="card-value normal">9.2</div>
+                    <p class="card-reference">Ref: 8,4-10,2 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Fósforo</span>
+                        <span class="card-icon">🧪</span>
+                    </div>
+                    <div class="card-value normal">3.10</div>
+                    <p class="card-reference">Ref: 2,5-4,5 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Magnésio</span>
+                        <span class="card-icon">✨</span>
+                    </div>
+                    <div class="card-value normal">2.00</div>
+                    <p class="card-reference">Ref: 1,6-2,3 mg/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">✅</span>
+                <div class="alert-content">
+                    <h4>Equilíbrio Eletrolítico Perfeito</h4>
+                    <p>Todos os eletrólitos e minerais estão dentro da faixa normal. Isso indica boa função renal, hidratação adequada e equilíbrio ácido-base do organismo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: HEMOGRAMA -->
+        <section id="hemograma" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">🩸</span>
+                <h2>Hemograma Completo</h2>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🔴 Série Vermelha (Eritrograma)</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Hemácias</span>
+                        <span class="card-icon">🔴</span>
+                    </div>
+                    <div class="card-value normal">5.19</div>
+                    <p class="card-reference">Ref: 4,5-5,5 milhões/mm³</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Hemoglobina</span>
+                        <span class="card-icon">🩸</span>
+                    </div>
+                    <div class="card-value normal">15.6</div>
+                    <p class="card-reference">Ref: 13-17 g/dL</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Hematócrito</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">44.7%</div>
+                    <p class="card-reference">Ref: 40-50%</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">VCM</span>
+                        <span class="card-icon">📏</span>
+                    </div>
+                    <div class="card-value normal">86.1</div>
+                    <p class="card-reference">Ref: 83-101 fl</p>
+                    <span class="status-badge normal">✓ Normocitose</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">HCM</span>
+                        <span class="card-icon">⚖️</span>
+                    </div>
+                    <div class="card-value normal">30.1</div>
+                    <p class="card-reference">Ref: 27-32 pg</p>
+                    <span class="status-badge normal">✓ Normocromia</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">RDW</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">12.0%</div>
+                    <p class="card-reference">Ref: 11,6-14%</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">⚪ Série Branca (Leucograma)</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Leucócitos Totais</span>
+                        <span class="card-icon">⚪</span>
+                    </div>
+                    <div class="card-value normal">5.630</div>
+                    <p class="card-reference">Ref: 4.000-10.000/mm³</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Neutrófilos</span>
+                        <span class="card-icon">🛡️</span>
+                    </div>
+                    <div class="card-value normal">3.406</div>
+                    <p class="card-reference">Ref: 2.000-7.000/mm³</p>
+                    <span class="status-badge normal">✓ 60,5%</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Linfócitos</span>
+                        <span class="card-icon">🦠</span>
+                    </div>
+                    <div class="card-value normal">1.109</div>
+                    <p class="card-reference">Ref: 1.000-3.000/mm³</p>
+                    <span class="status-badge normal">✓ 19,7%</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Monócitos</span>
+                        <span class="card-icon">🔬</span>
+                    </div>
+                    <div class="card-value normal">602</div>
+                    <p class="card-reference">Ref: 200-1.000/mm³</p>
+                    <span class="status-badge normal">✓ 10,7%</span>
+                </div>
+
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">Eosinófilos</span>
+                        <span class="card-icon">🔴</span>
+                    </div>
+                    <div class="card-value warning">462</div>
+                    <p class="card-reference">Ref: 20-500/mm³</p>
+                    <span class="status-badge warning">⚠ 8,2% (leve ↑)</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Basófilos</span>
+                        <span class="card-icon">⚪</span>
+                    </div>
+                    <div class="card-value normal">51</div>
+                    <p class="card-reference">Ref: 20-100/mm³</p>
+                    <span class="status-badge normal">✓ 0,9%</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🩹 Plaquetas</h3>
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Contagem de Plaquetas</span>
+                        <span class="card-icon">🩹</span>
+                    </div>
+                    <div class="card-value normal">183.000</div>
+                    <p class="card-reference">Ref: 150.000-400.000/mm³</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Volume Plaquetário (MPV)</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">9.70</div>
+                    <p class="card-reference">Ref: 9-12 fl</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">✅</span>
+                <div class="alert-content">
+                    <h4>Hemograma Completamente Normal</h4>
+                    <p>Série vermelha: normocitose e normocromia (sem anemia). Série branca: sem sinais de infecção ou alterações importantes (leve aumento de eosinófilos pode ser alergia leve). Plaquetas normais. Morfologia celular preservada.</p>
                 </div>
             </div>
         </section>
@@ -767,7 +1275,7 @@
                     <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
                         <li>⚠️ Mudanças drásticas na dieta (cortar açúcar, carboidratos refinados, frituras)</li>
                         <li>⚠️ Exercícios aeróbicos intensos (45-60 min, 5-6x/semana)</li>
-                        <li>⚠️ Perda de 10-15% do peso atual</li>
+                        <li>⚠️ Perda de 10-15% do peso atual (12-19 kg)</li>
                         <li>⚠️ Acompanhamento com hepatologista URGENTE</li>
                     </ul>
                 </div>
@@ -805,8 +1313,8 @@
     </main>
 
     <footer class="footer">
-        <p style="font-size: 1.1em; font-weight: 600;">⚕️ Aviso Importante</p>
-        <p style="margin: 15px 0;">Este relatório é informativo e educacional. A interpretação completa deve ser feita pelo seu médico.</p>
+        <p style="font-size: 1.1em; font-weight: 600;">⚕️ Dashboard Completo de Saúde</p>
+        <p style="margin: 15px 0;">Este relatório consolidado inclui TODOS os dados dos exames realizados.</p>
         <p style="color: var(--danger); font-weight: 600;">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
         <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">Exames realizados: 26/01 - 09/02/2026 • Relatório atualizado: 09/02/2026</p>
     </footer>
@@ -834,13 +1342,14 @@
             new Chart(lipidCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Colesterol Total', 'HDL', 'LDL', 'Triglicerídeos'],
+                    labels: ['Colesterol Total', 'HDL', 'LDL', 'VLDL', 'Triglicerídeos'],
                     datasets: [{
                         label: 'Seu Resultado',
-                        data: [148, 30, 96.8, 106],
+                        data: [148, 30, 96.8, 21.2, 106],
                         backgroundColor: [
                             'rgba(56, 239, 125, 0.7)',
                             'rgba(255, 117, 140, 0.7)',
+                            'rgba(56, 239, 125, 0.7)',
                             'rgba(56, 239, 125, 0.7)',
                             'rgba(56, 239, 125, 0.7)'
                         ],
@@ -848,12 +1357,13 @@
                             '#38ef7d',
                             '#ff758c',
                             '#38ef7d',
+                            '#38ef7d',
                             '#38ef7d'
                         ],
                         borderWidth: 2
                     }, {
                         label: 'Limite Ideal',
-                        data: [190, 40, 130, 150],
+                        data: [190, 40, 130, 30, 150],
                         type: 'line',
                         fill: false,
                         borderColor: '#667eea',
