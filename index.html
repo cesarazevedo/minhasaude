@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard completo de saúde com exames laboratoriais, plano alimentar, acompanhamento de peso e atividades físicas.">
+    <meta name="author" content="César Augusto de Freitas Azevedo">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
     <title>Dashboard Saúde Completo - César Augusto</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <style>
         /* --- RESET E BASE --- */
         :root {
@@ -641,6 +644,20 @@
             }
             .tabs-nav {
                 overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                flex-wrap: nowrap;
+                padding-bottom: 10px;
+                gap: 5px;
+            }
+            .tabs-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.85em;
+                white-space: nowrap;
+                flex-shrink: 0;
             }
             .weight-timeline {
                 flex-wrap: wrap;
@@ -659,6 +676,46 @@
             }
         }
 
+        /* --- CLASSES UTILITÁRIAS --- */
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .mt-0 { margin-top: 0; }
+        .mt-10 { margin-top: 10px; }
+        .mt-15 { margin-top: 15px; }
+        .mt-20 { margin-top: 20px; }
+        .mt-25 { margin-top: 25px; }
+        .mb-0 { margin: 0; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-15 { margin-bottom: 15px; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .my-15 { margin: 15px 0; }
+        .no-margin { margin: 0; }
+        .sub-text { font-size: 0.85em; color: #718096; margin-top: 5px; }
+        .small-text { font-size: 0.9em; color: #718096; margin-top: 10px; }
+        .tiny-text { font-size: 0.8em; color: #a0aec0; margin-top: 15px; text-align: center; }
+        .section-subtitle { margin: 25px 0 15px 0; color: var(--text-dark); }
+        .detail-list { margin-left: 20px; line-height: 1.8; }
+        .detail-list-mt { margin-left: 20px; margin-top: 10px; line-height: 1.8; }
+        .paragraph-mt { margin-top: 10px; }
+        .highlight-text { font-weight: 600; color: var(--primary); }
+        .bold-text { font-weight: 600; }
+        .value-danger { color: var(--danger); }
+        .value-primary { color: var(--primary); }
+        .value-success { color: var(--success); }
+        .value-warning { color: var(--warning); }
+        .value-teal { color: #11998e; }
+        .weight-goal-value { background: linear-gradient(135deg, #38ef7d, #11998e); color: white; }
+        .weight-goal-dot { background: #38ef7d; width: 22px; height: 22px; }
+        .weight-goal-label { color: #11998e; }
+        .liver-severity { text-align: center; margin-top: 20px; font-size: 1.2em; color: var(--danger); font-weight: 600; }
+        .chart-wrapper { max-width: 600px; margin: 0 auto; }
+        .alert-tip { background: #fff3cd; border-left-color: #ffc107; margin-bottom: 15px; }
+        .footer-title { font-size: 1.1em; font-weight: 600; }
+        .footer-subtitle { margin: 15px 0; }
+        .footer-urgent { color: var(--danger); font-weight: 600; }
+        .footer-date { margin-top: 20px; font-size: 0.85em; opacity: 0.8; }
+
         /* --- FOOTER --- */
         .footer {
             background: #2d3748;
@@ -671,6 +728,245 @@
             margin: 8px 0;
             font-size: 0.9em;
         }
+
+        /* --- FORMULÁRIO DE PESO --- */
+        .weight-form {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        .weight-form h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .form-group label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #718096;
+        }
+        .form-group input {
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .btn-add-weight {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-add-weight:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .weight-log {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .weight-log-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+        .weight-log-entry:last-child {
+            border-bottom: none;
+        }
+        body.dark-mode .weight-form {
+            background: #2d3748;
+        }
+        body.dark-mode .form-group input {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .weight-log-entry {
+            border-bottom-color: #4a5568;
+        }
+
+        /* --- BOTÕES FLUTUANTES --- */
+        .floating-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3em;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .floating-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+        .btn-top {
+            background: var(--primary);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .btn-print {
+            background: linear-gradient(135deg, var(--success), #11998e);
+        }
+        .dark-toggle {
+            background: #2d3748;
+        }
+
+        /* --- DARK MODE --- */
+        body.dark-mode {
+            --bg-light: #1a202c;
+            --text-dark: #e2e8f0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        body.dark-mode .top-header {
+            background: #2d3748;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .tab-btn {
+            color: #a0aec0;
+        }
+        body.dark-mode .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        body.dark-mode .tab-btn.active {
+            color: var(--primary);
+            background: #2d3748;
+        }
+        body.dark-mode .tabs-nav {
+            border-bottom-color: #4a5568;
+        }
+        body.dark-mode .health-card,
+        body.dark-mode .chart-container,
+        body.dark-mode .bioimpedance-visual,
+        body.dark-mode .meal-card,
+        body.dark-mode .activity-calendar,
+        body.dark-mode .weight-summary-card,
+        body.dark-mode .diet-info-card {
+            background: #2d3748;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .card-title,
+        body.dark-mode .card-reference {
+            color: #a0aec0;
+        }
+        body.dark-mode .meal-option {
+            background: #1a202c;
+        }
+        body.dark-mode .meal-option:hover {
+            background: #4a5568;
+        }
+        body.dark-mode .meal-header {
+            border-bottom-color: #4a5568;
+        }
+        body.dark-mode .meal-time {
+            background: #1a202c;
+            color: #a0aec0;
+        }
+        body.dark-mode .section-header {
+            border-bottom-color: #4a5568;
+        }
+        body.dark-mode .alert-box.alert-danger {
+            background: rgba(255, 117, 140, 0.15);
+        }
+        body.dark-mode .alert-box.alert-warning {
+            background: rgba(247, 151, 30, 0.15);
+        }
+        body.dark-mode .alert-box.alert-success {
+            background: rgba(56, 239, 125, 0.15);
+        }
+        body.dark-mode .alert-box.alert-tip {
+            background: rgba(255, 193, 7, 0.15);
+        }
+        body.dark-mode .alert-content p,
+        body.dark-mode .alert-content li {
+            color: #cbd5e0;
+        }
+        body.dark-mode .composition-bar {
+            background: #4a5568;
+        }
+        body.dark-mode .weight-value {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+        body.dark-mode .exercise .exercise-item,
+        body.dark-mode .calendar-day {
+            background: #2d3748;
+        }
+        body.dark-mode .weekly-stat-card {
+            background: #2d3748;
+        }
+        body.dark-mode .quiz-options label {
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+        body.dark-mode .footer {
+            background: #171923;
+        }
+        body.dark-mode .patient-details p {
+            color: #a0aec0;
+        }
+
+        /* --- PRINT --- */
+        @media print {
+            body { background: white; font-size: 12pt; }
+            .top-header { box-shadow: none; }
+            .tabs-nav { display: none; }
+            .tab-content { display: block !important; page-break-inside: avoid; }
+            .health-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            .health-card:hover { transform: none; }
+            .alert-box { break-inside: avoid; }
+            .chart-container { break-inside: avoid; }
+            .bioimpedance-visual { box-shadow: none; border: 1px solid #ddd; }
+            .footer { background: white; color: #333; border-top: 2px solid #ddd; }
+            .floating-buttons, .btn-print, .btn-top, .dark-toggle { display: none !important; }
+            canvas { max-height: 300px; }
+        }
     </style>
 </head>
 <body>
@@ -681,7 +977,7 @@
             <span class="brand-text">Health Dashboard Completo</span>
         </div>
         <div class="patient-info-header">
-            <div style="text-align: right;">
+            <div class="text-right">
                 <h3>César Augusto de Freitas Azevedo</h3>
                 <p>47 anos</p>
             </div>
@@ -831,25 +1127,25 @@
                     <div class="icon">🔥</div>
                     <div class="title">Calorias Diárias</div>
                     <div class="value">1.600 kcal</div>
-                    <p style="font-size: 0.85em; color: #718096; margin-top: 5px;">+ gasto energético</p>
+                    <p class="sub-text">+ gasto energético</p>
                 </div>
                 <div class="diet-info-card">
                     <div class="icon">💧</div>
                     <div class="title">Hidratação</div>
                     <div class="value">3 litros</div>
-                    <p style="font-size: 0.85em; color: #718096; margin-top: 5px;">de água por dia</p>
+                    <p class="sub-text">de água por dia</p>
                 </div>
                 <div class="diet-info-card">
                     <div class="icon">⏰</div>
                     <div class="title">Jejum Noturno</div>
                     <div class="value">~12h</div>
-                    <p style="font-size: 0.85em; color: #718096; margin-top: 5px;">após o jantar</p>
+                    <p class="sub-text">após o jantar</p>
                 </div>
                 <div class="diet-info-card">
                     <div class="icon">🎯</div>
                     <div class="title">Meta de Perda</div>
                     <div class="value">15 kg</div>
-                    <p style="font-size: 0.85em; color: #718096; margin-top: 5px;">em 6 meses</p>
+                    <p class="sub-text">em 6 meses</p>
                 </div>
             </div>
 
@@ -862,10 +1158,10 @@
                     </div>
                     <div class="meal-time">Antes do treino</div>
                 </div>
-                <div class="alert-box alert-success" style="margin: 0;">
+                <div class="alert-box alert-success" class="no-margin">
                     <span class="alert-icon">💡</span>
                     <div class="alert-content">
-                        <p style="margin: 0;"><strong>1 banana</strong> — Ou você pode treinar em jejum, se preferir!</p>
+                        <p class="no-margin"><strong>1 banana</strong> — Ou você pode treinar em jejum, se preferir!</p>
                     </div>
                 </div>
             </div>
@@ -908,14 +1204,14 @@
                     </div>
                     <div class="meal-time">10:00h</div>
                 </div>
-                <div class="alert-box alert-success" style="margin: 0;">
+                <div class="alert-box alert-success" class="no-margin">
                     <span class="alert-icon">🥤</span>
                     <div class="alert-content">
-                        <p style="margin-bottom: 10px;"><strong>Escolha 1 opção:</strong></p>
+                        <p class="mb-10"><strong>Escolha 1 opção:</strong></p>
                         <p>• 1 banana OU<br>
                         • 1 barra de cereal zero açúcar OU<br>
                         • 1 Yopro</p>
-                        <p style="margin-top: 15px; font-weight: 600; color: var(--primary);">💧 HIDRATAÇÃO LIVRE ATÉ O ALMOÇO!</p>
+                        <p class="mt-15 highlight-text">💧 HIDRATAÇÃO LIVRE ATÉ O ALMOÇO!</p>
                     </div>
                 </div>
             </div>
@@ -929,10 +1225,10 @@
                     </div>
                     <div class="meal-time">12:00h</div>
                 </div>
-                <div class="alert-box" style="background: #fff3cd; border-left-color: #ffc107; margin-bottom: 15px;">
+                <div class="alert-box alert-tip">
                     <span class="alert-icon">🥗</span>
                     <div class="alert-content">
-                        <p style="margin: 0;"><strong>Sempre começar com:</strong> Salada verde crua livre OU Vinagrete</p>
+                        <p class="no-margin"><strong>Sempre começar com:</strong> Salada verde crua livre OU Vinagrete</p>
                     </div>
                 </div>
                 <div class="meal-options">
@@ -965,10 +1261,10 @@
                         <div class="option-content">1 omelete feito com 3 ovos + tomate + cebola + coentro + orégano + 100g de frango desfiado</div>
                     </div>
                 </div>
-                <div class="alert-box alert-success" style="margin-top: 15px;">
+                <div class="alert-box alert-success" class="mt-15">
                     <span class="alert-icon">🍊</span>
                     <div class="alert-content">
-                        <p style="margin: 0;"><strong>Sobremesa:</strong> 1 fruta cítrica (laranja, mexerica, abacaxi)</p>
+                        <p class="no-margin"><strong>Sobremesa:</strong> 1 fruta cítrica (laranja, mexerica, abacaxi)</p>
                     </div>
                 </div>
             </div>
@@ -1049,10 +1345,10 @@
                         <div class="option-content">80g de arroz refogado + 120g de salada de legumes ou salada verde crua + 100g de frango grelhado</div>
                     </div>
                 </div>
-                <div class="alert-box alert-warning" style="margin-top: 15px;">
+                <div class="alert-box alert-warning" class="mt-15">
                     <span class="alert-icon">⏰</span>
                     <div class="alert-content">
-                        <p style="margin: 0; font-weight: 600;"><strong>JEJUM até o dia seguinte!</strong> Não comer nada após o jantar até o café da manhã.</p>
+                        <p class="no-margin bold-text"><strong>JEJUM até o dia seguinte!</strong> Não comer nada após o jantar até o café da manhã.</p>
                     </div>
                 </div>
             </div>
@@ -1061,7 +1357,7 @@
                 <span class="alert-icon">💡</span>
                 <div class="alert-content">
                     <h4>Dicas Importantes</h4>
-                    <ul style="margin-left: 20px; line-height: 1.8;">
+                    <ul class="detail-list">
                         <li>🥤 Beba pelo menos 3 litros de água ao longo do dia</li>
                         <li>🍽️ Escolha 1 opção diferente por dia em cada refeição</li>
                         <li>⏰ Respeite os horários das refeições</li>
@@ -1078,6 +1374,22 @@
             <div class="section-header">
                 <span class="section-icon">📉</span>
                 <h2>Acompanhamento de Peso - Projeto Dieta</h2>
+            </div>
+
+            <div class="weight-form">
+                <h3>⚖️ Registrar Nova Pesagem</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="weightDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" id="weightValue" step="0.1" min="50" max="250" placeholder="Ex: 125.5">
+                    </div>
+                    <button class="btn-add-weight" onclick="addWeight()">+ Registrar</button>
+                </div>
+                <div class="weight-log" id="weightLog"></div>
             </div>
 
             <div class="alert-box alert-success">
@@ -1139,49 +1451,49 @@
                         <div class="weight-label">Meta 150 dias</div>
                     </div>
                     <div class="weight-point">
-                        <div class="weight-value" style="background: linear-gradient(135deg, #38ef7d, #11998e); color: white;">~108 kg 🏆</div>
-                        <div class="weight-dot" style="background: #38ef7d; width: 22px; height: 22px;"></div>
+                        <div class="weight-value weight-goal-value">~108 kg 🏆</div>
+                        <div class="weight-dot weight-goal-dot"></div>
                         <div class="weight-date">09/08/2026</div>
-                        <div class="weight-label" style="color: #11998e;">🎯 Meta Final</div>
+                        <div class="weight-label weight-goal-label">🎯 Meta Final</div>
                     </div>
                 </div>
-                <p style="font-size: 0.8em; color: #a0aec0; margin-top: 15px; text-align: center;">* Pesagem avulsa registrada em 07/02/2026</p>
+                <p class="tiny-text">* Pesagem avulsa registrada em 07/02/2026</p>
             </div>
 
             <div class="weight-summary-cards">
                 <div class="weight-summary-card">
                     <div class="label">Peso Inicial</div>
-                    <div class="value" style="color: var(--danger);">127,4 kg</div>
+                    <div class="value value-danger">127,4 kg</div>
                     <div class="sub">09/02/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Peso Atual</div>
-                    <div class="value" style="color: var(--primary);">127,0 kg</div>
+                    <div class="value value-primary">127,0 kg</div>
                     <div class="sub">07/02/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Já Perdeu</div>
-                    <div class="value" style="color: var(--success);">0,4 kg</div>
+                    <div class="value value-success">0,4 kg</div>
                     <div class="sub">Início da jornada!</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Meta (-10%)</div>
-                    <div class="value" style="color: #11998e;">~108 kg</div>
+                    <div class="value value-teal">~108 kg</div>
                     <div class="sub">Até 09/08/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Falta Perder</div>
-                    <div class="value" style="color: var(--warning);">19,0 kg</div>
+                    <div class="value value-warning">19,0 kg</div>
                     <div class="sub">Para atingir a meta</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">IMC Atual</div>
-                    <div class="value" style="color: var(--danger);">37,5</div>
+                    <div class="value value-danger">37,5</div>
                     <div class="sub">Meta: &lt;30 (Sair da obesidade)</div>
                 </div>
             </div>
 
-            <div class="alert-box alert-warning" style="margin-top: 25px;">
+            <div class="alert-box alert-warning mt-25">
                 <span class="alert-icon">💡</span>
                 <div class="alert-content">
                     <h4>Dica Importante</h4>
@@ -1203,6 +1515,48 @@
                     <h4>Acompanhamento de Corridas e Ciclismo</h4>
                     <p>Registros de distância percorrida em atividades aeróbicas (corrida, caminhada, ciclismo). A recomendação médica é de <strong>45-60 minutos, 5-6x por semana</strong>, essencial para tratar a esteatose hepática e perder peso.</p>
                 </div>
+            </div>
+
+            <div class="activity-calendar">
+                <h3 class="chart-title">📅 Calendário de Atividades - Fevereiro 2026</h3>
+                <div class="calendar-grid">
+                    <div class="calendar-day"><small>Dom</small></div>
+                    <div class="calendar-day"><small>Seg</small></div>
+                    <div class="calendar-day"><small>Ter</small></div>
+                    <div class="calendar-day"><small>Qua</small></div>
+                    <div class="calendar-day"><small>Qui</small></div>
+                    <div class="calendar-day"><small>Sex</small></div>
+                    <div class="calendar-day"><small>Sab</small></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">1</div><div class="calendar-day-km">5.2km</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">2</div><div class="calendar-day-km">4.8km</div></div>
+                    <div class="calendar-day light-active"><div class="calendar-day-number">3</div><div class="calendar-day-km">3.1km</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">4</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">5</div><div class="calendar-day-km">4.5km</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">6</div><div class="calendar-day-km">5.0km</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">7</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">8</div><div class="calendar-day-km">4.2km</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">9</div><div class="calendar-day-km">5.5km</div></div>
+                    <div class="calendar-day light-active"><div class="calendar-day-number">10</div><div class="calendar-day-km">3.0km</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">11</div><div class="calendar-day-km">4.8km</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">12</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">13</div><div class="calendar-day-km">4.6km</div></div>
+                    <div class="calendar-day active"><div class="calendar-day-number">14</div><div class="calendar-day-km">4.3km</div></div>
+                    <div class="calendar-day light-active"><div class="calendar-day-number">15</div><div class="calendar-day-km">3.5km</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">16</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">17</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">18</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">19</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">20</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">21</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">22</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">23</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">24</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">25</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">26</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">27</div></div>
+                    <div class="calendar-day"><div class="calendar-day-number">28</div></div>
+                </div>
+                <p class="tiny-text">🟣 Treino completo (4+ km) | 🔵 Treino leve (&lt;4 km) | Vazio = Descanso</p>
             </div>
 
             <div class="cards-grid">
@@ -1309,8 +1663,8 @@
                 <div class="alert-content">
                     <h4>Por que o exercício é tão importante?</h4>
                     <p><strong>Pense no seu fígado como um tanque de combustível</strong> — ele está 43,9% cheio de gordura quando deveria ter menos de 5%. O exercício aeróbico funciona como uma "bomba de gasolina" que retira essa gordura do fígado para ser queimada como energia.</p>
-                    <p style="margin-top: 10px;"><strong>Corrida e ciclismo são ideais</strong> porque mantêm o coração acelerado por tempo suficiente (45-60 min) para forçar o corpo a buscar energia justamente onde está sobrando: no fígado e na barriga (gordura visceral).</p>
-                    <p style="margin-top: 10px;">Continue com o ritmo! Seus <strong>145 km em janeiro</strong> são um excelente começo. 🏃💪</p>
+                    <p class="paragraph-mt"><strong>Corrida e ciclismo são ideais</strong> porque mantêm o coração acelerado por tempo suficiente (45-60 min) para forçar o corpo a buscar energia justamente onde está sobrando: no fígado e na barriga (gordura visceral).</p>
+                    <p class="paragraph-mt">Continue com o ritmo! Seus <strong>145 km em janeiro</strong> são um excelente começo. 🏃💪</p>
                 </div>
             </div>
         </section>
@@ -1323,8 +1677,8 @@
             </div>
 
             <div class="bioimpedance-visual">
-                <h3 style="margin-bottom: 20px; color: var(--text-dark);">📊 Dados do Exame - 09/02/2026</h3>
-                <div class="cards-grid" style="margin-bottom: 30px;">
+                <h3 class="mb-20 section-subtitle">📊 Dados do Exame - 09/02/2026</h3>
+                <div class="cards-grid mb-30">
                     <div class="health-card status-normal">
                         <div class="card-header">
                             <span class="card-title">Peso</span>
@@ -1364,7 +1718,7 @@
                 <div class="body-composition">
                     <div class="body-silhouette">
                         <div class="body-icon">🧍</div>
-                        <p style="font-size: 0.9em; color: #718096; margin-top: 10px;">
+                        <p class="small-text">
                             Composição Corporal
                         </p>
                     </div>
@@ -1377,7 +1731,7 @@
                             <div class="composition-bar">
                                 <div class="composition-fill fill-fat" style="width: 40.5%">40.5%</div>
                             </div>
-                            <p style="font-size: 0.85em; color: var(--danger);">⚠️ Muito Alto - Normal: 8-19,9%</p>
+                            <p class="sub-text value-danger">⚠️ Muito Alto - Normal: 8-19,9%</p>
                         </div>
 
                         <div class="composition-item">
@@ -1388,7 +1742,7 @@
                             <div class="composition-bar">
                                 <div class="composition-fill fill-muscle" style="width: 26.2%">26.2%</div>
                             </div>
-                            <p style="font-size: 0.85em; color: var(--warning);">⚠️ Abaixo do ideal - Normal: 32,9-38,9%</p>
+                            <p class="sub-text value-warning">⚠️ Abaixo do ideal - Normal: 32,9-38,9%</p>
                         </div>
 
                         <div class="composition-item">
@@ -1399,7 +1753,7 @@
                             <div class="composition-bar">
                                 <div class="composition-fill fill-water" style="width: 33.3%">~33%</div>
                             </div>
-                            <p style="font-size: 0.85em; color: #718096;">ℹ️ Valor estimado baseado em músculo e gordura</p>
+                            <p class="sub-text">ℹ️ Valor estimado baseado em músculo e gordura</p>
                         </div>
                     </div>
                 </div>
@@ -1410,7 +1764,7 @@
                 <div class="alert-content">
                     <h4>Interpretação dos Resultados</h4>
                     <p><strong>Gordura corporal em 40,5%</strong> indica obesidade severa. Combinado com <strong>gordura visceral nível 22</strong> (muito alto) e <strong>esteatose hepática grau III</strong>, há risco cardiovascular e metabólico elevado.</p>
-                    <p style="margin-top: 10px;"><strong>Idade corporal de 80 anos</strong> (33 anos acima da idade real) reflete o impacto do excesso de gordura e baixa massa muscular na saúde geral.</p>
+                    <p class="paragraph-mt"><strong>Idade corporal de 80 anos</strong> (33 anos acima da idade real) reflete o impacto do excesso de gordura e baixa massa muscular na saúde geral.</p>
                 </div>
             </div>
         </section>
@@ -1422,7 +1776,7 @@
                 <h2>Exames Laboratoriais</h2>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">💊 Perfil Lipídico</h3>
+            <h3 class="section-subtitle">💊 Perfil Lipídico</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1490,8 +1844,8 @@
                 <div class="alert-content">
                     <h4>Sobre a Lipoproteína(a) - Lp(a)</h4>
                     <p><strong>Resultado: 47,8 mg/dL</strong> (Ref: &lt;30 mg/dL) — Exame coletado em 03/02/2026, liberado em 10/02/2026.</p>
-                    <p style="margin-top: 10px;">A Lp(a) é um <strong>marcador genético</strong> de risco cardiovascular. Pense nela como uma "variação" do LDL que é mais "grudenta" nos vasos sanguíneos. Diferente do colesterol comum, <strong>dieta e exercício não alteram a Lp(a)</strong> — ela é determinada pelo seu DNA.</p>
-                    <p style="margin-top: 10px;"><strong>O que fazer:</strong> Como não dá para baixar a Lp(a) diretamente, o foco deve ser controlar ao máximo todos os outros fatores de risco: subir o HDL (exercício aeróbico), reduzir peso, tratar a esteatose, e manter LDL e triglicerídeos baixos.</p>
+                    <p class="paragraph-mt">A Lp(a) é um <strong>marcador genético</strong> de risco cardiovascular. Pense nela como uma "variação" do LDL que é mais "grudenta" nos vasos sanguíneos. Diferente do colesterol comum, <strong>dieta e exercício não alteram a Lp(a)</strong> — ela é determinada pelo seu DNA.</p>
+                    <p class="paragraph-mt"><strong>O que fazer:</strong> Como não dá para baixar a Lp(a) diretamente, o foco deve ser controlar ao máximo todos os outros fatores de risco: subir o HDL (exercício aeróbico), reduzir peso, tratar a esteatose, e manter LDL e triglicerídeos baixos.</p>
                 </div>
             </div>
 
@@ -1500,7 +1854,7 @@
                 <canvas id="lipidChart"></canvas>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🍬 Metabolismo do Açúcar</h3>
+            <h3 class="section-subtitle">🍬 Metabolismo do Açúcar</h3>
             <div class="cards-grid">
                 <div class="health-card status-warning">
                     <div class="card-header">
@@ -1533,7 +1887,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🫘 Função Renal e Hepática</h3>
+            <h3 class="section-subtitle">🫘 Função Renal e Hepática</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1616,7 +1970,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🟡 Bilirrubinas</h3>
+            <h3 class="section-subtitle">🟡 Bilirrubinas</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1649,7 +2003,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🧪 Outros Exames</h3>
+            <h3 class="section-subtitle">🧪 Outros Exames</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1700,7 +2054,7 @@
                 <h2>Perfil Hormonal</h2>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🦋 Função Tireoidiana</h3>
+            <h3 class="section-subtitle">🦋 Função Tireoidiana</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1723,7 +2077,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">💪 Hormônios Sexuais</h3>
+            <h3 class="section-subtitle">💪 Hormônios Sexuais</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1809,7 +2163,7 @@
                 <div class="alert-content">
                     <h4>Atenção à Vitamina B12</h4>
                     <p><strong>B12 em 192 pg/mL</strong> está no limite inferior da normalidade. Considere suplementação ou aumento do consumo de alimentos ricos em B12 (carnes, ovos, laticínios) para evitar deficiência futura.</p>
-                    <p style="margin-top: 10px;"><strong>Vitamina D em 37,6 ng/mL</strong> está adequada, mas pode ser otimizada para 40-50 ng/mL com exposição solar moderada e/ou suplementação.</p>
+                    <p class="paragraph-mt"><strong>Vitamina D em 37,6 ng/mL</strong> está adequada, mas pode ser otimizada para 40-50 ng/mL com exposição solar moderada e/ou suplementação.</p>
                 </div>
             </div>
         </section>
@@ -1899,7 +2253,7 @@
                 <h2>Hemograma Completo</h2>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🔴 Série Vermelha (Eritrograma)</h3>
+            <h3 class="section-subtitle">🔴 Série Vermelha (Eritrograma)</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -1962,7 +2316,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">⚪ Série Branca (Leucograma)</h3>
+            <h3 class="section-subtitle">⚪ Série Branca (Leucograma)</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -2025,7 +2379,7 @@
                 </div>
             </div>
 
-            <h3 style="margin: 25px 0 15px 0; color: var(--text-dark);">🩹 Plaquetas</h3>
+            <h3 class="section-subtitle">🩹 Plaquetas</h3>
             <div class="cards-grid">
                 <div class="health-card status-normal">
                     <div class="card-header">
@@ -2069,8 +2423,8 @@
                 <div class="alert-content">
                     <h4>Colonoscopia - 26/01/2026</h4>
                     <p><strong>RESULTADO: EXAME NORMAL</strong></p>
-                    <p style="margin-top: 10px;">✅ Sem pólipos • ✅ Sem divertículos • ✅ Sem inflamação • ✅ Sem tumores</p>
-                    <p style="margin-top: 10px; font-size: 0.9em;">Preparo adequado (Escala de Boston: 9 pontos). Próximo exame recomendado em 5-10 anos.</p>
+                    <p class="paragraph-mt">✅ Sem pólipos • ✅ Sem divertículos • ✅ Sem inflamação • ✅ Sem tumores</p>
+                    <p class="paragraph-mt small-text">Preparo adequado (Escala de Boston: 9 pontos). Próximo exame recomendado em 5-10 anos.</p>
                 </div>
             </div>
 
@@ -2079,7 +2433,7 @@
                 <div class="alert-content">
                     <h4>Biópsia Gástrica - 05/02/2026</h4>
                     <p><strong>H. pylori: NEGATIVO</strong> ✅</p>
-                    <p style="margin-top: 10px;">Excelente notícia! Não há infecção por H. pylori. Não precisa de tratamento com antibióticos.</p>
+                    <p class="paragraph-mt">Excelente notícia! Não há infecção por H. pylori. Não precisa de tratamento com antibióticos.</p>
                 </div>
             </div>
 
@@ -2088,12 +2442,12 @@
                 <div class="alert-content">
                     <h4>Endoscopia Digestiva Alta - 27/01/2026</h4>
                     <p><strong>Achados:</strong></p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <ul class="detail-list-mt">
                         <li><strong>Esofagite Péptica Grau A</strong> - Inflamação leve do esôfago</li>
                         <li><strong>Hérnia de Hiato Tipo I</strong> - Grau II de Hill</li>
                         <li><strong>Pangastrite Enantematosa Leve</strong> - Inflamação leve do estômago</li>
                     </ul>
-                    <p style="margin-top: 10px;"><strong>Recomendação:</strong> Tratamento para refluxo com inibidor de bomba de prótons (IBP)</p>
+                    <p class="paragraph-mt"><strong>Recomendação:</strong> Tratamento para refluxo com inibidor de bomba de prótons (IBP)</p>
                 </div>
             </div>
         </section>
@@ -2110,8 +2464,8 @@
                 <div class="alert-content">
                     <h4>ACHADO CRÍTICO: Esteatose Hepática Grau III</h4>
                     <p>Infiltração gordurosa hepática difusa acentuada com índice de queda de sinal de <strong>43,9%</strong></p>
-                    <p style="margin-top: 10px;"><strong>Significado:</strong> Mais de 40% das células do fígado contêm gordura. Este é um grau SEVERO que requer:</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <p class="paragraph-mt"><strong>Significado:</strong> Mais de 40% das células do fígado contêm gordura. Este é um grau SEVERO que requer:</p>
+                    <ul class="detail-list-mt">
                         <li>⚠️ Mudanças drásticas na dieta (cortar açúcar, carboidratos refinados, frituras)</li>
                         <li>⚠️ Exercícios aeróbicos intensos (45-60 min, 5-6x/semana)</li>
                         <li>⚠️ Perda de 10-15% do peso atual (12-19 kg)</li>
@@ -2122,10 +2476,10 @@
 
             <div class="chart-container">
                 <h3 class="chart-title">🫘 Nível de Gordura no Fígado</h3>
-                <div style="max-width: 600px; margin: 0 auto;">
+                <div class="chart-wrapper">
                     <canvas id="liverChart"></canvas>
                 </div>
-                <p style="text-align: center; margin-top: 20px; font-size: 1.2em; color: var(--danger); font-weight: 600;">
+                <p class="liver-severity">
                     SEU NÍVEL: 43.9% (GRAU III - SEVERO)
                 </p>
             </div>
@@ -2134,7 +2488,7 @@
                 <span class="alert-icon">✅</span>
                 <div class="alert-content">
                     <h4>Estruturas Normais na RM</h4>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <ul class="detail-list-mt">
                         <li>✅ Fígado: Dimensões e contornos normais (apenas com esteatose)</li>
                         <li>✅ Vesícula biliar: Normal, sem cálculos</li>
                         <li>✅ Pâncreas: Morfologia e contornos normais</li>
@@ -2151,11 +2505,17 @@
 
     </main>
 
+    <div class="floating-buttons">
+        <button class="floating-btn dark-toggle" id="darkToggle" title="Modo Escuro">🌙</button>
+        <button class="floating-btn btn-print" onclick="window.print()" title="Imprimir / Exportar PDF">🖨️</button>
+        <button class="floating-btn btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">⬆️</button>
+    </div>
+
     <footer class="footer">
-        <p style="font-size: 1.1em; font-weight: 600;">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
-        <p style="margin: 15px 0;">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
-        <p style="color: var(--danger); font-weight: 600;">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
-        <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 15/02/2026</p>
+        <p class="footer-title">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
+        <p class="footer-subtitle">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
+        <p class="footer-urgent">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
+        <p class="footer-date">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 15/02/2026</p>
     </footer>
 
     <script>
@@ -2173,6 +2533,66 @@
                     document.getElementById(targetId).classList.add('active');
                 });
             });
+        });
+
+        // REGISTRO DE PESO
+        function loadWeightLog() {
+            const log = JSON.parse(localStorage.getItem('weightLog') || '[]');
+            const container = document.getElementById('weightLog');
+            if (log.length === 0) {
+                container.innerHTML = '<p style="color:#a0aec0;font-size:0.85em;margin-top:10px;">Nenhuma pesagem registrada ainda.</p>';
+                return;
+            }
+            log.sort((a, b) => new Date(b.date) - new Date(a.date));
+            container.innerHTML = log.map(entry => {
+                const d = new Date(entry.date + 'T00:00:00');
+                const dateStr = d.toLocaleDateString('pt-BR');
+                return '<div class="weight-log-entry"><span>' + dateStr + '</span><strong>' + entry.weight.toFixed(1) + ' kg</strong></div>';
+            }).join('');
+        }
+
+        function addWeight() {
+            const dateInput = document.getElementById('weightDate');
+            const weightInput = document.getElementById('weightValue');
+            const date = dateInput.value;
+            const weight = parseFloat(weightInput.value);
+            if (!date || isNaN(weight)) {
+                alert('Preencha a data e o peso!');
+                return;
+            }
+            const log = JSON.parse(localStorage.getItem('weightLog') || '[]');
+            log.push({ date: date, weight: weight });
+            localStorage.setItem('weightLog', JSON.stringify(log));
+            dateInput.value = '';
+            weightInput.value = '';
+            loadWeightLog();
+        }
+
+        // Definir data padrão como hoje e carregar log
+        document.getElementById('weightDate').valueAsDate = new Date();
+        loadWeightLog();
+
+        // DARK MODE
+        const darkToggle = document.getElementById('darkToggle');
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkToggle.textContent = '☀️';
+        }
+        darkToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            darkToggle.textContent = isDark ? '☀️' : '🌙';
+        });
+
+        // BOTÃO VOLTAR AO TOPO
+        window.addEventListener('scroll', function() {
+            const btnTop = document.getElementById('btnTop');
+            if (window.scrollY > 300) {
+                btnTop.classList.add('visible');
+            } else {
+                btnTop.classList.remove('visible');
+            }
         });
 
         // GRÁFICO DE PERFIL LIPÍDICO
