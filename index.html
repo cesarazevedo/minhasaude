@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -545,6 +544,86 @@
             color: var(--primary);
         }
 
+        /* --- CALENDÁRIO DE ATIVIDADES --- */
+        .activity-calendar {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: 600;
+            background: #f7fafc;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .calendar-day.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+        .calendar-day.light-active {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .calendar-day-number {
+            font-size: 1.2em;
+        }
+        .calendar-day-km {
+            font-size: 0.7em;
+            margin-top: 3px;
+            opacity: 0.8;
+        }
+
+        /* --- WEEKLY STATS --- */
+        .weekly-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .weekly-stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid;
+        }
+        .weekly-stat-card.week-1 { border-left-color: #667eea; }
+        .weekly-stat-card.week-2 { border-left-color: #764ba2; }
+        .weekly-stat-card.week-3 { border-left-color: #38ef7d; }
+        .weekly-stat-card.week-4 { border-left-color: #f7971e; }
+        .weekly-stat-card .week-label {
+            font-size: 0.85em;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+        .weekly-stat-card .week-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .weekly-stat-card .week-date {
+            font-size: 0.75em;
+            color: #a0aec0;
+            margin-top: 5px;
+        }
+
         /* --- RESPONSIVIDADE --- */
         @media (max-width: 768px) {
             .top-header {
@@ -570,6 +649,13 @@
             }
             .weight-timeline::before {
                 display: none;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
+            }
+            .calendar-day {
+                font-size: 0.7em;
             }
         }
 
@@ -608,6 +694,7 @@
             <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
             <button class="tab-btn" data-target="dieta">🥗 Plano Alimentar</button>
             <button class="tab-btn" data-target="peso">📉 Acompanhamento Peso</button>
+            <button class="tab-btn" data-target="atividades">🏃 Atividades Físicas</button>
             <button class="tab-btn" data-target="bioimpedancia">💪 Bioimpedância</button>
             <button class="tab-btn" data-target="laboratoriais">🔬 Exames Lab</button>
             <button class="tab-btn" data-target="hormonios">🧬 Hormônios</button>
@@ -1099,6 +1186,131 @@
                 <div class="alert-content">
                     <h4>Dica Importante</h4>
                     <p>As metas mensais são estimativas baseadas em perda de ~1 kg/semana (ritmo saudável e sustentável). No começo, a perda pode ser mais rápida por conta da retenção de líquidos. <strong>O mais importante é a tendência de queda, não o número exato.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA: ATIVIDADES FÍSICAS -->
+        <section id="atividades" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">🏃</span>
+                <h2>Registro de Atividades Físicas</h2>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">💪</span>
+                <div class="alert-content">
+                    <h4>Acompanhamento de Corridas e Ciclismo</h4>
+                    <p>Registros de distância percorrida em atividades aeróbicas (corrida, caminhada, ciclismo). A recomendação médica é de <strong>45-60 minutos, 5-6x por semana</strong>, essencial para tratar a esteatose hepática e perder peso.</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Total Janeiro 2026</span>
+                        <span class="card-icon">🏃</span>
+                    </div>
+                    <div class="card-value normal">145,22 km</div>
+                    <p class="card-reference">Média: ~4,7 km/dia</p>
+                    <span class="status-badge normal">✓ Excelente!</span>
+                </div>
+
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">Total Fevereiro 2026</span>
+                        <span class="card-icon">🏃</span>
+                    </div>
+                    <div class="card-value warning">57,01 km</div>
+                    <p class="card-reference">Parcial até 14/02</p>
+                    <span class="status-badge warning">Em progresso</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Maior Semana</span>
+                        <span class="card-icon">🔥</span>
+                    </div>
+                    <div class="card-value normal">49,76 km</div>
+                    <p class="card-reference">11-17 Janeiro</p>
+                    <span class="status-badge normal">✓ Ótimo ritmo!</span>
+                </div>
+
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Total Geral</span>
+                        <span class="card-icon">📊</span>
+                    </div>
+                    <div class="card-value normal">202,23 km</div>
+                    <p class="card-reference">Janeiro + Fevereiro</p>
+                    <span class="status-badge normal">✓ Continue assim!</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📈 Quilômetros por Semana - Janeiro 2026</h3>
+                <div class="weekly-stats">
+                    <div class="weekly-stat-card week-1">
+                        <div class="week-label">Semana 1</div>
+                        <div class="week-value">15,78 km</div>
+                        <div class="week-date">28 Dez 2025 - 03 Jan 2026</div>
+                    </div>
+                    <div class="weekly-stat-card week-2">
+                        <div class="week-label">Semana 2</div>
+                        <div class="week-value">36,46 km</div>
+                        <div class="week-date">04 - 10 Janeiro</div>
+                    </div>
+                    <div class="weekly-stat-card week-3">
+                        <div class="week-label">Semana 3 ⭐</div>
+                        <div class="week-value">49,76 km</div>
+                        <div class="week-date">11 - 17 Janeiro</div>
+                    </div>
+                    <div class="weekly-stat-card week-4">
+                        <div class="week-label">Semana 4</div>
+                        <div class="week-value">36,71 km</div>
+                        <div class="week-date">18 - 24 Janeiro</div>
+                    </div>
+                    <div class="weekly-stat-card week-1">
+                        <div class="week-label">Semana 5</div>
+                        <div class="week-value">16,9 km</div>
+                        <div class="week-date">25 - 31 Janeiro</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📊 Quilômetros por Semana - Fevereiro 2026</h3>
+                <div class="weekly-stats">
+                    <div class="weekly-stat-card week-2">
+                        <div class="week-label">Semana 1</div>
+                        <div class="week-value">23,04 km</div>
+                        <div class="week-date">01 - 07 Fevereiro</div>
+                    </div>
+                    <div class="weekly-stat-card week-3">
+                        <div class="week-label">Semana 2</div>
+                        <div class="week-value">26,42 km</div>
+                        <div class="week-date">08 - 14 Fevereiro</div>
+                    </div>
+                    <div class="weekly-stat-card week-4">
+                        <div class="week-label">Semana 3</div>
+                        <div class="week-value">8,45 km</div>
+                        <div class="week-date">15 - 21 Fevereiro (parcial)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📉 Evolução Mensal - Comparativo</h3>
+                <canvas id="activityChart"></canvas>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <span class="alert-icon">⚡</span>
+                <div class="alert-content">
+                    <h4>Por que o exercício é tão importante?</h4>
+                    <p><strong>Pense no seu fígado como um tanque de combustível</strong> — ele está 43,9% cheio de gordura quando deveria ter menos de 5%. O exercício aeróbico funciona como uma "bomba de gasolina" que retira essa gordura do fígado para ser queimada como energia.</p>
+                    <p style="margin-top: 10px;"><strong>Corrida e ciclismo são ideais</strong> porque mantêm o coração acelerado por tempo suficiente (45-60 min) para forçar o corpo a buscar energia justamente onde está sobrando: no fígado e na barriga (gordura visceral).</p>
+                    <p style="margin-top: 10px;">Continue com o ritmo! Seus <strong>145 km em janeiro</strong> são um excelente começo. 🏃💪</p>
                 </div>
             </div>
         </section>
@@ -1940,10 +2152,10 @@
     </main>
 
     <footer class="footer">
-        <p style="font-size: 1.1em; font-weight: 600;">⚕️ Dashboard Completo de Saúde + Plano Alimentar</p>
-        <p style="margin: 15px 0;">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional personalizada.</p>
+        <p style="font-size: 1.1em; font-weight: 600;">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
+        <p style="margin: 15px 0;">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
         <p style="color: var(--danger); font-weight: 600;">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
-        <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 13/02/2026</p>
+        <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 15/02/2026</p>
     </footer>
 
     <script>
@@ -1963,7 +2175,7 @@
             });
         });
 
-        // GRÁFICO DE PERFIL LIPÍDICO (com Lp(a))
+        // GRÁFICO DE PERFIL LIPÍDICO
         const lipidCtx = document.getElementById('lipidChart');
         if(lipidCtx) {
             new Chart(lipidCtx, {
@@ -2132,6 +2344,46 @@
                         },
                         x: {
                             title: { display: true, text: 'Data' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // GRÁFICO DE ATIVIDADES FÍSICAS
+        const activityCtx = document.getElementById('activityChart');
+        if(activityCtx) {
+            new Chart(activityCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Janeiro 2026', 'Fevereiro 2026 (parcial)'],
+                    datasets: [{
+                        label: 'Distância Percorrida (km)',
+                        data: [145.22, 57.01],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(118, 75, 162, 0.8)'
+                        ],
+                        borderColor: [
+                            '#667eea',
+                            '#764ba2'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Total de Quilômetros por Mês'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Quilômetros (km)' }
                         }
                     }
                 }
