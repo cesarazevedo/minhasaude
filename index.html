@@ -7,7 +7,7 @@
     <meta name="author" content="César Augusto de Freitas Azevedo">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
     <title>Dashboard Saúde Completo - César Augusto</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* --- RESET E BASE --- */
         :root {
@@ -2726,7 +2726,7 @@
 
     <script>
         // CONTROLE DAS ABAS
-        var pendingCharts = {};
+        var bodyCompChartRendered = false;
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -2738,10 +2738,10 @@
                     tabContents.forEach(content => content.classList.remove('active'));
                     const targetId = button.getAttribute('data-target');
                     document.getElementById(targetId).classList.add('active');
-                    // Renderizar gráficos pendentes da aba
-                    if (pendingCharts[targetId]) {
-                        pendingCharts[targetId]();
-                        delete pendingCharts[targetId];
+                    // Renderizar gráfico de composição corporal na primeira vez
+                    if (targetId === 'bioimpedancia' && !bodyCompChartRendered) {
+                        bodyCompChartRendered = true;
+                        renderBodyCompChart();
                     }
                 });
             });
@@ -3023,9 +3023,9 @@
         }
 
         // GRÁFICO DE COMPOSIÇÃO CORPORAL (BIOIMPEDÂNCIA) - renderizado ao abrir a aba
-        pendingCharts['bioimpedancia'] = function() {
+        function renderBodyCompChart() {
             var ctx = document.getElementById('bodyCompChart');
-            if (ctx) {
+            if (ctx && typeof Chart !== 'undefined') {
                 new Chart(ctx, {
                     type: 'doughnut',
                     data: {
@@ -3052,7 +3052,7 @@
                     }
                 });
             }
-        };
+        }
 
         // ANIMAÇÃO DE CONTAGEM NOS CARDS
         function animateValue(el, target, decimals, suffix) {
