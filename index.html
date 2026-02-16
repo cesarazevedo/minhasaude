@@ -600,7 +600,8 @@
 // ===== CONFIG =====
 const SPREADSHEET_PUB_ID = '2PACX-1vT0LSmB9V0Xw-QvcPUsIenXz8FVTEpfuP4CtX2nBlYitPcNHUUs1YgsXwUU4Cadb67Iv_biFuxdl9Rn';
 
-const SHEETS = [
+// SHEETS é descoberto dinamicamente do pubhtml (fallback hardcoded)
+let SHEETS = [
     { name: 'Hemograma 31/01/2026', gid: '912209641' },
     { name: 'Colesterol 31/01/2026', gid: '2010398228' },
     { name: 'Demais 31/01/2026', gid: '318227406' },
@@ -615,6 +616,29 @@ const SHEETS = [
     { name: 'Checkup 19/03/2021', gid: '1048005645' },
     { name: 'Covid 15/03/2021', gid: '237661920' },
 ];
+
+async function discoverSheets() {
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_PUB_ID}/pubhtml`;
+        const resp = await fetch(url);
+        if (!resp.ok) return;
+        const html = await resp.text();
+        // Parse items.push({name: "...", ..., gid: "..."}) from the JS
+        const re = /items\.push\(\{name:\s*"([^"]+)"[^}]*gid:\s*"(\d+)"/g;
+        const discovered = [];
+        let m;
+        while ((m = re.exec(html)) !== null) {
+            // Unescape JS string (e.g., \/ -> /)
+            const name = m[1].replace(/\\(.)/g, '$1');
+            discovered.push({ name, gid: m[2] });
+        }
+        if (discovered.length > 0) {
+            SHEETS = discovered;
+        }
+    } catch (e) {
+        console.warn('Usando lista de abas hardcoded:', e);
+    }
+}
 
 const csvCache = {};
 let activeTab = 'dashboard';
@@ -716,10 +740,13 @@ const EVO_EXAMS = [
 const CHART_GROUPS = [
     { title: 'Glicose & HbA1c', exams: ['Glicose', 'HbA1c'] },
     { title: 'Colesterol / HDL / Triglicer\u00EDdeos', exams: ['Colesterol Total', 'HDL', 'Triglicer\u00EDdeos'] },
-    { title: 'Creatinina', exams: ['Creatinina'] },
+    { title: 'Creatinina & \u00C1cido \u00DArico', exams: ['Creatinina', '\u00C1cido \u00DArico'] },
     { title: 'TGO / TGP / GGT', exams: ['TGO (AST)', 'TGP (ALT)', 'GGT'] },
+    { title: 'TSH', exams: ['TSH'] },
     { title: 'PSA Total', exams: ['PSA Total'] },
     { title: 'Vitamina D & B12', exams: ['Vitamina D', 'B12'] },
+    { title: 'Hemoglobina', exams: ['Hemoglobina'] },
+    { title: 'Leuc\u00F3citos & Plaquetas', exams: ['Leuc\u00F3citos', 'Plaquetas'] },
 ];
 
 const CHART_COLORS = ['#667eea', '#f7971e', '#38ef7d', '#ff758c', '#764ba2', '#00b4d8'];
@@ -1300,8 +1327,11 @@ function showDataSource(online) {
 }
 
 // ===== INIT =====
-renderTabs();
-switchTab('dashboard');
+(async function init() {
+    await discoverSheets();
+    renderTabs();
+    switchTab('dashboard');
+})();
 </script>
 
 </body>
