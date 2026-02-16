@@ -355,8 +355,7 @@ let activeSheet = null;
 
 // ===== CSV URL =====
 function csvUrl(gid) {
-    const base = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_PUB_ID}/pub?output=csv&gid=${gid}`;
-    return `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`;
+    return `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_PUB_ID}/pub?output=csv&gid=${gid}`;
 }
 
 // ===== CSV PARSER =====
