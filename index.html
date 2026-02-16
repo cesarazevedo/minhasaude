@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dashboard completo de saúde com exames laboratoriais, plano alimentar, acompanhamento de peso e atividades físicas.">
+    <meta name="description" content="Dashboard de saúde com exames laboratoriais - César Augusto de Freitas Azevedo">
     <meta name="author" content="César Augusto de Freitas Azevedo">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
-    <title>Dashboard Saúde Completo - César Augusto</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>MinhaSaúde - Dashboard de Exames</title>
     <style>
-        /* --- RESET E BASE --- */
         :root {
             --primary: #667eea;
             --secondary: #764ba2;
@@ -18,6 +16,7 @@
             --danger: #ff758c;
             --bg-light: #f4f7fe;
             --text-dark: #2d3748;
+            --table-header: #009879;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -29,7 +28,7 @@
             flex-direction: column;
         }
 
-        /* --- HEADER SUPERIOR --- */
+        /* HEADER */
         .top-header {
             background: white;
             padding: 15px 30px;
@@ -46,16 +45,12 @@
             align-items: center;
             gap: 10px;
         }
-        .brand-icons {
-            font-size: 1.2em;
-        }
         .brand-text {
             background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
         .patient-info-header {
             display: flex;
             align-items: center;
@@ -82,7 +77,7 @@
             color: #718096;
         }
 
-        /* --- CONTAINER PRINCIPAL --- */
+        /* MAIN */
         .main-container {
             flex: 1;
             padding: 30px;
@@ -91,30 +86,31 @@
             margin: 0 auto;
         }
 
-        /* NAVEGAÇÃO POR ABAS */
+        /* TABS */
         .tabs-nav {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             margin-bottom: 25px;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 2px;
             flex-wrap: wrap;
         }
         .tab-btn {
-            padding: 12px 24px;
+            padding: 10px 18px;
             background: transparent;
             border: none;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: 600;
             color: #718096;
             cursor: pointer;
             position: relative;
             transition: all 0.3s;
             border-radius: 8px 8px 0 0;
+            white-space: nowrap;
         }
-        .tab-btn:hover { 
-            color: var(--primary); 
-            background: rgba(102, 126, 234, 0.05); 
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
         }
         .tab-btn.active {
             color: var(--primary);
@@ -131,3479 +127,405 @@
             border-radius: 4px 4px 0 0;
         }
 
-        /* CONTEÚDO DAS ABAS */
+        /* CONTENT AREA */
         .tab-content {
-            display: none;
             animation: fadeIn 0.4s ease;
         }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- CARDS --- */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .health-card {
+        /* TABLE */
+        .table-card {
             background: white;
             border-radius: 16px;
-            padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border-left: 4px solid;
-        }
-        .health-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .health-card.status-normal { border-left-color: var(--success); }
-        .health-card.status-warning { border-left-color: var(--warning); }
-        .health-card.status-danger { border-left-color: var(--danger); }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .card-title {
-            font-size: 1em;
-            color: #718096;
-            font-weight: 600;
-        }
-        .card-icon {
-            font-size: 1.8em;
-        }
-        
-        .card-value {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        .card-value.normal { color: var(--success); }
-        .card-value.warning { color: var(--warning); }
-        .card-value.danger { color: var(--danger); }
-        
-        .card-reference {
-            font-size: 0.85em;
-            color: #a0aec0;
-            margin-bottom: 10px;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .status-badge.normal {
-            background: rgba(56, 239, 125, 0.15);
-            color: #11998e;
-        }
-        .status-badge.warning {
-            background: rgba(247, 151, 30, 0.15);
-            color: #f7971e;
-        }
-        .status-badge.danger {
-            background: rgba(255, 117, 140, 0.15);
-            color: #ff758c;
-        }
-
-        /* --- BIOIMPEDÂNCIA VISUAL --- */
-        .bioimpedance-visual {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        
-        .body-composition {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
-            align-items: center;
-        }
-        
-        .body-silhouette {
-            text-align: center;
-        }
-        .body-icon {
-            font-size: 12em;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-        }
-        
-        .composition-bars {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .composition-item {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .composition-label {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-        .composition-bar {
-            height: 30px;
-            background: #e2e8f0;
-            border-radius: 15px;
             overflow: hidden;
-            position: relative;
         }
-        .composition-fill {
-            height: 100%;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92em;
+        }
+        .data-table thead tr {
+            background-color: var(--table-header);
+            color: #ffffff;
+            text-align: left;
+        }
+        .data-table th {
+            padding: 14px 16px;
             font-weight: 600;
-            font-size: 0.9em;
-            transition: width 1s ease;
+            white-space: nowrap;
         }
-        .fill-fat { background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%); }
-        .fill-muscle { background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%); }
-        .fill-water { background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%); }
-
-        /* --- ALERTAS --- */
-        .alert-box {
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            border-left: 4px solid;
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
         }
-        .alert-box.alert-danger {
-            background: rgba(255, 117, 140, 0.1);
-            border-left-color: var(--danger);
+        .data-table tbody tr {
+            transition: background-color 0.2s;
         }
-        .alert-box.alert-warning {
-            background: rgba(247, 151, 30, 0.1);
-            border-left-color: var(--warning);
+        .data-table tbody tr:hover {
+            background-color: #f6f8ff;
         }
-        .alert-box.alert-success {
-            background: rgba(56, 239, 125, 0.1);
-            border-left-color: var(--success);
-        }
-        .alert-icon {
-            font-size: 2em;
-            flex-shrink: 0;
-        }
-        .alert-content h4 {
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-        .alert-content p {
-            color: #4a5568;
-            line-height: 1.6;
+        .data-table tbody tr:last-of-type td {
+            border-bottom: none;
         }
 
-        /* --- GRÁFICOS --- */
-        .chart-container {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        .chart-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--text-dark);
-        }
-
-        /* --- SEÇÃO HEADER --- */
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .section-header h2 {
-            font-size: 1.8em;
-            color: var(--text-dark);
-        }
-        .section-icon {
-            font-size: 1.5em;
-        }
-
-        /* --- PESO TRACKER --- */
-        .weight-timeline {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 30px 10px 10px;
-            position: relative;
-            margin-top: 20px;
-        }
-        .weight-timeline::before {
-            content: '';
-            position: absolute;
-            bottom: 60px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-        .weight-point {
+        /* LOADING */
+        .loading-container {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            gap: 16px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text {
+            color: #718096;
+            font-size: 0.95em;
+        }
+
+        /* ERROR */
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+            color: #718096;
+        }
+        .error-container .error-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+        .error-container button {
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .error-container button:hover { opacity: 0.85; }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #a0aec0;
+            font-size: 0.85em;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* DATA SOURCE */
+        .data-source {
+            display: flex;
             align-items: center;
             gap: 8px;
-            position: relative;
-            z-index: 2;
-            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            margin-bottom: 20px;
         }
-        .weight-value {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--text-dark);
-            background: white;
-            padding: 8px 14px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            white-space: nowrap;
+        .data-source-online {
+            background: #f0fff4;
+            color: #276749;
         }
-        .weight-value.recorded {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+        .data-source-offline {
+            background: #fff5f5;
+            color: #9b2c2c;
         }
-        .weight-value.target {
-            border: 2px dashed var(--primary);
-            color: var(--primary);
-            background: rgba(102, 126, 234, 0.05);
-        }
-        .weight-dot {
-            width: 16px;
-            height: 16px;
+        .source-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            display: inline-block;
         }
-        .weight-dot.recorded {
-            background: var(--secondary);
-            width: 20px;
-            height: 20px;
-        }
-        .weight-dot.future {
-            background: #cbd5e0;
-            border: 3px dashed var(--primary);
-        }
-        .weight-date {
-            font-size: 0.8em;
-            color: #718096;
-            text-align: center;
-            white-space: nowrap;
-        }
-        .weight-label {
-            font-size: 0.7em;
-            color: var(--primary);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .weight-summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 25px;
-        }
-        .weight-summary-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-        }
-        .weight-summary-card .label {
-            font-size: 0.85em;
-            color: #718096;
-            margin-bottom: 8px;
-        }
-        .weight-summary-card .value {
-            font-size: 1.8em;
-            font-weight: 700;
-        }
-        .weight-summary-card .sub {
-            font-size: 0.8em;
-            color: #a0aec0;
-            margin-top: 5px;
-        }
-
-        /* --- DIETA --- */
-        .meal-card {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            border-left: 5px solid;
-        }
-        .meal-card.breakfast { border-left-color: #ffd93d; }
-        .meal-card.snack { border-left-color: #6bcf7f; }
-        .meal-card.lunch { border-left-color: #ff6b6b; }
-        .meal-card.dinner { border-left-color: #4d96ff; }
-        
-        .meal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        .meal-title {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .meal-time {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #718096;
-            padding: 8px 16px;
-            background: #f7fafc;
-            border-radius: 20px;
-        }
-        
-        .meal-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .meal-option {
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 12px;
-            border-left: 3px solid var(--primary);
-            transition: all 0.3s;
-        }
-        .meal-option:hover {
-            background: #edf2f7;
-            transform: translateX(5px);
-        }
-        .option-label {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-        .option-content {
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        .diet-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .diet-info-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .diet-info-card .icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        .diet-info-card .title {
+        .source-online { background: #38a169; }
+        .source-offline { background: #e53e3e; }
+        .source-time { opacity: 0.7; }
+        .btn-refresh {
+            margin-left: auto;
+            padding: 4px 12px;
+            background: transparent;
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            color: inherit;
+            cursor: pointer;
             font-size: 0.9em;
-            color: #718096;
-            margin-bottom: 8px;
+            transition: opacity 0.2s;
         }
-        .diet-info-card .value {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--primary);
-        }
+        .btn-refresh:hover { opacity: 0.7; }
 
-        /* --- CALENDÁRIO DE ATIVIDADES --- */
-        .activity-calendar {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .calendar-day {
-            aspect-ratio: 1;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            font-weight: 600;
-            background: #f7fafc;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-        }
-        .calendar-day.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-        }
-        .calendar-day.light-active {
-            background: rgba(102, 126, 234, 0.2);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .calendar-day-number {
-            font-size: 1.2em;
-        }
-        .calendar-day-km {
-            font-size: 0.7em;
-            margin-top: 3px;
-            opacity: 0.8;
-        }
-
-        /* --- WEEKLY STATS --- */
-        .weekly-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .weekly-stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid;
-        }
-        .weekly-stat-card.week-1 { border-left-color: #667eea; }
-        .weekly-stat-card.week-2 { border-left-color: #764ba2; }
-        .weekly-stat-card.week-3 { border-left-color: #38ef7d; }
-        .weekly-stat-card.week-4 { border-left-color: #f7971e; }
-        .weekly-stat-card .week-label {
-            font-size: 0.85em;
-            color: #718096;
-            margin-bottom: 8px;
-        }
-        .weekly-stat-card .week-value {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-        .weekly-stat-card .week-date {
-            font-size: 0.75em;
-            color: #a0aec0;
-            margin-top: 5px;
-        }
-
-        /* --- RESPONSIVIDADE --- */
-        @media (max-width: 1024px) {
-            .body-composition {
-                grid-template-columns: 1fr;
-            }
-            .cards-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-            .main-container {
-                padding: 20px;
-            }
-            .consult-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-        }
-
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             .top-header {
                 flex-direction: column;
-                gap: 15px;
+                gap: 10px;
+                padding: 12px 16px;
             }
-            .body-composition {
-                grid-template-columns: 1fr;
-            }
-            .body-icon {
-                font-size: 8em;
-            }
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .tabs-nav {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                flex-wrap: nowrap;
-                padding-bottom: 10px;
-                gap: 5px;
-            }
-            .tabs-nav::-webkit-scrollbar {
-                display: none;
-            }
+            .main-container { padding: 16px; }
+            .tabs-nav { gap: 4px; }
             .tab-btn {
-                padding: 10px 16px;
-                font-size: 0.85em;
-                white-space: nowrap;
-                flex-shrink: 0;
+                padding: 8px 12px;
+                font-size: 0.8em;
             }
-            .weight-timeline {
-                flex-wrap: wrap;
-                gap: 15px;
-                justify-content: center;
+            .data-table { font-size: 0.82em; }
+            .data-table th, .data-table td {
+                padding: 8px 10px;
             }
-            .weight-timeline::before {
-                display: none;
-            }
-            .calendar-grid {
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-            }
-            .calendar-day {
-                font-size: 0.7em;
-            }
-            .form-row {
-                flex-direction: column;
-            }
-            .form-group { width: 100%; }
-            .form-group input, .form-group select {
-                width: 100%;
-            }
-            .med-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            .progress-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-                padding: 12px 15px;
-            }
-            .reminder-banner {
-                flex-direction: column;
-                text-align: center;
-                gap: 8px;
-            }
+            .table-card { overflow-x: auto; }
         }
 
-        /* --- CLASSES UTILITÁRIAS --- */
-        .text-right { text-align: right; }
-        .text-center { text-align: center; }
-        .mt-0 { margin-top: 0; }
-        .mt-10 { margin-top: 10px; }
-        .mt-15 { margin-top: 15px; }
-        .mt-20 { margin-top: 20px; }
-        .mt-25 { margin-top: 25px; }
-        .mb-0 { margin: 0; }
-        .mb-10 { margin-bottom: 10px; }
-        .mb-15 { margin-bottom: 15px; }
-        .mb-20 { margin-bottom: 20px; }
-        .mb-30 { margin-bottom: 30px; }
-        .my-15 { margin: 15px 0; }
-        .no-margin { margin: 0; }
-        .sub-text { font-size: 0.85em; color: #718096; margin-top: 5px; }
-        .small-text { font-size: 0.9em; color: #718096; margin-top: 10px; }
-        .tiny-text { font-size: 0.8em; color: #a0aec0; margin-top: 15px; text-align: center; }
-        .section-subtitle { margin: 25px 0 15px 0; color: var(--text-dark); }
-        .detail-list { margin-left: 20px; line-height: 1.8; }
-        .detail-list-mt { margin-left: 20px; margin-top: 10px; line-height: 1.8; }
-        .paragraph-mt { margin-top: 10px; }
-        .highlight-text { font-weight: 600; color: var(--primary); }
-        .bold-text { font-weight: 600; }
-        .value-danger { color: var(--danger); }
-        .value-primary { color: var(--primary); }
-        .value-success { color: var(--success); }
-        .value-warning { color: var(--warning); }
-        .value-teal { color: #11998e; }
-        .weight-goal-value { background: linear-gradient(135deg, #38ef7d, #11998e); color: white; }
-        .weight-goal-dot { background: #38ef7d; width: 22px; height: 22px; }
-        .weight-goal-label { color: #11998e; }
-        .liver-severity { text-align: center; margin-top: 20px; font-size: 1.2em; color: var(--danger); font-weight: 600; }
-        .chart-wrapper { max-width: 600px; margin: 0 auto; }
-        .alert-tip { background: #fff3cd; border-left-color: #ffc107; margin-bottom: 15px; }
-        .footer-title { font-size: 1.1em; font-weight: 600; }
-        .footer-subtitle { margin: 15px 0; }
-        .footer-urgent { color: var(--danger); font-weight: 600; }
-        .footer-date { margin-top: 20px; font-size: 0.85em; opacity: 0.8; }
-
-        /* --- FOOTER --- */
-        .footer {
-            background: #2d3748;
-            color: white;
+        /* EMPTY STATE */
+        .empty-state {
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-        }
-        .footer p {
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
-
-        /* --- FORMULÁRIO DE PESO --- */
-        .weight-form {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            border-left: 4px solid var(--primary);
-        }
-        .weight-form h3 {
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
-        .form-row {
-            display: flex;
-            gap: 15px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .form-group label {
-            font-size: 0.85em;
-            font-weight: 600;
-            color: #718096;
-        }
-        .form-group input {
-            padding: 10px 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        .btn-add-weight {
-            padding: 10px 24px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-add-weight:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-        .weight-log {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .weight-log-entry {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 12px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9em;
-        }
-        .weight-log-entry:last-child {
-            border-bottom: none;
-        }
-        body.dark-mode .weight-form {
-            background: #2d3748;
-        }
-        body.dark-mode .form-group input {
-            background: #1a202c;
-            border-color: #4a5568;
-            color: #e2e8f0;
-        }
-        body.dark-mode .weight-log-entry {
-            border-bottom-color: #4a5568;
-        }
-
-        /* --- FORMULÁRIO DE ATIVIDADES --- */
-        .activity-form {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            border-left: 4px solid var(--success);
-        }
-        .activity-form h3 {
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
-        .activity-log {
-            margin-top: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        .activity-log-entry {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9em;
-        }
-        .activity-log-entry:last-child { border-bottom: none; }
-        .activity-type-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-        .badge-corrida { background: rgba(102,126,234,0.15); color: var(--primary); }
-        .badge-ciclismo { background: rgba(118,75,162,0.15); color: var(--secondary); }
-        .badge-caminhada { background: rgba(56,239,125,0.15); color: #11998e; }
-        .btn-export {
-            padding: 8px 18px;
-            background: #2d3748;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.85em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-export:hover {
-            background: #4a5568;
-            transform: translateY(-1px);
-        }
-        .btn-delete-entry {
-            background: none;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            font-size: 1.1em;
-            padding: 2px 6px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        .btn-delete-entry:hover { background: rgba(255,117,140,0.15); }
-        body.dark-mode .activity-form { background: #2d3748; }
-        body.dark-mode .activity-log-entry { border-bottom-color: #4a5568; }
-
-        /* --- LEMBRETE DE PESAGEM --- */
-        .reminder-banner {
-            background: linear-gradient(135deg, var(--warning), #e67e22);
-            color: white;
-            padding: 12px 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 0.95em;
-            display: none;
-        }
-        .reminder-banner.visible { display: flex; }
-        .reminder-banner .reminder-icon { font-size: 1.3em; }
-        .reminder-dismiss {
-            margin-left: auto;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .reminder-dismiss:hover { background: rgba(255,255,255,0.3); }
-
-        /* --- SEÇÃO MEDICAMENTOS/CONSULTAS --- */
-        .med-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-        .med-icon { font-size: 2em; }
-        .med-info { flex: 1; }
-        .med-name { font-weight: 700; color: var(--text-dark); font-size: 1.05em; }
-        .med-dose { font-size: 0.9em; color: #718096; margin-top: 3px; }
-        .med-schedule {
-            padding: 6px 14px;
-            background: rgba(102,126,234,0.1);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .consult-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--primary);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .consult-info h4 { color: var(--text-dark); }
-        .consult-info p { font-size: 0.85em; color: #718096; margin-top: 4px; }
-        .consult-date {
-            text-align: center;
-            padding: 10px 18px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 10px;
-            font-weight: 700;
-            min-width: 80px;
-        }
-        .consult-date .day { font-size: 1.8em; line-height: 1; }
-        .consult-date .month { font-size: 0.8em; text-transform: uppercase; }
-        body.dark-mode .med-card,
-        body.dark-mode .consult-card { background: #2d3748; }
-
-        /* --- BOTÕES FLUTUANTES --- */
-        .floating-buttons {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        }
-        .floating-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1.3em;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .floating-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-        }
-        .btn-top {
-            background: var(--primary);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        .btn-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        .btn-print {
-            background: linear-gradient(135deg, var(--success), #11998e);
-        }
-        .dark-toggle {
-            background: #2d3748;
-        }
-
-        /* --- DARK MODE --- */
-        body.dark-mode {
-            --bg-light: #1a202c;
-            --text-dark: #e2e8f0;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-        }
-        body.dark-mode .top-header {
-            background: #2d3748;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        body.dark-mode .tab-btn {
+            padding: 40px;
             color: #a0aec0;
-        }
-        body.dark-mode .tab-btn:hover {
-            color: var(--primary);
-            background: rgba(102, 126, 234, 0.1);
-        }
-        body.dark-mode .tab-btn.active {
-            color: var(--primary);
-            background: #2d3748;
-        }
-        body.dark-mode .tabs-nav {
-            border-bottom-color: #4a5568;
-        }
-        body.dark-mode .health-card,
-        body.dark-mode .chart-container,
-        body.dark-mode .bioimpedance-visual,
-        body.dark-mode .meal-card,
-        body.dark-mode .activity-calendar,
-        body.dark-mode .weight-summary-card,
-        body.dark-mode .diet-info-card {
-            background: #2d3748;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        body.dark-mode .card-title,
-        body.dark-mode .card-reference {
-            color: #a0aec0;
-        }
-        body.dark-mode .meal-option {
-            background: #1a202c;
-        }
-        body.dark-mode .meal-option:hover {
-            background: #4a5568;
-        }
-        body.dark-mode .meal-header {
-            border-bottom-color: #4a5568;
-        }
-        body.dark-mode .meal-time {
-            background: #1a202c;
-            color: #a0aec0;
-        }
-        body.dark-mode .section-header {
-            border-bottom-color: #4a5568;
-        }
-        body.dark-mode .alert-box.alert-danger {
-            background: rgba(255, 117, 140, 0.15);
-        }
-        body.dark-mode .alert-box.alert-warning {
-            background: rgba(247, 151, 30, 0.15);
-        }
-        body.dark-mode .alert-box.alert-success {
-            background: rgba(56, 239, 125, 0.15);
-        }
-        body.dark-mode .alert-box.alert-tip {
-            background: rgba(255, 193, 7, 0.15);
-        }
-        body.dark-mode .alert-content p,
-        body.dark-mode .alert-content li {
-            color: #cbd5e0;
-        }
-        body.dark-mode .composition-bar {
-            background: #4a5568;
-        }
-        body.dark-mode .weight-value {
-            background: #2d3748;
-            color: #e2e8f0;
-        }
-        body.dark-mode .exercise .exercise-item,
-        body.dark-mode .calendar-day {
-            background: #2d3748;
-        }
-        body.dark-mode .weekly-stat-card {
-            background: #2d3748;
-        }
-        body.dark-mode .quiz-options label {
-            background: #1a202c;
-            color: #e2e8f0;
-        }
-        body.dark-mode .footer {
-            background: #171923;
-        }
-        body.dark-mode .patient-details p {
-            color: #a0aec0;
-        }
-
-        /* --- ANIMAÇÃO DE CONTAGEM NOS CARDS --- */
-        .card-value[data-target] {
-            transition: color 0.3s ease;
-        }
-
-        /* --- TOOLTIP NOS CARDS --- */
-        .health-card {
-            position: relative;
-        }
-        .card-tooltip {
-            display: none;
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2d3748;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 0.82em;
-            line-height: 1.5;
-            width: 260px;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            pointer-events: none;
-        }
-        .card-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: #2d3748;
-        }
-        .health-card:hover .card-tooltip {
-            display: block;
-            animation: fadeIn 0.2s ease;
-        }
-
-        /* --- ALERTA PULSANTE --- */
-        .alert-pulse {
-            animation: alertPulse 2s ease-in-out infinite;
-            border: 2px solid transparent;
-        }
-        @keyframes alertPulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(255, 117, 140, 0);
-                border-color: transparent;
-            }
-            50% {
-                box-shadow: 0 0 25px 8px rgba(255, 117, 140, 0.4);
-                border-color: var(--danger);
-            }
-        }
-
-        /* --- BARRA DE PROGRESSO GERAL --- */
-        .progress-banner {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .progress-banner-label {
-            font-weight: 600;
-            font-size: 0.95em;
-            white-space: nowrap;
-        }
-        .progress-banner-bar {
-            flex: 1;
-            min-width: 200px;
-            height: 14px;
-            background: rgba(255,255,255,0.25);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-banner-fill {
-            height: 100%;
-            background: var(--success);
-            border-radius: 10px;
-            transition: width 1.5s ease;
-        }
-        .progress-banner-text {
-            font-weight: 700;
-            font-size: 1.1em;
-            white-space: nowrap;
-        }
-
-        /* --- CALCULADORA IMC --- */
-        .imc-calculator {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            border-left: 4px solid var(--secondary);
-        }
-        .imc-calculator h3 {
-            margin-bottom: 15px;
-            color: var(--text-dark);
-        }
-        .imc-result {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            display: none;
-        }
-        .imc-result.visible {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-        .imc-result .imc-number {
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        .imc-result .imc-class {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-        .imc-result.imc-normal { background: rgba(56,239,125,0.15); }
-        .imc-result.imc-normal .imc-number { color: var(--success); }
-        .imc-result.imc-sobrepeso { background: rgba(247,151,30,0.15); }
-        .imc-result.imc-sobrepeso .imc-number { color: var(--warning); }
-        .imc-result.imc-obeso { background: rgba(255,117,140,0.15); }
-        .imc-result.imc-obeso .imc-number { color: var(--danger); }
-        .imc-scale {
-            display: flex;
-            margin-top: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 8px;
-        }
-        .imc-scale-segment {
-            flex: 1;
-            transition: opacity 0.3s;
-        }
-        .imc-scale .seg-low { background: #4facfe; }
-        .imc-scale .seg-normal { background: #38ef7d; }
-        .imc-scale .seg-over { background: #f7971e; }
-        .imc-scale .seg-obese1 { background: #ff758c; }
-        .imc-scale .seg-obese2 { background: #e74c3c; }
-        .imc-scale .seg-obese3 { background: #c0392b; }
-        body.dark-mode .imc-calculator {
-            background: #2d3748;
-        }
-        body.dark-mode .card-tooltip {
-            background: #4a5568;
-        }
-        body.dark-mode .card-tooltip::after {
-            border-top-color: #4a5568;
-        }
-
-        /* --- PRINT --- */
-        @media print {
-            body { background: white; font-size: 12pt; }
-            .top-header { box-shadow: none; }
-            .tabs-nav { display: none; }
-            .tab-content { display: block !important; page-break-inside: avoid; }
-            .health-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
-            .health-card:hover { transform: none; }
-            .alert-box { break-inside: avoid; }
-            .chart-container { break-inside: avoid; }
-            .bioimpedance-visual { box-shadow: none; border: 1px solid #ddd; }
-            .footer { background: white; color: #333; border-top: 2px solid #ddd; }
-            .floating-buttons, .btn-print, .btn-top, .dark-toggle { display: none !important; }
-            canvas { max-height: 300px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header class="top-header">
         <div class="brand">
-            <span class="brand-icons">❤️💪</span>
-            <span class="brand-text">Health Dashboard Completo</span>
+            <span class="brand-text">MinhaSaude</span>
         </div>
         <div class="patient-info-header">
-            <div class="text-right">
-                <h3>César Augusto de Freitas Azevedo</h3>
-                <p>47 anos</p>
-            </div>
             <div class="patient-avatar">CA</div>
+            <div class="patient-details">
+                <h3>Cesar Augusto de Freitas Azevedo</h3>
+                <p>Dashboard de Exames</p>
+            </div>
         </div>
     </header>
 
-    <div class="progress-banner">
-        <span class="progress-banner-label">Meta de Peso:</span>
-        <div class="progress-banner-bar">
-            <div class="progress-banner-fill" id="progressFill"></div>
-        </div>
-        <span class="progress-banner-text" id="progressText"></span>
-    </div>
-
-    <div class="reminder-banner" id="weightReminder">
-        <span class="reminder-icon">⏰</span>
-        <span id="reminderText">Você não registra seu peso há alguns dias. Que tal pesar hoje?</span>
-        <button class="reminder-dismiss" onclick="dismissReminder()">OK</button>
-    </div>
-
+    <!-- MAIN -->
     <main class="main-container">
-        <nav class="tabs-nav">
-            <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
-            <button class="tab-btn" data-target="dieta">🥗 Plano Alimentar</button>
-            <button class="tab-btn" data-target="peso">📉 Acompanhamento Peso</button>
-            <button class="tab-btn" data-target="atividades">🏃 Atividades Físicas</button>
-            <button class="tab-btn" data-target="bioimpedancia">💪 Bioimpedância</button>
-            <button class="tab-btn" data-target="laboratoriais">🔬 Exames Lab</button>
-            <button class="tab-btn" data-target="hormonios">🧬 Hormônios</button>
-            <button class="tab-btn" data-target="vitaminas">💊 Vitaminas</button>
-            <button class="tab-btn" data-target="eletrolitos">⚡ Eletrólitos</button>
-            <button class="tab-btn" data-target="hemograma">🩸 Hemograma</button>
-            <button class="tab-btn" data-target="endoscopia">🔍 Endoscopia</button>
-            <button class="tab-btn" data-target="ressonancia">🧲 Ressonância</button>
-            <button class="tab-btn" data-target="medicamentos">💊 Medicamentos</button>
-        </nav>
-
-        <!-- ABA: VISÃO GERAL -->
-        <section id="visao-geral" class="tab-content active">
-            <div class="alert-box alert-danger alert-pulse">
-                <span class="alert-icon">🚨</span>
-                <div class="alert-content">
-                    <h4>ALERTA CRÍTICO: Esteatose Hepática Grau III</h4>
-                    <p>A ressonância magnética detectou <strong>43,9% de gordura no fígado</strong>. Este é um achado sério que requer ação imediata: mudanças drásticas na dieta, exercícios intensos e acompanhamento com hepatologista.</p>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>ATENÇÃO: Lipoproteína(a) Elevada</h4>
-                    <p><strong>Lp(a) = 47,8 mg/dL</strong> — acima do valor de referência (&lt;30 mg/dL). Concentrações ≥50 mg/dL são consideradas fator agravante de risco cardiovascular. Seu valor está muito próximo desse limiar. Este marcador é genético e não muda com dieta, mas exige controle rigoroso dos demais fatores de risco (HDL baixo, obesidade, gordura visceral).</p>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>ÓTIMAS NOTÍCIAS!</h4>
-                    <p><strong>H. pylori NEGATIVO</strong> na biópsia • <strong>Colonoscopia NORMAL</strong> • Rins, pâncreas, baço e próstata normais • <strong>PSA excelente (0,46)</strong> • Função tireoidiana normal • Hemograma completo normal</p>
-                </div>
-            </div>
-
-            <div class="section-header">
-                <span class="section-icon">📋</span>
-                <h2>Indicadores Críticos</h2>
-            </div>
-
-            <div class="cards-grid">
-                <div class="health-card status-danger">
-                    <div class="card-tooltip">O IMC mede a relação entre peso e altura. Acima de 30 indica obesidade. A meta é chegar abaixo de 30.</div>
-                    <div class="card-header">
-                        <span class="card-title">IMC</span>
-                        <span class="card-icon">⚖️</span>
-                    </div>
-                    <div class="card-value danger" data-target="37.63" data-decimals="2">0</div>
-                    <p class="card-reference">Referência: 18,5 - 24,9</p>
-                    <span class="status-badge danger">Obesidade Grau II</span>
-                </div>
-
-                <div class="health-card status-danger">
-                    <div class="card-tooltip">Porcentagem do corpo composta por gordura. Para homens, o ideal é entre 8% e 19,9%.</div>
-                    <div class="card-header">
-                        <span class="card-title">Gordura Corporal</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value danger" data-target="40.5" data-decimals="1" data-suffix="%">0</div>
-                    <p class="card-reference">Normal: 8 - 19,9%</p>
-                    <span class="status-badge danger">Muito Alto</span>
-                </div>
-
-                <div class="health-card status-danger">
-                    <div class="card-tooltip">O HDL é o "colesterol bom" que protege o coração. Exercício aeróbico é a melhor forma de aumentá-lo.</div>
-                    <div class="card-header">
-                        <span class="card-title">HDL (Colesterol Bom)</span>
-                        <span class="card-icon">💊</span>
-                    </div>
-                    <div class="card-value danger" data-target="30" data-decimals="0">0</div>
-                    <p class="card-reference">Referência: >40 mg/dL</p>
-                    <span class="status-badge danger">Muito Baixo</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-tooltip">Marcador genético de risco cardiovascular. Não muda com dieta, mas exige controle dos outros fatores.</div>
-                    <div class="card-header">
-                        <span class="card-title">Lipoproteína(a)</span>
-                        <span class="card-icon">🫀</span>
-                    </div>
-                    <div class="card-value warning" data-target="47.8" data-decimals="1">0</div>
-                    <p class="card-reference">Referência: &lt;30 mg/dL</p>
-                    <span class="status-badge warning">Elevada - Risco CV</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-tooltip">Nível de açúcar no sangue em jejum. Acima de 100 indica pré-diabetes. Dieta e exercício ajudam a controlar.</div>
-                    <div class="card-header">
-                        <span class="card-title">Glicose</span>
-                        <span class="card-icon">🍬</span>
-                    </div>
-                    <div class="card-value warning" data-target="101" data-decimals="0">0</div>
-                    <p class="card-reference">Referência: 70-99 mg/dL</p>
-                    <span class="status-badge warning">Levemente Elevada</span>
-                </div>
-
-                <div class="health-card status-danger">
-                    <div class="card-tooltip">Porcentagem de gordura acumulada no fígado. Normal é menos de 5%. Acima de 33% é grau III (severo).</div>
-                    <div class="card-header">
-                        <span class="card-title">Gordura no Fígado</span>
-                        <span class="card-icon">🫘</span>
-                    </div>
-                    <div class="card-value danger" data-target="43.9" data-decimals="1" data-suffix="%">0</div>
-                    <p class="card-reference">Normal: &lt;5%</p>
-                    <span class="status-badge danger">Grau III - Severo</span>
-                </div>
-
-                <div class="health-card status-danger">
-                    <div class="card-tooltip">Gordura ao redor dos órgãos internos. É a gordura mais perigosa. Acima de 9 aumenta o risco de doenças cardíacas.</div>
-                    <div class="card-header">
-                        <span class="card-title">Gordura Visceral</span>
-                        <span class="card-icon">🫀</span>
-                    </div>
-                    <div class="card-value danger" data-target="22" data-decimals="0">0</div>
-                    <p class="card-reference">Normal: ≤9</p>
-                    <span class="status-badge danger">Muito Alto</span>
-                </div>
-            </div>
-
-            <div class="imc-calculator">
-                <h3>🧮 Calculadora de IMC</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Peso (kg)</label>
-                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 125" value="127.4">
-                    </div>
-                    <div class="form-group">
-                        <label>Altura (m)</label>
-                        <input type="number" id="imcHeight" step="0.01" min="1.0" max="2.5" placeholder="Ex: 1.84" value="1.84">
-                    </div>
-                    <button class="btn-add-weight" onclick="calcIMC()">Calcular</button>
-                </div>
-                <div class="imc-scale">
-                    <div class="imc-scale-segment seg-low"></div>
-                    <div class="imc-scale-segment seg-normal"></div>
-                    <div class="imc-scale-segment seg-over"></div>
-                    <div class="imc-scale-segment seg-obese1"></div>
-                    <div class="imc-scale-segment seg-obese2"></div>
-                    <div class="imc-scale-segment seg-obese3"></div>
-                </div>
-                <div class="imc-result" id="imcResult">
-                    <div class="imc-number" id="imcNumber"></div>
-                    <div class="imc-class" id="imcClass"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: PLANO ALIMENTAR -->
-        <section id="dieta" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🥗</span>
-                <h2>Plano Alimentar Personalizado</h2>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">📋</span>
-                <div class="alert-content">
-                    <h4>Prescrição Nutricional - 09/02/2026</h4>
-                    <p><strong>Paciente:</strong> César Augusto de Freitas Azevedo</p>
-                    <p><strong>Peso Atual:</strong> 127kg → <strong>Meta:</strong> 112kg</p>
-                    <p><strong>Diagnóstico:</strong> Obesidade / Gastrite / Refluxo / Esteatose hepática grau III</p>
-                </div>
-            </div>
-
-            <div class="diet-info-grid">
-                <div class="diet-info-card">
-                    <div class="icon">🔥</div>
-                    <div class="title">Calorias Diárias</div>
-                    <div class="value">1.600 kcal</div>
-                    <p class="sub-text">+ gasto energético</p>
-                </div>
-                <div class="diet-info-card">
-                    <div class="icon">💧</div>
-                    <div class="title">Hidratação</div>
-                    <div class="value">3 litros</div>
-                    <p class="sub-text">de água por dia</p>
-                </div>
-                <div class="diet-info-card">
-                    <div class="icon">⏰</div>
-                    <div class="title">Jejum Noturno</div>
-                    <div class="value">~12h</div>
-                    <p class="sub-text">após o jantar</p>
-                </div>
-                <div class="diet-info-card">
-                    <div class="icon">🎯</div>
-                    <div class="title">Meta de Perda</div>
-                    <div class="value">15 kg</div>
-                    <p class="sub-text">em 6 meses</p>
-                </div>
-            </div>
-
-            <!-- PRÉ-TREINO -->
-            <div class="meal-card breakfast">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>🏃</span>
-                        PRÉ-TREINO (OPCIONAL)
-                    </div>
-                    <div class="meal-time">Antes do treino</div>
-                </div>
-                <div class="alert-box alert-success" class="no-margin">
-                    <span class="alert-icon">💡</span>
-                    <div class="alert-content">
-                        <p class="no-margin"><strong>1 banana</strong> — Ou você pode treinar em jejum, se preferir!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CAFÉ DA MANHÃ -->
-            <div class="meal-card breakfast">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>☀️</span>
-                        CAFÉ DA MANHÃ
-                    </div>
-                    <div class="meal-time">7:30h</div>
-                </div>
-                <div class="meal-options">
-                    <div class="meal-option">
-                        <div class="option-label">Opção 1: Pão com Frango</div>
-                        <div class="option-content">1 fatia única de pão de forma + 60g de frango desfiado + 200ml de café preto</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 2: Crepioca</div>
-                        <div class="option-content">1 crepioca (2 ovos + 40g de goma de tapioca + sal e orégano) — Rechear com 60g de frango desfiado + 200ml de café preto</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 3: Tapioca Fitness</div>
-                        <div class="option-content">1 tapioca de 60g com chia + 40g de queijo minas + 1 ovo mexido + 200ml de café preto</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 4: Wrap Proteico</div>
-                        <div class="option-content">1 rap10 integral com 60g de frango desfiado + 1 ovo mexido + 10g de requeijão sem lactose + 200ml de café preto</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LANCHE 10H -->
-            <div class="meal-card snack">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>🍎</span>
-                        LANCHE DA MANHÃ
-                    </div>
-                    <div class="meal-time">10:00h</div>
-                </div>
-                <div class="alert-box alert-success" class="no-margin">
-                    <span class="alert-icon">🥤</span>
-                    <div class="alert-content">
-                        <p class="mb-10"><strong>Escolha 1 opção:</strong></p>
-                        <p>• 1 banana OU<br>
-                        • 1 barra de cereal zero açúcar OU<br>
-                        • 1 Yopro</p>
-                        <p class="mt-15 highlight-text">💧 HIDRATAÇÃO LIVRE ATÉ O ALMOÇO!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ALMOÇO -->
-            <div class="meal-card lunch">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>🍽️</span>
-                        ALMOÇO
-                    </div>
-                    <div class="meal-time">12:00h</div>
-                </div>
-                <div class="alert-box alert-tip">
-                    <span class="alert-icon">🥗</span>
-                    <div class="alert-content">
-                        <p class="no-margin"><strong>Sempre começar com:</strong> Salada verde crua livre OU Vinagrete</p>
-                    </div>
-                </div>
-                <div class="meal-options">
-                    <div class="meal-option">
-                        <div class="option-label">Opção 1: Macarrão + Atum</div>
-                        <div class="option-content">Feijão (80g) + Macarrão parafuso (80g) + 100g de atum ou sardinha ou carne moída</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 2: Macaxeira + Carne de Sol</div>
-                        <div class="option-content">Feijão (80g) + Macaxeira (80g) + Carne de sol (100g)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 3: Arroz com Legumes</div>
-                        <div class="option-content">Feijão (80g) + Arroz refogado com legumes congelados (80g) + Paçoca ou Carne moída com legumes (100g)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 4: Purê + Carne de Sol</div>
-                        <div class="option-content">Purê de batata inglesa (100g) + Carne de sol assada em tirinhas (100g)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 5: Salpicão</div>
-                        <div class="option-content">Feijão (60g) + Macaxeira cozida (80g) + Salpicão (100g)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 6: Churrasco de Carne de Sol</div>
-                        <div class="option-content">Vinagrete (100g) + Carne de sol em tirinhas tipo churrasco (100g) + Batata doce (80g)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 7: Omelete Caprichado</div>
-                        <div class="option-content">1 omelete feito com 3 ovos + tomate + cebola + coentro + orégano + 100g de frango desfiado</div>
-                    </div>
-                </div>
-                <div class="alert-box alert-success" class="mt-15">
-                    <span class="alert-icon">🍊</span>
-                    <div class="alert-content">
-                        <p class="no-margin"><strong>Sobremesa:</strong> 1 fruta cítrica (laranja, mexerica, abacaxi)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LANCHE DA TARDE -->
-            <div class="meal-card snack">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>🥤</span>
-                        LANCHE DA TARDE
-                    </div>
-                    <div class="meal-time">16:00h</div>
-                </div>
-                <div class="meal-options">
-                    <div class="meal-option">
-                        <div class="option-label">Opção 1: Shake Proteico</div>
-                        <div class="option-content">1 banana + 1 dose de 30g de whey protein</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 2: Barra de Proteína</div>
-                        <div class="option-content">1 barra de proteína BOLD / NUTRATA ou INTEGRAL MÉDICA</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 3: Sanduíche Natural</div>
-                        <div class="option-content">2 fatias de pão de forma + 60g de frango desfiado + cenoura ralada + milho + ervilha + alface + tomate</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 4: Bebida Proteica</div>
-                        <div class="option-content">1 bebida proteica (pronta para consumo)</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 5: Pão com Doce Diet</div>
-                        <div class="option-content">1 fatia de pão de forma + 10g de doce de leite DIET</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- JANTAR -->
-            <div class="meal-card dinner">
-                <div class="meal-header">
-                    <div class="meal-title">
-                        <span>🌙</span>
-                        JANTAR
-                    </div>
-                    <div class="meal-time">19:00h</div>
-                </div>
-                <div class="meal-options">
-                    <div class="meal-option">
-                        <div class="option-label">Opção 1: Shake Completo</div>
-                        <div class="option-content">300ml de shake: 80g de morangos congelados OU 100g de mamão OU 1 banana + leite desnatado + aveia + granola + adoçante. Pode adicionar 1 dose de whey + 1 dose de creatina</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 2: Hambúrguer Caseiro</div>
-                        <div class="option-content">2 fatias de pão de forma integral + 110g hambúrguer de patinho + alface e tomate LIVRE</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 3: Cuscuz com Carne</div>
-                        <div class="option-content">Cuscuz (80g) + 100g de carne magra moída ou frango desfiado</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 4: Wrap Pizza</div>
-                        <div class="option-content">1 rap10 integral + molho de tomate zero tipo pizza + 100g de frango desfiado + 10g de ricota + alface + tomate + milho + ervilha</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 5: Sopa de Legumes</div>
-                        <div class="option-content">300g de sopa de legumes caseira</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 6: Espetinhos</div>
-                        <div class="option-content">2 espetinhos + 80g de macaxeira cozida + Vinagrete livre</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 7: Crepioca Recheada</div>
-                        <div class="option-content">1 crepioca (2 ovos + 30g de goma + orégano + sal), rechear com 100g de carne magra moída ou frango desfiado + milho + ervilha</div>
-                    </div>
-                    <div class="meal-option">
-                        <div class="option-label">Opção 8: Prato Completo Leve</div>
-                        <div class="option-content">80g de arroz refogado + 120g de salada de legumes ou salada verde crua + 100g de frango grelhado</div>
-                    </div>
-                </div>
-                <div class="alert-box alert-warning" class="mt-15">
-                    <span class="alert-icon">⏰</span>
-                    <div class="alert-content">
-                        <p class="no-margin bold-text"><strong>JEJUM até o dia seguinte!</strong> Não comer nada após o jantar até o café da manhã.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">💡</span>
-                <div class="alert-content">
-                    <h4>Dicas Importantes</h4>
-                    <ul class="detail-list">
-                        <li>🥤 Beba pelo menos 3 litros de água ao longo do dia</li>
-                        <li>🍽️ Escolha 1 opção diferente por dia em cada refeição</li>
-                        <li>⏰ Respeite os horários das refeições</li>
-                        <li>🚫 Evite açúcar, frituras e carboidratos refinados</li>
-                        <li>🏃 Combine a dieta com exercícios aeróbicos (45-60 min, 5-6x/semana)</li>
-                        <li>😴 Respeite o jejum noturno (não comer após o jantar)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: ACOMPANHAMENTO DE PESO -->
-        <section id="peso" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">📉</span>
-                <h2>Acompanhamento de Peso - Projeto Dieta</h2>
-            </div>
-
-            <div class="weight-form">
-                <h3>⚖️ Registrar Nova Pesagem</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Data</label>
-                        <input type="date" id="weightDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Peso (kg)</label>
-                        <input type="number" id="weightValue" step="0.1" min="50" max="250" placeholder="Ex: 125.5">
-                    </div>
-                    <button class="btn-add-weight" onclick="addWeight()">+ Registrar</button>
-                </div>
-                <div class="weight-log" id="weightLog"></div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">🎯</span>
-                <div class="alert-content">
-                    <h4>Meta: Perder 10-15% do peso em 6 meses</h4>
-                    <p>Peso inicial: <strong>127,4 kg</strong> (09/02/2026) → Meta mínima: <strong>~108 kg</strong>. Perda necessária: ~12,7 a 19,1 kg. Ritmo saudável: ~0,8 a 1,2 kg/semana.</p>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📉 Evolução do Peso (6 meses)</h3>
-                <canvas id="weightChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📅 Linha do Tempo - Marcações a cada 30 dias</h3>
-                <div class="weight-timeline">
-                    <div class="weight-point">
-                        <div class="weight-value recorded">127,4 kg</div>
-                        <div class="weight-dot recorded"></div>
-                        <div class="weight-date">09/02/2026</div>
-                        <div class="weight-label">✅ Pesado</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value recorded">127,0 kg</div>
-                        <div class="weight-dot recorded"></div>
-                        <div class="weight-date">07/02/2026*</div>
-                        <div class="weight-label">✅ Pesado</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value target">~123 kg</div>
-                        <div class="weight-dot future"></div>
-                        <div class="weight-date">09/03/2026</div>
-                        <div class="weight-label">Meta 30 dias</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value target">~119 kg</div>
-                        <div class="weight-dot future"></div>
-                        <div class="weight-date">09/04/2026</div>
-                        <div class="weight-label">Meta 60 dias</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value target">~115 kg</div>
-                        <div class="weight-dot future"></div>
-                        <div class="weight-date">09/05/2026</div>
-                        <div class="weight-label">Meta 90 dias</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value target">~112 kg</div>
-                        <div class="weight-dot future"></div>
-                        <div class="weight-date">09/06/2026</div>
-                        <div class="weight-label">Meta 120 dias</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value target">~109 kg</div>
-                        <div class="weight-dot future"></div>
-                        <div class="weight-date">09/07/2026</div>
-                        <div class="weight-label">Meta 150 dias</div>
-                    </div>
-                    <div class="weight-point">
-                        <div class="weight-value weight-goal-value">~108 kg 🏆</div>
-                        <div class="weight-dot weight-goal-dot"></div>
-                        <div class="weight-date">09/08/2026</div>
-                        <div class="weight-label weight-goal-label">🎯 Meta Final</div>
-                    </div>
-                </div>
-                <p class="tiny-text">* Pesagem avulsa registrada em 07/02/2026</p>
-            </div>
-
-            <div class="weight-summary-cards">
-                <div class="weight-summary-card">
-                    <div class="label">Peso Inicial</div>
-                    <div class="value value-danger">127,4 kg</div>
-                    <div class="sub">09/02/2026</div>
-                </div>
-                <div class="weight-summary-card">
-                    <div class="label">Peso Atual</div>
-                    <div class="value value-primary">127,0 kg</div>
-                    <div class="sub">07/02/2026</div>
-                </div>
-                <div class="weight-summary-card">
-                    <div class="label">Já Perdeu</div>
-                    <div class="value value-success">0,4 kg</div>
-                    <div class="sub">Início da jornada!</div>
-                </div>
-                <div class="weight-summary-card">
-                    <div class="label">Meta (-10%)</div>
-                    <div class="value value-teal">~108 kg</div>
-                    <div class="sub">Até 09/08/2026</div>
-                </div>
-                <div class="weight-summary-card">
-                    <div class="label">Falta Perder</div>
-                    <div class="value value-warning">19,0 kg</div>
-                    <div class="sub">Para atingir a meta</div>
-                </div>
-                <div class="weight-summary-card">
-                    <div class="label">IMC Atual</div>
-                    <div class="value value-danger">37,5</div>
-                    <div class="sub">Meta: &lt;30 (Sair da obesidade)</div>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning mt-25">
-                <span class="alert-icon">💡</span>
-                <div class="alert-content">
-                    <h4>Dica Importante</h4>
-                    <p>As metas mensais são estimativas baseadas em perda de ~1 kg/semana (ritmo saudável e sustentável). No começo, a perda pode ser mais rápida por conta da retenção de líquidos. <strong>O mais importante é a tendência de queda, não o número exato.</strong></p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: ATIVIDADES FÍSICAS -->
-        <section id="atividades" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🏃</span>
-                <h2>Registro de Atividades Físicas</h2>
-            </div>
-
-            <div class="activity-form">
-                <h3>🏃 Registrar Nova Atividade</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Data</label>
-                        <input type="date" id="actDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo</label>
-                        <select id="actType" style="padding:10px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:1em;">
-                            <option value="corrida">🏃 Corrida</option>
-                            <option value="ciclismo">🚴 Ciclismo</option>
-                            <option value="caminhada">🚶 Caminhada</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Distância (km)</label>
-                        <input type="number" id="actDistance" step="0.1" min="0" placeholder="Ex: 5.2">
-                    </div>
-                    <div class="form-group">
-                        <label>Duração (min)</label>
-                        <input type="number" id="actDuration" step="1" min="0" placeholder="Ex: 45">
-                    </div>
-                    <button class="btn-add-weight" onclick="addActivity()">+ Registrar</button>
-                </div>
-                <div class="form-row mt-15">
-                    <button class="btn-export" onclick="exportCSV('activities')">📥 Exportar Atividades (CSV)</button>
-                    <button class="btn-export" onclick="exportCSV('weight')">📥 Exportar Pesagens (CSV)</button>
-                </div>
-                <div class="activity-log" id="activityLog"></div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">💪</span>
-                <div class="alert-content">
-                    <h4>Acompanhamento de Corridas e Ciclismo</h4>
-                    <p>Registros de distância percorrida em atividades aeróbicas (corrida, caminhada, ciclismo). A recomendação médica é de <strong>45-60 minutos, 5-6x por semana</strong>, essencial para tratar a esteatose hepática e perder peso.</p>
-                </div>
-            </div>
-
-            <div class="activity-calendar">
-                <h3 class="chart-title">📅 Calendário de Atividades - Fevereiro 2026</h3>
-                <div class="calendar-grid">
-                    <div class="calendar-day"><small>Dom</small></div>
-                    <div class="calendar-day"><small>Seg</small></div>
-                    <div class="calendar-day"><small>Ter</small></div>
-                    <div class="calendar-day"><small>Qua</small></div>
-                    <div class="calendar-day"><small>Qui</small></div>
-                    <div class="calendar-day"><small>Sex</small></div>
-                    <div class="calendar-day"><small>Sab</small></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">1</div><div class="calendar-day-km">5.2km</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">2</div><div class="calendar-day-km">4.8km</div></div>
-                    <div class="calendar-day light-active"><div class="calendar-day-number">3</div><div class="calendar-day-km">3.1km</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">4</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">5</div><div class="calendar-day-km">4.5km</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">6</div><div class="calendar-day-km">5.0km</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">7</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">8</div><div class="calendar-day-km">4.2km</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">9</div><div class="calendar-day-km">5.5km</div></div>
-                    <div class="calendar-day light-active"><div class="calendar-day-number">10</div><div class="calendar-day-km">3.0km</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">11</div><div class="calendar-day-km">4.8km</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">12</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">13</div><div class="calendar-day-km">4.6km</div></div>
-                    <div class="calendar-day active"><div class="calendar-day-number">14</div><div class="calendar-day-km">4.3km</div></div>
-                    <div class="calendar-day light-active"><div class="calendar-day-number">15</div><div class="calendar-day-km">3.5km</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">16</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">17</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">18</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">19</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">20</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">21</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">22</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">23</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">24</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">25</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">26</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">27</div></div>
-                    <div class="calendar-day"><div class="calendar-day-number">28</div></div>
-                </div>
-                <p class="tiny-text">🟣 Treino completo (4+ km) | 🔵 Treino leve (&lt;4 km) | Vazio = Descanso</p>
-            </div>
-
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Total Janeiro 2026</span>
-                        <span class="card-icon">🏃</span>
-                    </div>
-                    <div class="card-value normal">145,22 km</div>
-                    <p class="card-reference">Média: ~4,7 km/dia</p>
-                    <span class="status-badge normal">✓ Excelente!</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Total Fevereiro 2026</span>
-                        <span class="card-icon">🏃</span>
-                    </div>
-                    <div class="card-value warning">57,01 km</div>
-                    <p class="card-reference">Parcial até 14/02</p>
-                    <span class="status-badge warning">Em progresso</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Maior Semana</span>
-                        <span class="card-icon">🔥</span>
-                    </div>
-                    <div class="card-value normal">49,76 km</div>
-                    <p class="card-reference">11-17 Janeiro</p>
-                    <span class="status-badge normal">✓ Ótimo ritmo!</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Total Geral</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">202,23 km</div>
-                    <p class="card-reference">Janeiro + Fevereiro</p>
-                    <span class="status-badge normal">✓ Continue assim!</span>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📈 Quilômetros por Semana - Janeiro 2026</h3>
-                <div class="weekly-stats">
-                    <div class="weekly-stat-card week-1">
-                        <div class="week-label">Semana 1</div>
-                        <div class="week-value">15,78 km</div>
-                        <div class="week-date">28 Dez 2025 - 03 Jan 2026</div>
-                    </div>
-                    <div class="weekly-stat-card week-2">
-                        <div class="week-label">Semana 2</div>
-                        <div class="week-value">36,46 km</div>
-                        <div class="week-date">04 - 10 Janeiro</div>
-                    </div>
-                    <div class="weekly-stat-card week-3">
-                        <div class="week-label">Semana 3 ⭐</div>
-                        <div class="week-value">49,76 km</div>
-                        <div class="week-date">11 - 17 Janeiro</div>
-                    </div>
-                    <div class="weekly-stat-card week-4">
-                        <div class="week-label">Semana 4</div>
-                        <div class="week-value">36,71 km</div>
-                        <div class="week-date">18 - 24 Janeiro</div>
-                    </div>
-                    <div class="weekly-stat-card week-1">
-                        <div class="week-label">Semana 5</div>
-                        <div class="week-value">16,9 km</div>
-                        <div class="week-date">25 - 31 Janeiro</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📊 Quilômetros por Semana - Fevereiro 2026</h3>
-                <div class="weekly-stats">
-                    <div class="weekly-stat-card week-2">
-                        <div class="week-label">Semana 1</div>
-                        <div class="week-value">23,04 km</div>
-                        <div class="week-date">01 - 07 Fevereiro</div>
-                    </div>
-                    <div class="weekly-stat-card week-3">
-                        <div class="week-label">Semana 2</div>
-                        <div class="week-value">26,42 km</div>
-                        <div class="week-date">08 - 14 Fevereiro</div>
-                    </div>
-                    <div class="weekly-stat-card week-4">
-                        <div class="week-label">Semana 3</div>
-                        <div class="week-value">8,45 km</div>
-                        <div class="week-date">15 - 21 Fevereiro (parcial)</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📉 Evolução Mensal - Comparativo</h3>
-                <canvas id="activityChart"></canvas>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚡</span>
-                <div class="alert-content">
-                    <h4>Por que o exercício é tão importante?</h4>
-                    <p><strong>Pense no seu fígado como um tanque de combustível</strong> — ele está 43,9% cheio de gordura quando deveria ter menos de 5%. O exercício aeróbico funciona como uma "bomba de gasolina" que retira essa gordura do fígado para ser queimada como energia.</p>
-                    <p class="paragraph-mt"><strong>Corrida e ciclismo são ideais</strong> porque mantêm o coração acelerado por tempo suficiente (45-60 min) para forçar o corpo a buscar energia justamente onde está sobrando: no fígado e na barriga (gordura visceral).</p>
-                    <p class="paragraph-mt">Continue com o ritmo! Seus <strong>145 km em janeiro</strong> são um excelente começo. 🏃💪</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: BIOIMPEDÂNCIA -->
-        <section id="bioimpedancia" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">💪</span>
-                <h2>Análise de Composição Corporal</h2>
-            </div>
-
-            <div class="bioimpedance-visual">
-                <h3 class="mb-20 section-subtitle">📊 Dados do Exame - 09/02/2026</h3>
-                <div class="cards-grid mb-30">
-                    <div class="health-card status-normal">
-                        <div class="card-header">
-                            <span class="card-title">Peso</span>
-                            <span class="card-icon">⚖️</span>
-                        </div>
-                        <div class="card-value">127.4 kg</div>
-                        <p class="card-reference">Altura: 1.84m</p>
-                    </div>
-                    <div class="health-card status-normal">
-                        <div class="card-header">
-                            <span class="card-title">Idade Corporal</span>
-                            <span class="card-icon">🎂</span>
-                        </div>
-                        <div class="card-value">80 anos</div>
-                        <p class="card-reference">Idade real: 47 anos</p>
-                        <span class="status-badge danger">33 anos acima</span>
-                    </div>
-                    <div class="health-card status-normal">
-                        <div class="card-header">
-                            <span class="card-title">Metabolismo Basal</span>
-                            <span class="card-icon">🔥</span>
-                        </div>
-                        <div class="card-value">2315 kcal</div>
-                        <p class="card-reference">Calorias/dia em repouso</p>
-                    </div>
-                    <div class="health-card status-danger">
-                        <div class="card-header">
-                            <span class="card-title">Gordura Visceral</span>
-                            <span class="card-icon">🫀</span>
-                        </div>
-                        <div class="card-value danger">22</div>
-                        <p class="card-reference">Normal: ≤9</p>
-                        <span class="status-badge danger">Muito Alto</span>
-                    </div>
-                </div>
-
-                <div class="body-composition">
-                    <div class="body-silhouette">
-                        <div class="body-icon">🧍</div>
-                        <p class="small-text">
-                            Composição Corporal
-                        </p>
-                    </div>
-                    <div class="composition-bars">
-                        <div class="composition-item">
-                            <div class="composition-label">
-                                <span>🟡 Gordura Corporal</span>
-                                <span><strong>40.5%</strong> (51.6 kg)</span>
-                            </div>
-                            <div class="composition-bar">
-                                <div class="composition-fill fill-fat" style="width: 40.5%">40.5%</div>
-                            </div>
-                            <p class="sub-text value-danger">⚠️ Muito Alto - Normal: 8-19,9%</p>
-                        </div>
-
-                        <div class="composition-item">
-                            <div class="composition-label">
-                                <span>💪 Massa Muscular</span>
-                                <span><strong>26.2%</strong> (33.4 kg)</span>
-                            </div>
-                            <div class="composition-bar">
-                                <div class="composition-fill fill-muscle" style="width: 26.2%">26.2%</div>
-                            </div>
-                            <p class="sub-text value-warning">⚠️ Abaixo do ideal - Normal: 32,9-38,9%</p>
-                        </div>
-
-                        <div class="composition-item">
-                            <div class="composition-label">
-                                <span>💧 Água Corporal (estimado)</span>
-                                <span><strong>~33.3%</strong></span>
-                            </div>
-                            <div class="composition-bar">
-                                <div class="composition-fill fill-water" style="width: 33.3%">~33%</div>
-                            </div>
-                            <p class="sub-text">ℹ️ Valor estimado baseado em músculo e gordura</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">📊 Composição Corporal</h3>
-                <div class="chart-wrapper">
-                    <canvas id="bodyCompChart"></canvas>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>Interpretação dos Resultados</h4>
-                    <p><strong>Gordura corporal em 40,5%</strong> indica obesidade severa. Combinado com <strong>gordura visceral nível 22</strong> (muito alto) e <strong>esteatose hepática grau III</strong>, há risco cardiovascular e metabólico elevado.</p>
-                    <p class="paragraph-mt"><strong>Idade corporal de 80 anos</strong> (33 anos acima da idade real) reflete o impacto do excesso de gordura e baixa massa muscular na saúde geral.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: EXAMES LABORATORIAIS -->
-        <section id="laboratoriais" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🔬</span>
-                <h2>Exames Laboratoriais</h2>
-            </div>
-
-            <h3 class="section-subtitle">💊 Perfil Lipídico</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Colesterol Total</span>
-                        <span class="card-icon">💊</span>
-                    </div>
-                    <div class="card-value normal">148</div>
-                    <p class="card-reference">Referência: &lt;190 mg/dL</p>
-                    <span class="status-badge normal">✓ Excelente</span>
-                </div>
-
-                <div class="health-card status-danger">
-                    <div class="card-header">
-                        <span class="card-title">HDL (Bom)</span>
-                        <span class="card-icon">❤️</span>
-                    </div>
-                    <div class="card-value danger">30</div>
-                    <p class="card-reference">Referência: >40 mg/dL</p>
-                    <span class="status-badge danger">✗ Muito Baixo</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">LDL (Ruim)</span>
-                        <span class="card-icon">⚠️</span>
-                    </div>
-                    <div class="card-value normal">96.8</div>
-                    <p class="card-reference">Referência: &lt;130 mg/dL</p>
-                    <span class="status-badge normal">✓ Ótimo</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">VLDL</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">21.2</div>
-                    <p class="card-reference">Referência: ≤30 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Triglicerídeos</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">106</div>
-                    <p class="card-reference">Referência: &lt;150 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Lipoproteína(a)</span>
-                        <span class="card-icon">🧬</span>
-                    </div>
-                    <div class="card-value warning">47.8</div>
-                    <p class="card-reference">Referência: &lt;30 mg/dL</p>
-                    <span class="status-badge warning">⚠ Elevada</span>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>Sobre a Lipoproteína(a) - Lp(a)</h4>
-                    <p><strong>Resultado: 47,8 mg/dL</strong> (Ref: &lt;30 mg/dL) — Exame coletado em 03/02/2026, liberado em 10/02/2026.</p>
-                    <p class="paragraph-mt">A Lp(a) é um <strong>marcador genético</strong> de risco cardiovascular. Pense nela como uma "variação" do LDL que é mais "grudenta" nos vasos sanguíneos. Diferente do colesterol comum, <strong>dieta e exercício não alteram a Lp(a)</strong> — ela é determinada pelo seu DNA.</p>
-                    <p class="paragraph-mt"><strong>O que fazer:</strong> Como não dá para baixar a Lp(a) diretamente, o foco deve ser controlar ao máximo todos os outros fatores de risco: subir o HDL (exercício aeróbico), reduzir peso, tratar a esteatose, e manter LDL e triglicerídeos baixos.</p>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">Perfil Lipídico Comparativo</h3>
-                <canvas id="lipidChart"></canvas>
-            </div>
-
-            <h3 class="section-subtitle">🍬 Metabolismo do Açúcar</h3>
-            <div class="cards-grid">
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Glicose em Jejum</span>
-                        <span class="card-icon">🍬</span>
-                    </div>
-                    <div class="card-value warning">101</div>
-                    <p class="card-reference">Referência: 70-99 mg/dL</p>
-                    <span class="status-badge warning">⚠ Levemente Elevada</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Hemoglobina Glicada</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">5.0%</div>
-                    <p class="card-reference">Referência: &lt;5.7%</p>
-                    <span class="status-badge normal">✓ Excelente</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Glicemia Estimada Média</span>
-                        <span class="card-icon">📈</span>
-                    </div>
-                    <div class="card-value normal">97</div>
-                    <p class="card-reference">mg/dL (média 3 meses)</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">🫘 Função Renal e Hepática</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Ureia</span>
-                        <span class="card-icon">🫘</span>
-                    </div>
-                    <div class="card-value normal">35</div>
-                    <p class="card-reference">Ref: 19,3-43 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Creatinina</span>
-                        <span class="card-icon">🫘</span>
-                    </div>
-                    <div class="card-value normal">1.00</div>
-                    <p class="card-reference">Ref: 0,66-1,25 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">TFG (Taxa Filtração)</span>
-                        <span class="card-icon">💧</span>
-                    </div>
-                    <div class="card-value normal">85.1</div>
-                    <p class="card-reference">ml/min/1,73m²</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">TGO (AST)</span>
-                        <span class="card-icon">🫀</span>
-                    </div>
-                    <div class="card-value normal">25</div>
-                    <p class="card-reference">Ref: 17-59 U/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">TGP (ALT)</span>
-                        <span class="card-icon">🫀</span>
-                    </div>
-                    <div class="card-value normal">36</div>
-                    <p class="card-reference">Ref: &lt;50 U/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">GGT</span>
-                        <span class="card-icon">🧪</span>
-                    </div>
-                    <div class="card-value normal">32</div>
-                    <p class="card-reference">Ref: 15-73 U/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Fosfatase Alcalina</span>
-                        <span class="card-icon">🧪</span>
-                    </div>
-                    <div class="card-value normal">47</div>
-                    <p class="card-reference">Ref: 38-126 U/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">LDH</span>
-                        <span class="card-icon">🧪</span>
-                    </div>
-                    <div class="card-value normal">162</div>
-                    <p class="card-reference">Ref: 120-246 U/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">🟡 Bilirrubinas</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Bilirrubina Total</span>
-                        <span class="card-icon">🟡</span>
-                    </div>
-                    <div class="card-value normal">0.98</div>
-                    <p class="card-reference">Ref: 0,2-1,3 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Bilirrubina Direta</span>
-                        <span class="card-icon">🟡</span>
-                    </div>
-                    <div class="card-value warning">0.34</div>
-                    <p class="card-reference">Ref: ≤0,3 mg/dL</p>
-                    <span class="status-badge warning">⚠ Leve elevação</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Bilirrubina Indireta</span>
-                        <span class="card-icon">🟡</span>
-                    </div>
-                    <div class="card-value normal">0.64</div>
-                    <p class="card-reference">Ref: ≤1,1 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">🧪 Outros Exames</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Ácido Úrico</span>
-                        <span class="card-icon">💎</span>
-                    </div>
-                    <div class="card-value normal">5.4</div>
-                    <p class="card-reference">Ref: 3,5-8,5 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Ferritina</span>
-                        <span class="card-icon">🧲</span>
-                    </div>
-                    <div class="card-value normal">139.5</div>
-                    <p class="card-reference">Ref: 23,9-336,2 ng/mL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">PSA Total</span>
-                        <span class="card-icon">🔬</span>
-                    </div>
-                    <div class="card-value normal">0.46</div>
-                    <p class="card-reference">Ref: &lt;2,5 ng/mL</p>
-                    <span class="status-badge normal">✓ Excelente</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">PSA Livre/Total</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">24%</div>
-                    <p class="card-reference">Ref: ≥15%</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: HORMÔNIOS -->
-        <section id="hormonios" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🧬</span>
-                <h2>Perfil Hormonal</h2>
-            </div>
-
-            <h3 class="section-subtitle">🦋 Função Tireoidiana</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">TSH</span>
-                        <span class="card-icon">🦋</span>
-                    </div>
-                    <div class="card-value normal">1.82</div>
-                    <p class="card-reference">Ref: 0,38-5,33 µUI/mL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">T4 Livre</span>
-                        <span class="card-icon">🦋</span>
-                    </div>
-                    <div class="card-value normal">1.02</div>
-                    <p class="card-reference">Ref: 0,54-1,24 ng/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">💪 Hormônios Sexuais</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Testosterona Total</span>
-                        <span class="card-icon">💪</span>
-                    </div>
-                    <div class="card-value normal">319</div>
-                    <p class="card-reference">Ref: 132-813 ng/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Testosterona Livre</span>
-                        <span class="card-icon">💪</span>
-                    </div>
-                    <div class="card-value normal">8.95</div>
-                    <p class="card-reference">Ref: 3,4-24,6 ng/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">SHBG</span>
-                        <span class="card-icon">🔗</span>
-                    </div>
-                    <div class="card-value warning">16.7</div>
-                    <p class="card-reference">Ref: 13,2-89,5 nmol/L</p>
-                    <span class="status-badge warning">⚠ Limite inferior</span>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>Função Hormonal Adequada</h4>
-                    <p>Tireoide funcionando normalmente (TSH e T4 livre dentro da faixa). Testosterona total e livre em níveis adequados para a idade. SHBG no limite inferior pode estar relacionado ao excesso de gordura corporal.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: VITAMINAS -->
-        <section id="vitaminas" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">💊</span>
-                <h2>Perfil de Vitaminas</h2>
-            </div>
-
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Vitamina D</span>
-                        <span class="card-icon">☀️</span>
-                    </div>
-                    <div class="card-value normal">37.6</div>
-                    <p class="card-reference">Ideal: 30-60 ng/mL</p>
-                    <span class="status-badge normal">✓ Adequado</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Vitamina B12</span>
-                        <span class="card-icon">💊</span>
-                    </div>
-                    <div class="card-value warning">192</div>
-                    <p class="card-reference">Ref: 130-868 pg/mL</p>
-                    <span class="status-badge warning">⚠ Limite inferior</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Vitamina A</span>
-                        <span class="card-icon">🥕</span>
-                    </div>
-                    <div class="card-value normal">0.84</div>
-                    <p class="card-reference">Ref: 0,3-0,7 mg/L</p>
-                    <span class="status-badge normal">✓ Adequado</span>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>Atenção à Vitamina B12</h4>
-                    <p><strong>B12 em 192 pg/mL</strong> está no limite inferior da normalidade. Considere suplementação ou aumento do consumo de alimentos ricos em B12 (carnes, ovos, laticínios) para evitar deficiência futura.</p>
-                    <p class="paragraph-mt"><strong>Vitamina D em 37,6 ng/mL</strong> está adequada, mas pode ser otimizada para 40-50 ng/mL com exposição solar moderada e/ou suplementação.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: ELETRÓLITOS -->
-        <section id="eletrolitos" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">⚡</span>
-                <h2>Eletrólitos e Minerais</h2>
-            </div>
-
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Sódio</span>
-                        <span class="card-icon">🧂</span>
-                    </div>
-                    <div class="card-value normal">139</div>
-                    <p class="card-reference">Ref: 137-145 mmol/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Potássio</span>
-                        <span class="card-icon">🍌</span>
-                    </div>
-                    <div class="card-value normal">4.40</div>
-                    <p class="card-reference">Ref: 3,5-5,1 mmol/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Cloro</span>
-                        <span class="card-icon">⚡</span>
-                    </div>
-                    <div class="card-value normal">105</div>
-                    <p class="card-reference">Ref: 98-107 mmol/L</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Cálcio</span>
-                        <span class="card-icon">🦴</span>
-                    </div>
-                    <div class="card-value normal">9.2</div>
-                    <p class="card-reference">Ref: 8,4-10,2 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Fósforo</span>
-                        <span class="card-icon">🧪</span>
-                    </div>
-                    <div class="card-value normal">3.10</div>
-                    <p class="card-reference">Ref: 2,5-4,5 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Magnésio</span>
-                        <span class="card-icon">✨</span>
-                    </div>
-                    <div class="card-value normal">2.00</div>
-                    <p class="card-reference">Ref: 1,6-2,3 mg/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>Equilíbrio Eletrolítico Perfeito</h4>
-                    <p>Todos os eletrólitos e minerais estão dentro da faixa normal. Isso indica boa função renal, hidratação adequada e equilíbrio ácido-base do organismo.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: HEMOGRAMA -->
-        <section id="hemograma" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🩸</span>
-                <h2>Hemograma Completo</h2>
-            </div>
-
-            <h3 class="section-subtitle">🔴 Série Vermelha (Eritrograma)</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Hemácias</span>
-                        <span class="card-icon">🔴</span>
-                    </div>
-                    <div class="card-value normal">5.19</div>
-                    <p class="card-reference">Ref: 4,5-5,5 milhões/mm³</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Hemoglobina</span>
-                        <span class="card-icon">🩸</span>
-                    </div>
-                    <div class="card-value normal">15.6</div>
-                    <p class="card-reference">Ref: 13-17 g/dL</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Hematócrito</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">44.7%</div>
-                    <p class="card-reference">Ref: 40-50%</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">VCM</span>
-                        <span class="card-icon">📏</span>
-                    </div>
-                    <div class="card-value normal">86.1</div>
-                    <p class="card-reference">Ref: 83-101 fl</p>
-                    <span class="status-badge normal">✓ Normocitose</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">HCM</span>
-                        <span class="card-icon">⚖️</span>
-                    </div>
-                    <div class="card-value normal">30.1</div>
-                    <p class="card-reference">Ref: 27-32 pg</p>
-                    <span class="status-badge normal">✓ Normocromia</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">RDW</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">12.0%</div>
-                    <p class="card-reference">Ref: 11,6-14%</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">⚪ Série Branca (Leucograma)</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Leucócitos Totais</span>
-                        <span class="card-icon">⚪</span>
-                    </div>
-                    <div class="card-value normal">5.630</div>
-                    <p class="card-reference">Ref: 4.000-10.000/mm³</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Neutrófilos</span>
-                        <span class="card-icon">🛡️</span>
-                    </div>
-                    <div class="card-value normal">3.406</div>
-                    <p class="card-reference">Ref: 2.000-7.000/mm³</p>
-                    <span class="status-badge normal">✓ 60,5%</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Linfócitos</span>
-                        <span class="card-icon">🦠</span>
-                    </div>
-                    <div class="card-value normal">1.109</div>
-                    <p class="card-reference">Ref: 1.000-3.000/mm³</p>
-                    <span class="status-badge normal">✓ 19,7%</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Monócitos</span>
-                        <span class="card-icon">🔬</span>
-                    </div>
-                    <div class="card-value normal">602</div>
-                    <p class="card-reference">Ref: 200-1.000/mm³</p>
-                    <span class="status-badge normal">✓ 10,7%</span>
-                </div>
-
-                <div class="health-card status-warning">
-                    <div class="card-header">
-                        <span class="card-title">Eosinófilos</span>
-                        <span class="card-icon">🔴</span>
-                    </div>
-                    <div class="card-value warning">462</div>
-                    <p class="card-reference">Ref: 20-500/mm³</p>
-                    <span class="status-badge warning">⚠ 8,2% (leve ↑)</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Basófilos</span>
-                        <span class="card-icon">⚪</span>
-                    </div>
-                    <div class="card-value normal">51</div>
-                    <p class="card-reference">Ref: 20-100/mm³</p>
-                    <span class="status-badge normal">✓ 0,9%</span>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">🩹 Plaquetas</h3>
-            <div class="cards-grid">
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Contagem de Plaquetas</span>
-                        <span class="card-icon">🩹</span>
-                    </div>
-                    <div class="card-value normal">183.000</div>
-                    <p class="card-reference">Ref: 150.000-400.000/mm³</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-
-                <div class="health-card status-normal">
-                    <div class="card-header">
-                        <span class="card-title">Volume Plaquetário (MPV)</span>
-                        <span class="card-icon">📊</span>
-                    </div>
-                    <div class="card-value normal">9.70</div>
-                    <p class="card-reference">Ref: 9-12 fl</p>
-                    <span class="status-badge normal">✓ Normal</span>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>Hemograma Completamente Normal</h4>
-                    <p>Série vermelha: normocitose e normocromia (sem anemia). Série branca: sem sinais de infecção ou alterações importantes (leve aumento de eosinófilos pode ser alergia leve). Plaquetas normais. Morfologia celular preservada.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: ENDOSCOPIA -->
-        <section id="endoscopia" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🔍</span>
-                <h2>Exames Endoscópicos</h2>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">🎉</span>
-                <div class="alert-content">
-                    <h4>Colonoscopia - 26/01/2026</h4>
-                    <p><strong>RESULTADO: EXAME NORMAL</strong></p>
-                    <p class="paragraph-mt">✅ Sem pólipos • ✅ Sem divertículos • ✅ Sem inflamação • ✅ Sem tumores</p>
-                    <p class="paragraph-mt small-text">Preparo adequado (Escala de Boston: 9 pontos). Próximo exame recomendado em 5-10 anos.</p>
-                </div>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>Biópsia Gástrica - 05/02/2026</h4>
-                    <p><strong>H. pylori: NEGATIVO</strong> ✅</p>
-                    <p class="paragraph-mt">Excelente notícia! Não há infecção por H. pylori. Não precisa de tratamento com antibióticos.</p>
-                </div>
-            </div>
-
-            <div class="alert-box alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>Endoscopia Digestiva Alta - 27/01/2026</h4>
-                    <p><strong>Achados:</strong></p>
-                    <ul class="detail-list-mt">
-                        <li><strong>Esofagite Péptica Grau A</strong> - Inflamação leve do esôfago</li>
-                        <li><strong>Hérnia de Hiato Tipo I</strong> - Grau II de Hill</li>
-                        <li><strong>Pangastrite Enantematosa Leve</strong> - Inflamação leve do estômago</li>
-                    </ul>
-                    <p class="paragraph-mt"><strong>Recomendação:</strong> Tratamento para refluxo com inibidor de bomba de prótons (IBP)</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: RESSONÂNCIA -->
-        <section id="ressonancia" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">🧲</span>
-                <h2>Ressonância Magnética</h2>
-            </div>
-
-            <div class="alert-box alert-danger alert-pulse">
-                <span class="alert-icon">🚨</span>
-                <div class="alert-content">
-                    <h4>ACHADO CRÍTICO: Esteatose Hepática Grau III</h4>
-                    <p>Infiltração gordurosa hepática difusa acentuada com índice de queda de sinal de <strong>43,9%</strong></p>
-                    <p class="paragraph-mt"><strong>Significado:</strong> Mais de 40% das células do fígado contêm gordura. Este é um grau SEVERO que requer:</p>
-                    <ul class="detail-list-mt">
-                        <li>⚠️ Mudanças drásticas na dieta (cortar açúcar, carboidratos refinados, frituras)</li>
-                        <li>⚠️ Exercícios aeróbicos intensos (45-60 min, 5-6x/semana)</li>
-                        <li>⚠️ Perda de 10-15% do peso atual (12-19 kg)</li>
-                        <li>⚠️ Acompanhamento com hepatologista URGENTE</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">🫘 Nível de Gordura no Fígado</h3>
-                <div class="chart-wrapper">
-                    <canvas id="liverChart"></canvas>
-                </div>
-                <p class="liver-severity">
-                    SEU NÍVEL: 43.9% (GRAU III - SEVERO)
-                </p>
-            </div>
-
-            <div class="alert-box alert-success">
-                <span class="alert-icon">✅</span>
-                <div class="alert-content">
-                    <h4>Estruturas Normais na RM</h4>
-                    <ul class="detail-list-mt">
-                        <li>✅ Fígado: Dimensões e contornos normais (apenas com esteatose)</li>
-                        <li>✅ Vesícula biliar: Normal, sem cálculos</li>
-                        <li>✅ Pâncreas: Morfologia e contornos normais</li>
-                        <li>✅ Baço: Homogêneo e normal</li>
-                        <li>✅ Rins: Normais bilateralmente</li>
-                        <li>✅ Próstata: Morfologia habitual</li>
-                        <li>✅ Bexiga: Capacidade e paredes normais</li>
-                        <li>✅ Sem linfonodos aumentados</li>
-                        <li>✅ Sem tumores ou massas</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABA: MEDICAMENTOS E CONSULTAS -->
-        <section id="medicamentos" class="tab-content">
-            <div class="section-header">
-                <span class="section-icon">💊</span>
-                <h2>Medicamentos e Consultas</h2>
-            </div>
-
-            <h3 class="section-subtitle">💊 Medicamentos em Uso</h3>
-            <div class="alert-box alert-success">
-                <span class="alert-icon">ℹ️</span>
-                <div class="alert-content">
-                    <p class="no-margin">Lista de medicamentos conforme prescrição médica. Sempre consulte seu médico antes de alterar dosagens.</p>
-                </div>
-            </div>
-
-            <div class="med-card">
-                <span class="med-icon">💊</span>
-                <div class="med-info">
-                    <div class="med-name">Omeprazol 20mg</div>
-                    <div class="med-dose">1 cápsula em jejum — Para gastrite e refluxo</div>
-                </div>
-                <span class="med-schedule">Manhã (jejum)</span>
-            </div>
-
-            <div class="med-card">
-                <span class="med-icon">💪</span>
-                <div class="med-info">
-                    <div class="med-name">Whey Protein 30g</div>
-                    <div class="med-dose">1 dose no shake — Suplemento proteico</div>
-                </div>
-                <span class="med-schedule">Lanche / Jantar</span>
-            </div>
-
-            <div class="med-card">
-                <span class="med-icon">⚡</span>
-                <div class="med-info">
-                    <div class="med-name">Creatina 5g</div>
-                    <div class="med-dose">1 dose diária — Suplemento muscular</div>
-                </div>
-                <span class="med-schedule">Jantar (shake)</span>
-            </div>
-
-            <div class="alert-box alert-warning mt-25">
-                <span class="alert-icon">⚠️</span>
-                <div class="alert-content">
-                    <h4>Suplementação sugerida</h4>
-                    <p>Considerar suplementação de <strong>Vitamina B12</strong> (nível em 192 pg/mL, limite inferior). Consultar médico para prescrição.</p>
-                </div>
-            </div>
-
-            <h3 class="section-subtitle">📅 Próximas Consultas</h3>
-
-            <div class="consult-card">
-                <div class="consult-info">
-                    <h4>Hepatologista</h4>
-                    <p>Acompanhamento da esteatose hepática grau III — URGENTE</p>
-                </div>
-                <div class="consult-date">
-                    <div class="day">--</div>
-                    <div class="month">Agendar</div>
-                </div>
-            </div>
-
-            <div class="consult-card">
-                <div class="consult-info">
-                    <h4>Nutricionista — Retorno</h4>
-                    <p>Avaliação do progresso da dieta e ajustes no plano alimentar</p>
-                </div>
-                <div class="consult-date">
-                    <div class="day">09</div>
-                    <div class="month">MAR</div>
-                </div>
-            </div>
-
-            <div class="consult-card">
-                <div class="consult-info">
-                    <h4>Endocrinologista</h4>
-                    <p>Acompanhamento geral — metabolismo e hormônios</p>
-                </div>
-                <div class="consult-date">
-                    <div class="day">--</div>
-                    <div class="month">Agendar</div>
-                </div>
-            </div>
-
-            <div class="consult-card">
-                <div class="consult-info">
-                    <h4>Cardiologista</h4>
-                    <p>Avaliação cardiovascular — Lp(a) elevada e HDL baixo</p>
-                </div>
-                <div class="consult-date">
-                    <div class="day">--</div>
-                    <div class="month">Agendar</div>
-                </div>
-            </div>
-        </section>
-
+        <div id="dataSource" class="data-source" style="display:none;"></div>
+        <nav id="tabsNav" class="tabs-nav"></nav>
+        <section id="tabContent"></section>
     </main>
 
-    <div class="floating-buttons">
-        <button class="floating-btn dark-toggle" id="darkToggle" title="Modo Escuro">🌙</button>
-        <button class="floating-btn btn-print" onclick="window.print()" title="Imprimir / Exportar PDF">🖨️</button>
-        <button class="floating-btn btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">⬆️</button>
-    </div>
-
+    <!-- FOOTER -->
     <footer class="footer">
-        <p class="footer-title">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
-        <p class="footer-subtitle">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
-        <p class="footer-urgent">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
-        <p class="footer-date">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 15/02/2026</p>
+        Dados carregados automaticamente do Google Sheets.
+        Adicione novos exames na planilha e recarregue a pagina.
     </footer>
 
-    <script>
-        // CONTROLE DAS ABAS
-        var bodyCompChartRendered = false;
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
+<script>
+// ===== CONFIG =====
+const SPREADSHEET_PUB_ID = '2PACX-1vT0LSmB9V0Xw-QvcPUsIenXz8FVTEpfuP4CtX2nBlYitPcNHUUs1YgsXwUU4Cadb67Iv_biFuxdl9Rn';
 
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    const targetId = button.getAttribute('data-target');
-                    document.getElementById(targetId).classList.add('active');
-                    // Renderizar gráfico de composição corporal na primeira vez
-                    if (targetId === 'bioimpedancia' && !bodyCompChartRendered) {
-                        bodyCompChartRendered = true;
-                        renderBodyCompChart();
-                    }
-                });
-            });
-        });
+const SHEETS = [
+    { name: 'Hemograma 31/01/2026', gid: '912209641' },
+    { name: 'Colesterol 31/01/2026', gid: '2010398228' },
+    { name: 'Demais 31/01/2026', gid: '318227406' },
+    { name: 'Lipoproteina A 03/02/2026', gid: '1247256957' },
+    { name: 'PSA 11/11/2023', gid: '937090680' },
+    { name: 'Checkup 09/10/2023', gid: '559948215' },
+    { name: 'Checkup 09/05/2023', gid: '1269112884' },
+    { name: 'Gastro 04/07/2022', gid: '740994487' },
+    { name: 'Covid 26/09/2022', gid: '226297418' },
+    { name: 'Checkup 18/12/2021', gid: '1918559974' },
+    { name: 'Checkup 06/10/2021', gid: '1324492065' },
+    { name: 'Checkup 19/03/2021', gid: '1048005645' },
+    { name: 'Covid 15/03/2021', gid: '237661920' },
+];
 
-        // REGISTRO DE PESO
-        function loadWeightLog() {
-            const log = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            const container = document.getElementById('weightLog');
-            if (log.length === 0) {
-                container.innerHTML = '<p style="color:#a0aec0;font-size:0.85em;margin-top:10px;">Nenhuma pesagem registrada ainda.</p>';
-                return;
-            }
-            log.sort((a, b) => new Date(b.date) - new Date(a.date));
-            container.innerHTML = log.map(entry => {
-                const d = new Date(entry.date + 'T00:00:00');
-                const dateStr = d.toLocaleDateString('pt-BR');
-                return '<div class="weight-log-entry"><span>' + dateStr + '</span><strong>' + entry.weight.toFixed(1) + ' kg</strong></div>';
-            }).join('');
-        }
+const csvCache = {};
+let activeSheet = null;
 
-        function addWeight() {
-            const dateInput = document.getElementById('weightDate');
-            const weightInput = document.getElementById('weightValue');
-            const date = dateInput.value;
-            const weight = parseFloat(weightInput.value);
-            if (!date || isNaN(weight)) {
-                alert('Preencha a data e o peso!');
-                return;
-            }
-            const log = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            log.push({ date: date, weight: weight });
-            localStorage.setItem('weightLog', JSON.stringify(log));
-            dateInput.value = '';
-            weightInput.value = '';
-            loadWeightLog();
-            updateWeightChart();
-        }
+// ===== CSV URL =====
+function csvUrl(gid) {
+    const base = `https://docs.google.com/spreadsheets/d/e/${SPREADSHEET_PUB_ID}/pub?output=csv&gid=${gid}`;
+    return `https://api.allorigins.win/raw?url=${encodeURIComponent(base)}`;
+}
 
-        // Definir data padrão como hoje e carregar log
-        document.getElementById('weightDate').valueAsDate = new Date();
-        loadWeightLog();
+// ===== CSV PARSER =====
+function parseCSV(text) {
+    const rows = [];
+    let current = '';
+    let inQuotes = false;
+    let row = [];
 
-        // DARK MODE
-        const darkToggle = document.getElementById('darkToggle');
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            darkToggle.textContent = '☀️';
-        }
-        darkToggle.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            darkToggle.textContent = isDark ? '☀️' : '🌙';
-        });
-
-        // BOTÃO VOLTAR AO TOPO
-        window.addEventListener('scroll', function() {
-            const btnTop = document.getElementById('btnTop');
-            if (window.scrollY > 300) {
-                btnTop.classList.add('visible');
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuotes) {
+            if (ch === '"' && text[i + 1] === '"') {
+                current += '"';
+                i++;
+            } else if (ch === '"') {
+                inQuotes = false;
             } else {
-                btnTop.classList.remove('visible');
+                current += ch;
             }
-        });
-
-        // GRÁFICO DE PERFIL LIPÍDICO
-        const lipidCtx = document.getElementById('lipidChart');
-        if(lipidCtx) {
-            new Chart(lipidCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Colesterol Total', 'HDL', 'LDL', 'VLDL', 'Triglicerídeos', 'Lp(a)'],
-                    datasets: [{
-                        label: 'Seu Resultado',
-                        data: [148, 30, 96.8, 21.2, 106, 47.8],
-                        backgroundColor: [
-                            'rgba(56, 239, 125, 0.7)',
-                            'rgba(255, 117, 140, 0.7)',
-                            'rgba(56, 239, 125, 0.7)',
-                            'rgba(56, 239, 125, 0.7)',
-                            'rgba(56, 239, 125, 0.7)',
-                            'rgba(247, 151, 30, 0.7)'
-                        ],
-                        borderColor: [
-                            '#38ef7d',
-                            '#ff758c',
-                            '#38ef7d',
-                            '#38ef7d',
-                            '#38ef7d',
-                            '#f7971e'
-                        ],
-                        borderWidth: 2
-                    }, {
-                        label: 'Limite Ideal',
-                        data: [190, 40, 130, 30, 150, 30],
-                        type: 'line',
-                        fill: false,
-                        borderColor: '#667eea',
-                        borderWidth: 2,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#667eea'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: true },
-                        title: {
-                            display: true,
-                            text: 'Valores em mg/dL'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'mg/dL' }
-                        }
-                    }
-                }
-            });
-        }
-
-        // GRÁFICO DE GORDURA NO FÍGADO
-        const liverCtx = document.getElementById('liverChart');
-        if(liverCtx) {
-            new Chart(liverCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Gordura (43.9%)', 'Tecido Saudável (56.1%)'],
-                    datasets: [{
-                        data: [43.9, 56.1],
-                        backgroundColor: [
-                            'rgba(255, 117, 140, 0.8)',
-                            'rgba(56, 239, 125, 0.3)'
-                        ],
-                        borderColor: [
-                            '#ff758c',
-                            '#38ef7d'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: { size: 14 },
-                                padding: 20
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // GRÁFICO DE EVOLUÇÃO DO PESO
-        const weightCtx = document.getElementById('weightChart');
-        if(weightCtx) {
-            new Chart(weightCtx, {
-                type: 'line',
-                data: {
-                    labels: [
-                        '07/02\n(Pesado)',
-                        '09/02\n(Bioimpedância)',
-                        '09/03\nMeta 30d',
-                        '09/04\nMeta 60d',
-                        '09/05\nMeta 90d',
-                        '09/06\nMeta 120d',
-                        '09/07\nMeta 150d',
-                        '09/08\nMeta 180d'
-                    ],
-                    datasets: [{
-                        label: 'Peso Real (kg)',
-                        data: [127.0, 127.4, null, null, null, null, null, null],
-                        borderColor: '#764ba2',
-                        backgroundColor: 'rgba(118, 75, 162, 0.2)',
-                        borderWidth: 3,
-                        pointRadius: 8,
-                        pointBackgroundColor: '#764ba2',
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 2,
-                        fill: false,
-                        tension: 0.1,
-                        spanGaps: false
-                    }, {
-                        label: 'Meta Projetada (kg)',
-                        data: [null, 127.4, 123, 119, 115, 112, 109, 108],
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 2,
-                        borderDash: [8, 4],
-                        pointRadius: 6,
-                        pointBackgroundColor: '#667eea',
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 2,
-                        fill: true,
-                        tension: 0.3,
-                        spanGaps: true
-                    }, {
-                        label: 'Meta Final (-10%)',
-                        data: [108, 108, 108, 108, 108, 108, 108, 108],
-                        borderColor: 'rgba(56, 239, 125, 0.5)',
-                        backgroundColor: 'rgba(56, 239, 125, 0.05)',
-                        borderWidth: 2,
-                        borderDash: [4, 4],
-                        pointRadius: 0,
-                        fill: false,
-                        tension: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { 
-                            display: true,
-                            position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Projeção de Perda de Peso - 6 Meses (Fev-Ago 2026)',
-                            font: { size: 14 }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            min: 100,
-                            max: 132,
-                            title: { display: true, text: 'Peso (kg)' },
-                            ticks: { stepSize: 4 }
-                        },
-                        x: {
-                            title: { display: true, text: 'Data' }
-                        }
-                    }
-                }
-            });
-        }
-
-        // GRÁFICO DE ATIVIDADES FÍSICAS
-        const activityCtx = document.getElementById('activityChart');
-        if(activityCtx) {
-            new Chart(activityCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Janeiro 2026', 'Fevereiro 2026 (parcial)'],
-                    datasets: [{
-                        label: 'Distância Percorrida (km)',
-                        data: [145.22, 57.01],
-                        backgroundColor: [
-                            'rgba(102, 126, 234, 0.8)',
-                            'rgba(118, 75, 162, 0.8)'
-                        ],
-                        borderColor: [
-                            '#667eea',
-                            '#764ba2'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                        title: {
-                            display: true,
-                            text: 'Total de Quilômetros por Mês'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'Quilômetros (km)' }
-                        }
-                    }
-                }
-            });
-        }
-
-        // GRÁFICO DE COMPOSIÇÃO CORPORAL (BIOIMPEDÂNCIA) - renderizado ao abrir a aba
-        function renderBodyCompChart() {
-            var ctx = document.getElementById('bodyCompChart');
-            if (ctx && typeof Chart !== 'undefined') {
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Gordura (40.5%)', 'Massa Muscular (26.2%)', 'Água (~33.3%)'],
-                        datasets: [{
-                            data: [40.5, 26.2, 33.3],
-                            backgroundColor: [
-                                'rgba(245, 87, 108, 0.8)',
-                                'rgba(79, 172, 254, 0.8)',
-                                'rgba(67, 233, 123, 0.8)'
-                            ],
-                            borderColor: ['#f5576c', '#4facfe', '#43e97b'],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { font: { size: 14 }, padding: 20 }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-        // ANIMAÇÃO DE CONTAGEM NOS CARDS
-        function animateValue(el, target, decimals, suffix) {
-            var start = 0;
-            var duration = 1500;
-            var startTime = null;
-            function step(timestamp) {
-                if (!startTime) startTime = timestamp;
-                var progress = Math.min((timestamp - startTime) / duration, 1);
-                var eased = 1 - Math.pow(1 - progress, 3);
-                var current = start + (target - start) * eased;
-                el.textContent = current.toFixed(decimals) + (suffix || '');
-                if (progress < 1) requestAnimationFrame(step);
-            }
-            requestAnimationFrame(step);
-        }
-
-        var observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting && !entry.target.dataset.animated) {
-                    entry.target.dataset.animated = 'true';
-                    var target = parseFloat(entry.target.dataset.target);
-                    var decimals = parseInt(entry.target.dataset.decimals) || 0;
-                    var suffix = entry.target.dataset.suffix || '';
-                    animateValue(entry.target, target, decimals, suffix);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        document.querySelectorAll('.card-value[data-target]').forEach(function(el) {
-            observer.observe(el);
-        });
-
-        // BARRA DE PROGRESSO
-        var pesoInicial = 127.4;
-        var pesoMeta = 108;
-        var pesoAtual = 127.0;
-        var totalPerder = pesoInicial - pesoMeta;
-        var jaPerdeu = pesoInicial - pesoAtual;
-        var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
-        document.getElementById('progressFill').style.width = percent.toFixed(1) + '%';
-        document.getElementById('progressText').textContent = percent.toFixed(1) + '% (' + jaPerdeu.toFixed(1) + ' de ' + totalPerder.toFixed(1) + ' kg)';
-
-        // CALCULADORA DE IMC
-        function calcIMC() {
-            var peso = parseFloat(document.getElementById('imcWeight').value);
-            var altura = parseFloat(document.getElementById('imcHeight').value);
-            if (isNaN(peso) || isNaN(altura) || altura === 0) {
-                alert('Preencha peso e altura!');
-                return;
-            }
-            var imc = peso / (altura * altura);
-            var result = document.getElementById('imcResult');
-            var numberEl = document.getElementById('imcNumber');
-            var classEl = document.getElementById('imcClass');
-            numberEl.textContent = imc.toFixed(2);
-            result.className = 'imc-result visible';
-            if (imc < 18.5) {
-                classEl.textContent = 'Abaixo do peso';
-                result.classList.add('imc-normal');
-            } else if (imc < 25) {
-                classEl.textContent = 'Peso normal';
-                result.classList.add('imc-normal');
-            } else if (imc < 30) {
-                classEl.textContent = 'Sobrepeso';
-                result.classList.add('imc-sobrepeso');
-            } else if (imc < 35) {
-                classEl.textContent = 'Obesidade Grau I';
-                result.classList.add('imc-obeso');
-            } else if (imc < 40) {
-                classEl.textContent = 'Obesidade Grau II';
-                result.classList.add('imc-obeso');
+        } else {
+            if (ch === '"') {
+                inQuotes = true;
+            } else if (ch === ',') {
+                row.push(current.trim());
+                current = '';
+            } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+                row.push(current.trim());
+                current = '';
+                if (ch === '\r') i++;
+                if (row.some(cell => cell !== '')) rows.push(row);
+                row = [];
             } else {
-                classEl.textContent = 'Obesidade Grau III (Mórbida)';
-                result.classList.add('imc-obeso');
+                current += ch;
             }
         }
+    }
+    if (current || row.length > 0) {
+        row.push(current.trim());
+        if (row.some(cell => cell !== '')) rows.push(row);
+    }
+    return rows;
+}
 
-        // REGISTRO DE ATIVIDADES
-        function loadActivityLog() {
-            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
-            var container = document.getElementById('activityLog');
-            if (log.length === 0) {
-                container.innerHTML = '<p class="sub-text mt-10">Nenhuma atividade registrada ainda.</p>';
-                return;
-            }
-            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-            container.innerHTML = log.map(function(entry, i) {
-                var d = new Date(entry.date + 'T00:00:00');
-                var dateStr = d.toLocaleDateString('pt-BR');
-                var typeLabels = { corrida: '🏃 Corrida', ciclismo: '🚴 Ciclismo', caminhada: '🚶 Caminhada' };
-                var badgeClass = 'badge-' + entry.type;
-                return '<div class="activity-log-entry">' +
-                    '<span>' + dateStr + '</span>' +
-                    '<span class="activity-type-badge ' + badgeClass + '">' + (typeLabels[entry.type] || entry.type) + '</span>' +
-                    '<strong>' + entry.distance.toFixed(1) + ' km</strong>' +
-                    '<span>' + (entry.duration || '-') + ' min</span>' +
-                    '<button class="btn-delete-entry" onclick="deleteActivity(' + i + ')" title="Remover">✕</button>' +
-                    '</div>';
-            }).join('');
+// ===== RENDER TABS =====
+function renderTabs() {
+    const nav = document.getElementById('tabsNav');
+    nav.innerHTML = SHEETS.map((sheet, i) => {
+        const active = i === 0 ? ' active' : '';
+        return `<button class="tab-btn${active}" data-index="${i}" onclick="switchTab(${i})">${sheet.name}</button>`;
+    }).join('');
+}
+
+// ===== SWITCH TAB =====
+async function switchTab(index) {
+    // Update active button
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+
+    activeSheet = index;
+    const sheet = SHEETS[index];
+    const content = document.getElementById('tabContent');
+
+    // Check cache
+    if (csvCache[sheet.gid]) {
+        renderTable(csvCache[sheet.gid], sheet.name);
+        return;
+    }
+
+    // Show loading
+    content.innerHTML = `
+        <div class="table-card">
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <div class="loading-text">Carregando ${sheet.name}...</div>
+            </div>
+        </div>`;
+
+    try {
+        const resp = await fetch(csvUrl(sheet.gid));
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const text = await resp.text();
+        const rows = parseCSV(text);
+
+        // Cache it
+        csvCache[sheet.gid] = rows;
+
+        // Only render if still on same tab
+        if (activeSheet === index) {
+            renderTable(rows, sheet.name);
         }
 
-        function addActivity() {
-            var date = document.getElementById('actDate').value;
-            var type = document.getElementById('actType').value;
-            var distance = parseFloat(document.getElementById('actDistance').value);
-            var duration = parseInt(document.getElementById('actDuration').value) || 0;
-            if (!date || isNaN(distance) || distance <= 0) {
-                alert('Preencha data e distância!');
-                return;
-            }
-            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
-            log.push({ date: date, type: type, distance: distance, duration: duration });
-            localStorage.setItem('activityLog', JSON.stringify(log));
-            document.getElementById('actDistance').value = '';
-            document.getElementById('actDuration').value = '';
-            loadActivityLog();
+        showDataSource(true);
+    } catch (err) {
+        console.warn('Erro ao carregar:', err);
+        if (activeSheet === index) {
+            content.innerHTML = `
+                <div class="table-card">
+                    <div class="error-container">
+                        <div class="error-icon">&#9888;</div>
+                        <p>Nao foi possivel carregar os dados de <strong>${sheet.name}</strong>.</p>
+                        <p style="font-size:0.85em;margin-top:8px;">${err.message}</p>
+                        <button onclick="switchTab(${index})">Tentar novamente</button>
+                    </div>
+                </div>`;
         }
+        showDataSource(false);
+    }
+}
 
-        function deleteActivity(index) {
-            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
-            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-            log.splice(index, 1);
-            localStorage.setItem('activityLog', JSON.stringify(log));
-            loadActivityLog();
+// ===== RENDER TABLE =====
+function renderTable(rows, sheetName) {
+    const content = document.getElementById('tabContent');
+
+    if (!rows || rows.length === 0) {
+        content.innerHTML = `
+            <div class="table-card">
+                <div class="empty-state">Nenhum dado encontrado em "${sheetName}".</div>
+            </div>`;
+        return;
+    }
+
+    const headers = rows[0];
+    const dataRows = rows.slice(1);
+
+    let html = '<div class="table-card"><table class="data-table"><thead><tr>';
+    headers.forEach(h => {
+        html += `<th>${escapeHTML(h)}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    dataRows.forEach(row => {
+        html += '<tr>';
+        // Pad row to match headers length
+        for (let i = 0; i < headers.length; i++) {
+            const cell = row[i] || '';
+            html += `<td>${escapeHTML(cell)}</td>`;
         }
+        html += '</tr>';
+    });
 
-        document.getElementById('actDate').valueAsDate = new Date();
-        loadActivityLog();
+    html += '</tbody></table></div>';
+    content.innerHTML = html;
+}
 
-        // EXPORTAR CSV
-        function exportCSV(type) {
-            var data, filename, headers;
-            if (type === 'weight') {
-                data = JSON.parse(localStorage.getItem('weightLog') || '[]');
-                if (data.length === 0) { alert('Nenhuma pesagem para exportar!'); return; }
-                headers = 'Data,Peso (kg)\n';
-                filename = 'pesagens.csv';
-                var csv = headers + data.map(function(e) {
-                    return e.date + ',' + e.weight.toFixed(1);
-                }).join('\n');
-            } else {
-                data = JSON.parse(localStorage.getItem('activityLog') || '[]');
-                if (data.length === 0) { alert('Nenhuma atividade para exportar!'); return; }
-                headers = 'Data,Tipo,Distância (km),Duração (min)\n';
-                filename = 'atividades.csv';
-                var csv = headers + data.map(function(e) {
-                    return e.date + ',' + e.type + ',' + e.distance.toFixed(1) + ',' + (e.duration || '');
-                }).join('\n');
-            }
-            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            link.click();
-        }
+// ===== HELPERS =====
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
-        // LEMBRETE DE PESAGEM
-        function checkWeightReminder() {
-            var log = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            var dismissed = localStorage.getItem('reminderDismissed');
-            var banner = document.getElementById('weightReminder');
-            if (dismissed) {
-                var dismissDate = new Date(dismissed);
-                var now = new Date();
-                if ((now - dismissDate) < 24 * 60 * 60 * 1000) return;
-            }
-            if (log.length === 0) {
-                document.getElementById('reminderText').textContent = 'Você ainda não registrou nenhuma pesagem. Que tal começar hoje?';
-                banner.classList.add('visible');
-                return;
-            }
-            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-            var lastDate = new Date(log[0].date + 'T00:00:00');
-            var now = new Date();
-            var diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
-            if (diffDays >= 7) {
-                document.getElementById('reminderText').textContent = 'Faz ' + diffDays + ' dias que você não registra seu peso. Que tal pesar hoje?';
-                banner.classList.add('visible');
-            }
-        }
+function showDataSource(online) {
+    const el = document.getElementById('dataSource');
+    el.style.display = 'flex';
+    const timeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    if (online) {
+        el.innerHTML = `<span class="source-dot source-online"></span> Dados carregados do Google Sheets <span class="source-time">as ${timeStr}</span> <button class="btn-refresh" onclick="location.reload()">&#8635; Atualizar</button>`;
+        el.className = 'data-source data-source-online';
+    } else {
+        el.innerHTML = `<span class="source-dot source-offline"></span> Erro ao carregar dados <button class="btn-refresh" onclick="location.reload()">&#8635; Tentar novamente</button>`;
+        el.className = 'data-source data-source-offline';
+    }
+}
 
-        function dismissReminder() {
-            localStorage.setItem('reminderDismissed', new Date().toISOString());
-            document.getElementById('weightReminder').classList.remove('visible');
-        }
+// ===== INIT =====
+renderTabs();
+switchTab(0);
+</script>
 
-        checkWeightReminder();
-
-        // GRÁFICO DE PESO DINÂMICO
-        function updateWeightChart() {
-            var weightChart = Chart.getChart('weightChart');
-            if (!weightChart) return;
-            var log = JSON.parse(localStorage.getItem('weightLog') || '[]');
-            if (log.length === 0) return;
-            log.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
-            var labels = log.map(function(e) {
-                var d = new Date(e.date + 'T00:00:00');
-                return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-            });
-            var values = log.map(function(e) { return e.weight; });
-            // Adicionar dataset de registros reais se não existe
-            if (weightChart.data.datasets.length < 4) {
-                weightChart.data.datasets.push({
-                    label: 'Seus Registros',
-                    data: [],
-                    borderColor: '#e74c3c',
-                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                    borderWidth: 3,
-                    pointRadius: 7,
-                    pointBackgroundColor: '#e74c3c',
-                    pointBorderColor: 'white',
-                    pointBorderWidth: 2,
-                    fill: false,
-                    tension: 0.2
-                });
-            }
-            // Mapear registros nas labels existentes do gráfico
-            var existingLabels = weightChart.data.labels;
-            var mappedData = existingLabels.map(function() { return null; });
-            // Adicionar novos pontos
-            labels.forEach(function(label, i) {
-                var idx = existingLabels.indexOf(label);
-                if (idx >= 0) {
-                    mappedData[idx] = values[i];
-                }
-            });
-            weightChart.data.datasets[3].data = mappedData;
-            weightChart.update();
-        }
-
-        // Chamar ao carregar se a aba de peso estiver visível
-        setTimeout(updateWeightChart, 1000);
-    </script>
 </body>
 </html>
