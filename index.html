@@ -212,6 +212,7 @@
         .exam-card.status-normal { border-left-color: var(--success-dark); }
         .exam-card.status-warning { border-left-color: var(--warning); }
         .exam-card.status-danger { border-left-color: var(--danger-dark); }
+        .exam-card.status-info { border-left-color: var(--primary); }
 
         .card-header {
             display: flex;
@@ -238,6 +239,7 @@
         .badge-normal { background: #f0fff4; color: #276749; }
         .badge-warning { background: #fffbeb; color: #92400e; }
         .badge-danger { background: #fff5f5; color: #9b2c2c; }
+        .badge-info { background: #ebf8ff; color: #2b6cb0; }
 
         .card-value {
             font-size: 1.8em;
@@ -326,7 +328,75 @@
             margin-bottom: 12px;
         }
 
-        /* TABLE (CSV tabs) */
+        /* ====== LAB REPORT (CSV TABS) ====== */
+        .lab-header {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .lab-header-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .lab-header-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.85em;
+            color: #718096;
+        }
+        .lab-header-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .lab-raw-section {
+            margin-top: 24px;
+        }
+        .lab-raw-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.88em;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lab-raw-toggle:hover { color: var(--primary); border-color: var(--primary); }
+        .lab-raw-content {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .lab-raw-content.show { display: block; }
+        .lab-raw-content pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.82em;
+            color: #4a5568;
+            line-height: 1.6;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        /* TABLE (fallback) */
         .table-card {
             background: white;
             border-radius: 16px;
@@ -433,14 +503,8 @@
             font-size: 0.85em;
             margin-bottom: 20px;
         }
-        .data-source-online {
-            background: #f0fff4;
-            color: #276749;
-        }
-        .data-source-offline {
-            background: #fff5f5;
-            color: #9b2c2c;
-        }
+        .data-source-online { background: #f0fff4; color: #276749; }
+        .data-source-offline { background: #fff5f5; color: #9b2c2c; }
         .source-dot {
             width: 8px;
             height: 8px;
@@ -499,6 +563,7 @@
             }
             .chart-card { padding: 14px; }
             .tab-separator { display: none; }
+            .lab-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -552,15 +617,15 @@ const SHEETS = [
 ];
 
 const csvCache = {};
-let activeTab = 'dashboard'; // 'dashboard', 'evolucao', or sheet index
+let activeTab = 'dashboard';
 
 // ===== DASHBOARD DATA =====
 const DASHBOARD_DATA = {
     alerts: [
-        { icon: '🔴', name: 'HDL', value: '30 mg/dL', ref: 'ref: >40', detail: 'Abaixo do desejável', type: 'danger' },
-        { icon: '⚠️', name: 'Glicose', value: '101 mg/dL', ref: 'ref: 70-99', detail: 'Alterada', type: 'warning' },
-        { icon: '⚠️', name: 'Lipoproteína A', value: '47.8 mg/dL', ref: 'ref: <30', detail: 'Elevada', type: 'warning' },
-        { icon: '⚠️', name: 'Vitamina A', value: '0.84 mg/L', ref: 'ref: 0.30-0.70', detail: 'Acima', type: 'warning' },
+        { icon: '\u{1F534}', name: 'HDL', value: '30 mg/dL', ref: 'ref: >40', detail: 'Abaixo do desejável', type: 'danger' },
+        { icon: '\u26A0\uFE0F', name: 'Glicose', value: '101 mg/dL', ref: 'ref: 70-99', detail: 'Alterada', type: 'warning' },
+        { icon: '\u26A0\uFE0F', name: 'Lipoproteína A', value: '47.8 mg/dL', ref: 'ref: <30', detail: 'Elevada', type: 'warning' },
+        { icon: '\u26A0\uFE0F', name: 'Vitamina A', value: '0.84 mg/L', ref: 'ref: 0.30-0.70', detail: 'Acima', type: 'warning' },
     ],
     categories: [
         {
@@ -568,22 +633,22 @@ const DASHBOARD_DATA = {
             exams: [
                 { name: 'Glicose', value: 101, unit: 'mg/dL', ref: '70 - 99', status: 'warning' },
                 { name: 'HbA1c', value: 5.0, unit: '%', ref: '< 5.7', status: 'normal' },
-                { name: 'Ácido Úrico', value: 5.4, unit: 'mg/dL', ref: '3.5 - 7.2', status: 'normal' },
+                { name: '\u00C1cido \u00DArico', value: 5.4, unit: 'mg/dL', ref: '3.5 - 7.2', status: 'normal' },
             ]
         },
         {
-            title: 'Lipídios',
+            title: 'Lip\u00EDdios',
             exams: [
                 { name: 'Colesterol Total', value: 148, unit: 'mg/dL', ref: '< 190', status: 'normal' },
                 { name: 'HDL', value: 30, unit: 'mg/dL', ref: '> 40', status: 'danger' },
                 { name: 'LDL', value: 96.8, unit: 'mg/dL', ref: '< 130', status: 'normal' },
                 { name: 'VLDL', value: 21.2, unit: 'mg/dL', ref: '< 30', status: 'normal' },
-                { name: 'Triglicerídeos', value: 106, unit: 'mg/dL', ref: '< 150', status: 'normal' },
-                { name: 'Lipoproteína A', value: 47.8, unit: 'mg/dL', ref: '< 30', status: 'warning' },
+                { name: 'Triglicer\u00EDdeos', value: 106, unit: 'mg/dL', ref: '< 150', status: 'normal' },
+                { name: 'Lipoprote\u00EDna A', value: 47.8, unit: 'mg/dL', ref: '< 30', status: 'warning' },
             ]
         },
         {
-            title: 'Renal / Hepática',
+            title: 'Renal / Hep\u00E1tica',
             exams: [
                 { name: 'Creatinina', value: 1.00, unit: 'mg/dL', ref: '0.7 - 1.3', status: 'normal' },
                 { name: 'Ureia', value: 35, unit: 'mg/dL', ref: '15 - 40', status: 'normal' },
@@ -595,7 +660,7 @@ const DASHBOARD_DATA = {
             ]
         },
         {
-            title: 'Hormônios',
+            title: 'Horm\u00F4nios',
             exams: [
                 { name: 'TSH', value: 1.82, unit: 'mUI/L', ref: '0.27 - 4.20', status: 'normal' },
                 { name: 'T4 Livre', value: 1.02, unit: 'ng/dL', ref: '0.93 - 1.70', status: 'normal' },
@@ -617,9 +682,9 @@ const DASHBOARD_DATA = {
             title: 'Hemograma',
             exams: [
                 { name: 'Hemoglobina', value: 15.6, unit: 'g/dL', ref: '13.0 - 17.5', status: 'normal' },
-                { name: 'Hematócrito', value: 44.7, unit: '%', ref: '39 - 50', status: 'normal' },
-                { name: 'Leucócitos', value: 5630, unit: '/mm³', ref: '3500 - 10500', status: 'normal' },
-                { name: 'Plaquetas', value: 183000, unit: '/mm³', ref: '150.000 - 400.000', status: 'normal' },
+                { name: 'Hemat\u00F3crito', value: 44.7, unit: '%', ref: '39 - 50', status: 'normal' },
+                { name: 'Leuc\u00F3citos', value: 5630, unit: '/mm\u00B3', ref: '3500 - 10500', status: 'normal' },
+                { name: 'Plaquetas', value: 183000, unit: '/mm\u00B3', ref: '150.000 - 400.000', status: 'normal' },
             ]
         },
     ]
@@ -628,15 +693,14 @@ const DASHBOARD_DATA = {
 // ===== EVOLUÇÃO DATA =====
 const EVO_DATES = ['19/03/2021', '06/10/2021', '04/07/2022', '09/10/2023', '31/01/2026'];
 
-// null = not measured on that date
 const EVO_EXAMS = [
     { name: 'Glicose', unit: 'mg/dL', ref: '70-99', refMin: 70, refMax: 99, values: [92, 93, 94, 97, 101], higher_is_worse: true },
     { name: 'HbA1c', unit: '%', ref: '<5.7', refMin: null, refMax: 5.7, values: [null, 5.4, null, 5.2, 5.0], higher_is_worse: true },
     { name: 'Colesterol Total', unit: 'mg/dL', ref: '<190', refMin: null, refMax: 190, values: [185, 193, 180, 169, 148], higher_is_worse: true },
     { name: 'HDL', unit: 'mg/dL', ref: '>40', refMin: 40, refMax: null, values: [39, 47, 38, 38, 30], higher_is_worse: false },
-    { name: 'Triglicerídeos', unit: 'mg/dL', ref: '<150', refMin: null, refMax: 150, values: [116, 123, 92, 104, 106], higher_is_worse: true },
+    { name: 'Triglicer\u00EDdeos', unit: 'mg/dL', ref: '<150', refMin: null, refMax: 150, values: [116, 123, 92, 104, 106], higher_is_worse: true },
     { name: 'Creatinina', unit: 'mg/dL', ref: '0.7-1.3', refMin: 0.7, refMax: 1.3, values: [0.93, 1.06, 0.99, 1.06, 1.00], higher_is_worse: true },
-    { name: 'Ácido Úrico', unit: 'mg/dL', ref: '3.5-7.2', refMin: 3.5, refMax: 7.2, values: [5.3, 6.1, 5.2, 5.4, 5.4], higher_is_worse: true },
+    { name: '\u00C1cido \u00DArico', unit: 'mg/dL', ref: '3.5-7.2', refMin: 3.5, refMax: 7.2, values: [5.3, 6.1, 5.2, 5.4, 5.4], higher_is_worse: true },
     { name: 'TGO (AST)', unit: 'U/L', ref: '<40', refMin: null, refMax: 40, values: [24, 19, 27, 26, 25], higher_is_worse: true },
     { name: 'TGP (ALT)', unit: 'U/L', ref: '<41', refMin: null, refMax: 41, values: [35, 24, 35, 41, 36], higher_is_worse: true },
     { name: 'GGT', unit: 'U/L', ref: '<60', refMin: null, refMax: 60, values: [37, 32, 35, 39, 32], higher_is_worse: true },
@@ -644,15 +708,14 @@ const EVO_EXAMS = [
     { name: 'Vitamina D', unit: 'ng/mL', ref: '30-60', refMin: 30, refMax: 60, values: [20.4, 50.2, null, 43.5, 37.6], higher_is_worse: false },
     { name: 'B12', unit: 'pg/mL', ref: '187-883', refMin: 187, refMax: 883, values: [null, 300, null, 276, 192], higher_is_worse: false },
     { name: 'Hemoglobina', unit: 'g/dL', ref: '13-17.5', refMin: 13, refMax: 17.5, values: [15.5, 15.8, 16.0, 15.8, 15.6], higher_is_worse: null },
-    { name: 'Leucócitos', unit: '/mm³', ref: '3500-10500', refMin: 3500, refMax: 10500, values: [5850, 6290, 7150, 6280, 5630], higher_is_worse: null },
-    { name: 'Plaquetas', unit: '/mm³', ref: '150k-400k', refMin: 150000, refMax: 400000, values: [186000, 195000, 197000, 189000, 183000], higher_is_worse: null },
+    { name: 'Leuc\u00F3citos', unit: '/mm\u00B3', ref: '3500-10500', refMin: 3500, refMax: 10500, values: [5850, 6290, 7150, 6280, 5630], higher_is_worse: null },
+    { name: 'Plaquetas', unit: '/mm\u00B3', ref: '150k-400k', refMin: 150000, refMax: 400000, values: [186000, 195000, 197000, 189000, 183000], higher_is_worse: null },
     { name: 'PSA Total', unit: 'ng/mL', ref: '<4.0', refMin: null, refMax: 4.0, values: [null, null, null, 0.46, 0.46], higher_is_worse: true },
 ];
 
-// Chart groupings
 const CHART_GROUPS = [
     { title: 'Glicose & HbA1c', exams: ['Glicose', 'HbA1c'] },
-    { title: 'Colesterol / HDL / Triglicerídeos', exams: ['Colesterol Total', 'HDL', 'Triglicerídeos'] },
+    { title: 'Colesterol / HDL / Triglicer\u00EDdeos', exams: ['Colesterol Total', 'HDL', 'Triglicer\u00EDdeos'] },
     { title: 'Creatinina', exams: ['Creatinina'] },
     { title: 'TGO / TGP / GGT', exams: ['TGO (AST)', 'TGP (ALT)', 'GGT'] },
     { title: 'PSA Total', exams: ['PSA Total'] },
@@ -673,33 +736,21 @@ function parseCSV(text) {
     let current = '';
     let inQuotes = false;
     let row = [];
-
     for (let i = 0; i < text.length; i++) {
         const ch = text[i];
         if (inQuotes) {
-            if (ch === '"' && text[i + 1] === '"') {
-                current += '"';
-                i++;
-            } else if (ch === '"') {
-                inQuotes = false;
-            } else {
-                current += ch;
-            }
+            if (ch === '"' && text[i + 1] === '"') { current += '"'; i++; }
+            else if (ch === '"') { inQuotes = false; }
+            else { current += ch; }
         } else {
-            if (ch === '"') {
-                inQuotes = true;
-            } else if (ch === ',') {
-                row.push(current.trim());
-                current = '';
-            } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
-                row.push(current.trim());
-                current = '';
+            if (ch === '"') { inQuotes = true; }
+            else if (ch === ',') { row.push(current.trim()); current = ''; }
+            else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+                row.push(current.trim()); current = '';
                 if (ch === '\r') i++;
                 if (row.some(cell => cell !== '')) rows.push(row);
                 row = [];
-            } else {
-                current += ch;
-            }
+            } else { current += ch; }
         }
     }
     if (current || row.length > 0) {
@@ -709,12 +760,277 @@ function parseCSV(text) {
     return rows;
 }
 
+// ===== LAB REPORT PARSER =====
+function parseBR(s) {
+    if (!s) return NaN;
+    s = s.toString().trim();
+    if (s.includes(',') && s.includes('.')) {
+        return parseFloat(s.replace(/\./g, '').replace(',', '.'));
+    } else if (s.includes(',')) {
+        return parseFloat(s.replace(',', '.'));
+    } else if (/\.\d{3}($|\D)/.test(s)) {
+        return parseFloat(s.replace(/\./g, ''));
+    }
+    return parseFloat(s);
+}
+
+function getStatus(numVal, refMin, refMax) {
+    if (isNaN(numVal)) return 'info';
+    if (refMin !== null && !isNaN(refMin) && numVal < refMin) return 'warning';
+    if (refMax !== null && !isNaN(refMax) && numVal > refMax) return 'warning';
+    return 'normal';
+}
+
+function cleanExamName(name) {
+    return name.replace(/\.+/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function parseLabReport(rows) {
+    const fullText = rows.flat().join('\n');
+    const exams = [];
+    const seen = new Set();
+
+    function addExam(name, value, unit, ref, refMin, refMax) {
+        name = cleanExamName(name);
+        if (!name || name.length < 2) return;
+        // Skip non-exam entries
+        const skip = /^(LABORATÓRIO|Paciente|Data|Médico|CPF|Prescrição|Coleta|Page|Participamos|www\.|CEP|Rua|Avenida|CNPJ|CRF|CNES|RT:|Aprovado|Impressão|Pedido|Resultado anterior|Método|Material|Convênio|Identidade|Idade|Nome\/Name|Solicitante|Fone|Tel|RG|NOTA|Cliente|Licen)/i;
+        if (skip.test(name)) return;
+        const key = name.toUpperCase().replace(/\s+/g, '');
+        if (seen.has(key)) return;
+        seen.add(key);
+        const numValue = parseBR(value);
+        const status = getStatus(numValue, refMin, refMax);
+        exams.push({ name, value: value.toString(), numValue, unit: unit || '', ref: ref || '', refMin, refMax, status });
+    }
+
+    // Extract lab info
+    const labInfo = {};
+    const dateMatch = fullText.match(/(?:Data (?:Atend|Coleta|Entrada)[.\s:]*|Service date:\s*)([\d]{2}\/[\d]{2}\/[\d]{4})/i);
+    if (dateMatch) labInfo.date = dateMatch[1];
+    const doctorMatch = fullText.match(/(?:Solicitante\/Doctor|Médico\(a\)|Solicitante)[:\s]+([A-ZÁÉÍÓÚÃÕÇ][A-Za-záéíóúãõçÁÉÍÓÚÃÕÇ\s]+?)(?:\n|RG|Prescrição|$)/);
+    if (doctorMatch) labInfo.doctor = doctorMatch[1].trim();
+    if (/hemolabRN/i.test(fullText)) labInfo.lab = 'Hemolab RN';
+    else if (/UNIMED NATAL/i.test(fullText)) labInfo.lab = 'Laboratório Unimed Natal';
+
+    // === PASS 1: Hemolab dots pattern ===
+    // NAME.{2,}:  VALUE UNIT
+    const dotsRe = /([A-ZÁÉÍÓÚÃÕÇ][A-ZÁÉÍÓÚÃÕÇ\s\(\)\-\/,\.]+?)\.{2,}:\s{0,10}([\d]+[.,]?\d*)\s+([\w\/³²%µ\.]+)/g;
+    let m;
+    while ((m = dotsRe.exec(fullText)) !== null) {
+        const name = m[1];
+        const value = m[2];
+        const unit = m[3];
+        // Find reference in next ~500 chars
+        const after = fullText.substring(m.index, m.index + 600);
+        let ref = '', refMin = null, refMax = null;
+        // "X a Y" pattern
+        const rangeM = after.match(/(?:normal|refer[eê]ncia|Adulto)[^\n]*?([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/i);
+        if (rangeM) { refMin = parseBR(rangeM[1]); refMax = parseBR(rangeM[2]); ref = `${rangeM[1]} a ${rangeM[2]}`; }
+        // "Inferior a X" / "Menor que X" / "< X"
+        if (refMax === null) {
+            const ltM = after.match(/(?:Inferior\s+a|Menor\s+que|<\s*(?:que\s*)?)\s*([\d][.,\d]*)/i);
+            if (ltM) { refMax = parseBR(ltM[1]); ref = `< ${ltM[1]}`; }
+        }
+        // "Superior a X" / "> X"
+        if (refMin === null && refMax === null) {
+            const gtM = after.match(/(?:Superior\s+a|>\s*)\s*([\d][.,\d]*)/i);
+            if (gtM) { refMin = parseBR(gtM[1]); ref = `> ${gtM[1]}`; }
+        }
+        addExam(name, value, unit, ref, refMin, refMax);
+    }
+
+    // === PASS 2: "Resultado:" + value pattern (Unimed) ===
+    // Handles: "Resultado:  VALUE UNIT", "Resultado:\nVALUE UNIT", "Resultado:VALUE\nUNIT"
+    const resRe = /Resultado:\s*([\d]+[.,]?\d*)\s*([\w\/³²%µ\.]*)/g;
+    while ((m = resRe.exec(fullText)) !== null) {
+        const value = m[1];
+        let unit = m[2];
+        // If unit is empty, check next line
+        if (!unit) {
+            const nextLine = fullText.substring(m.index + m[0].length, m.index + m[0].length + 50);
+            const unitM = nextLine.match(/^\s*([\w\/³²%µ\.]+)/);
+            if (unitM) unit = unitM[1];
+        }
+        // Look backwards for exam name
+        const before = fullText.substring(Math.max(0, m.index - 400), m.index);
+        const lines = before.split('\n').filter(l => l.trim());
+        let name = '';
+        for (let i = lines.length - 1; i >= 0; i--) {
+            const line = lines[i].trim();
+            if (/^(Material|Método|Resultado|\d|Aprovado|Data|Horário|CRF|POSTO|RG|CPF|Prescrição|Coleta|www\.|Participamos|A interpretação|CEP|Rua|Avenida|LABORATÓRIO|Paciente|Médico|0$)/i.test(line)) continue;
+            if (/^[A-ZÁÉÍÓÚÃÕÇ]/.test(line) && line.length > 2 && line.length < 80) {
+                name = line.replace(/\s+Material:.*/, '').trim();
+                break;
+            }
+        }
+        if (!name) continue;
+        // Find reference
+        const after = fullText.substring(m.index, m.index + 800);
+        let ref = '', refMin = null, refMax = null;
+        // Adult male range patterns
+        const adultM = after.match(/(?:Masculino|Adulto|Normal|Homens \(20 a 49)[^\n]*?([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/i);
+        if (adultM) { refMin = parseBR(adultM[1]); refMax = parseBR(adultM[2]); ref = `${adultM[1]} a ${adultM[2]}`; }
+        if (refMin === null && refMax === null) {
+            const genRange = after.match(/(?:refer[eê]ncia|Normal)[^\n]*?([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/i);
+            if (genRange) { refMin = parseBR(genRange[1]); refMax = parseBR(genRange[2]); ref = `${genRange[1]} a ${genRange[2]}`; }
+        }
+        if (refMax === null) {
+            const ltM = after.match(/(?:Inferior|Menor|<\s*(?:que)?|Até|Desej[aá]vel[:\s]*<\s*(?:que\s*)?)\s*([\d][.,\d]*)/i);
+            if (ltM) { refMax = parseBR(ltM[1]); ref = `< ${ltM[1]}`; }
+        }
+        if (refMin === null && refMax === null) {
+            const gtM = after.match(/(?:Superior\s+a|>\s*)\s*([\d][.,\d]*)/i);
+            if (gtM) { refMin = parseBR(gtM[1]); ref = `> ${gtM[1]}`; }
+        }
+        addExam(name, value, unit, ref, refMin, refMax);
+    }
+
+    // === PASS 3: Sub-result patterns ===
+    // Bilirrubina Total...: 0,98 mg/dL   0,2 a 1,3
+    // PSA Total:   0,46 ng/mL
+    // Hb A1c...: 5,0 %
+    // SHBG...: 16,70 nmol/L
+    // Testosterona Livre: 8,951 ng/dL
+    const subRe = /((?:Bilirrubina\s+\w+|PSA\s+\w+|Hb\s*A1c|SHBG|Testosterona\s+Livre|Glicemia\s+[Mm]\u00E9dia|Rela[çc][aã]o))[.:\s]+([\d]+[.,]?\d*)\s*([\w\/³²%µ\.]+)/g;
+    while ((m = subRe.exec(fullText)) !== null) {
+        const name = m[1].trim();
+        const value = m[2];
+        const unit = m[3];
+        const after = fullText.substring(m.index, m.index + 400);
+        let ref = '', refMin = null, refMax = null;
+        const rangeM = after.match(/([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)\s*[\w\/³²%µ\.]*\s*$/m);
+        if (rangeM) { refMin = parseBR(rangeM[1]); refMax = parseBR(rangeM[2]); ref = `${rangeM[1]} a ${rangeM[2]}`; }
+        addExam(name, value, unit, ref, refMin, refMax);
+    }
+
+    // === PASS 4: Hemograma inline patterns ===
+    const hemoNames = [
+        { re: /Hem[aá]cias[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'Hemácias' },
+        { re: /Hemoglobina[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'Hemoglobina' },
+        { re: /Hemat[oó]crito[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'Hematócrito' },
+        { re: /Vol\.\s*Glob\.\s*M[eé]dio\s*\(VCM\)[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'VCM' },
+        { re: /Hem\.\s*Glob\.\s*M[eé]dio\s*\(HCM\)[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'HCM' },
+        { re: /C\.H\.Glob\.\s*M[eé]dia\s*\(CHCM\)[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'CHCM' },
+        { re: /RDW[\s-]*CV\s*%?[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/, name: 'RDW-CV' },
+    ];
+    for (const h of hemoNames) {
+        const hm = fullText.match(h.re);
+        if (hm) addExam(h.name, hm[1], hm[2], `${hm[3]} a ${hm[4]}`, parseBR(hm[3]), parseBR(hm[4]));
+    }
+    // Leucócitos
+    const leucM = fullText.match(/Leuc[oó]citos[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/);
+    if (leucM) addExam('Leucócitos', leucM[1], leucM[2], `${leucM[3]} a ${leucM[4]}`, parseBR(leucM[3]), parseBR(leucM[4]));
+    // Plaquetas
+    const plaqM = fullText.match(/Plaquetas[:\s.]+\s*([\d][.,\d]*)\s*([\w\/³²%µ\.]+)\s+([\d][.,\d]*)\s+[aà]\s+([\d][.,\d]*)/);
+    if (plaqM) addExam('Plaquetas', plaqM[1], plaqM[2], `${plaqM[3]} a ${plaqM[4]}`, parseBR(plaqM[3]), parseBR(plaqM[4]));
+    // Volume plaquetário
+    const mpvM = fullText.match(/Volume\s+Plaquet[aá]rio\s*\(MPV\)[:\s.]+\s*([\d][.,\d]*)/);
+    if (mpvM) addExam('Volume Plaquetário (MPV)', mpvM[1], '', '9 a 12', 9, 12);
+
+    // === PASS 5: Single-line format (Colesterol) ===
+    const singleRe = /([A-ZÁÉÍÓÚÃÕÇ][A-ZÁÉÍÓÚÃÕÇ\s]+?)\s+Material:[\s\S]*?Resultado:\s*([\d]+[.,]?\d*)\s*([\w\/³²%µ\.]*)/g;
+    while ((m = singleRe.exec(fullText)) !== null) {
+        const name = m[1].trim();
+        const value = m[2];
+        const unit = m[3];
+        const after = fullText.substring(m.index, m.index + 500);
+        let ref = '', refMin = null, refMax = null;
+        const ltM = after.match(/(?:Desej[aá]vel|Inferior)[:\s]*<?\s*(?:que\s*)?([\d][.,\d]*)/i);
+        if (ltM) { refMax = parseBR(ltM[1]); ref = `< ${ltM[1]}`; }
+        addExam(name, value, unit, ref, refMin, refMax);
+    }
+
+    // === PASS 6: Qualitative results ===
+    const qualRe = /Resultado:\s*(N[aã]o Detect[aá]vel|Detect[aá]vel|Reagente|N[aã]o Reagente|Positivo|Negativo)/gi;
+    while ((m = qualRe.exec(fullText)) !== null) {
+        const resultVal = m[1];
+        const before = fullText.substring(Math.max(0, m.index - 400), m.index);
+        const lines = before.split('\n').filter(l => l.trim());
+        let name = '';
+        for (let i = lines.length - 1; i >= 0; i--) {
+            const line = lines[i].trim();
+            if (/^(Material|Método|Resultado|\d|Aprovado|Data|Horário|CRF|POSTO|RG|CPF|Prescrição|Coleta|www\.|Participamos|A interpretação|CEP|Rua|Avenida|LABORATÓRIO|Paciente|Médico|0$)/i.test(line)) continue;
+            if (/^[A-ZÁÉÍÓÚÃÕÇ]/.test(line) && line.length > 3 && line.length < 100) {
+                name = line.trim();
+                break;
+            }
+        }
+        if (name) addExam(name, resultVal, '', resultVal, null, null);
+    }
+
+    return { labInfo, exams };
+}
+
+// ===== RENDER LAB REPORT (CSV TABS) =====
+function renderLabReport(rows, sheetName) {
+    const content = document.getElementById('tabContent');
+    const { labInfo, exams } = parseLabReport(rows);
+
+    if (exams.length === 0) {
+        // Fallback to raw table
+        renderTable(rows, sheetName);
+        return;
+    }
+
+    let html = '<div class="tab-content">';
+
+    // Lab header
+    html += '<div class="lab-header">';
+    html += `<div class="lab-header-title">${escapeHTML(sheetName)}</div>`;
+    html += '<div class="lab-header-meta">';
+    if (labInfo.lab) html += `<span>\uD83C\uDFE5 ${escapeHTML(labInfo.lab)}</span>`;
+    if (labInfo.date) html += `<span>\uD83D\uDCC5 ${escapeHTML(labInfo.date)}</span>`;
+    if (labInfo.doctor) html += `<span>\uD83D\uDC68\u200D\u2695\uFE0F ${escapeHTML(labInfo.doctor)}</span>`;
+    html += '</div></div>';
+
+    // Exam cards
+    html += '<div class="cards-grid">';
+    exams.forEach(ex => {
+        const badgeClass = ex.status === 'normal' ? 'badge-normal' : ex.status === 'warning' ? 'badge-warning' : ex.status === 'danger' ? 'badge-danger' : 'badge-info';
+        const badgeText = ex.status === 'normal' ? 'Normal' : ex.status === 'warning' ? 'Alerta' : ex.status === 'danger' ? 'Cr\u00EDtico' : 'Info';
+        // Format display value
+        let displayVal = ex.value.replace(',', '.');
+        const numDisplay = parseFloat(displayVal);
+        if (!isNaN(numDisplay)) {
+            // Show thousands formatting for large numbers
+            if (numDisplay >= 1000) displayVal = numDisplay.toLocaleString('pt-BR');
+            else displayVal = ex.value;
+        } else {
+            displayVal = ex.value;
+        }
+        html += `<div class="exam-card status-${ex.status}">
+            <div class="card-header">
+                <span class="card-name">${escapeHTML(ex.name)}</span>
+                <span class="card-badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <div class="card-value">${escapeHTML(displayVal)}<span class="card-unit">${escapeHTML(ex.unit)}</span></div>
+            ${ex.ref ? `<div class="card-ref">Ref: ${escapeHTML(ex.ref)}</div>` : ''}
+        </div>`;
+    });
+    html += '</div>';
+
+    // Raw text toggle
+    const rawText = rows.flat().join('\n');
+    html += `<div class="lab-raw-section">
+        <button class="lab-raw-toggle" onclick="this.nextElementSibling.classList.toggle('show')">
+            \uD83D\uDCC4 Ver laudo completo \u25BC
+        </button>
+        <div class="lab-raw-content">
+            <pre>${escapeHTML(rawText)}</pre>
+        </div>
+    </div>`;
+
+    html += '</div>';
+    content.innerHTML = html;
+}
+
 // ===== RENDER TABS =====
 function renderTabs() {
     const nav = document.getElementById('tabsNav');
     let html = '';
     html += `<button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>`;
-    html += `<button class="tab-btn" onclick="switchTab('evolucao')">Evolução</button>`;
+    html += `<button class="tab-btn" onclick="switchTab('evolucao')">Evolu\u00E7\u00E3o</button>`;
     html += `<div class="tab-separator"></div>`;
     SHEETS.forEach((sheet, i) => {
         html += `<button class="tab-btn" data-sheet="${i}" onclick="switchTab(${i})">${sheet.name}</button>`;
@@ -724,15 +1040,13 @@ function renderTabs() {
 
 // ===== SWITCH TAB =====
 async function switchTab(tab) {
-    // Destroy old charts
     chartInstances.forEach(c => c.destroy());
     chartInstances = [];
 
-    // Update active button
     document.querySelectorAll('.tab-btn').forEach(btn => {
         let isActive = false;
         if (tab === 'dashboard' && btn.textContent === 'Dashboard') isActive = true;
-        else if (tab === 'evolucao' && btn.textContent === 'Evolução') isActive = true;
+        else if (tab === 'evolucao' && btn.textContent === 'Evolu\u00E7\u00E3o') isActive = true;
         else if (typeof tab === 'number' && btn.dataset.sheet == tab) isActive = true;
         btn.classList.toggle('active', isActive);
     });
@@ -740,21 +1054,14 @@ async function switchTab(tab) {
     activeTab = tab;
     const content = document.getElementById('tabContent');
 
-    if (tab === 'dashboard') {
-        renderDashboard();
-        return;
-    }
-    if (tab === 'evolucao') {
-        renderEvolucao();
-        return;
-    }
+    if (tab === 'dashboard') { renderDashboard(); return; }
+    if (tab === 'evolucao') { renderEvolucao(); return; }
 
-    // CSV sheet tab
     const index = tab;
     const sheet = SHEETS[index];
 
     if (csvCache[sheet.gid]) {
-        renderTable(csvCache[sheet.gid], sheet.name);
+        renderLabReport(csvCache[sheet.gid], sheet.name);
         return;
     }
 
@@ -773,7 +1080,7 @@ async function switchTab(tab) {
         const rows = parseCSV(text);
         csvCache[sheet.gid] = rows;
         if (activeTab === index) {
-            renderTable(rows, sheet.name);
+            renderLabReport(rows, sheet.name);
         }
         showDataSource(true);
     } catch (err) {
@@ -798,26 +1105,24 @@ function renderDashboard() {
     const content = document.getElementById('tabContent');
     let html = '<div class="tab-content">';
 
-    // Alerts
-    html += '<div class="alerts-section"><h3>Alertas — Exames fora da faixa</h3>';
+    html += '<div class="alerts-section"><h3>Alertas \u2014 Exames fora da faixa</h3>';
     DASHBOARD_DATA.alerts.forEach(a => {
         html += `<div class="alert-item alert-${a.type}">
             <span class="alert-icon">${a.icon}</span>
             <span class="alert-name">${a.name}:</span>
             <span>${a.value}</span>
-            <span class="alert-detail">(${a.ref}) — ${a.detail}</span>
+            <span class="alert-detail">(${a.ref}) \u2014 ${a.detail}</span>
         </div>`;
     });
     html += '</div>';
 
-    // Categories
     DASHBOARD_DATA.categories.forEach(cat => {
         html += `<div class="category-section">
             <div class="category-title">${cat.title}</div>
             <div class="cards-grid">`;
         cat.exams.forEach(ex => {
             const badgeClass = ex.status === 'normal' ? 'badge-normal' : ex.status === 'warning' ? 'badge-warning' : 'badge-danger';
-            const badgeText = ex.status === 'normal' ? 'Normal' : ex.status === 'warning' ? 'Alerta' : 'Crítico';
+            const badgeText = ex.status === 'normal' ? 'Normal' : ex.status === 'warning' ? 'Alerta' : 'Cr\u00EDtico';
             const displayValue = ex.name === 'Plaquetas' ? (ex.value / 1000).toFixed(0) + '.000' : ex.value;
             html += `<div class="exam-card status-${ex.status}">
                 <div class="card-header">
@@ -840,7 +1145,6 @@ function renderEvolucao() {
     const content = document.getElementById('tabContent');
     let html = '<div class="tab-content">';
 
-    // Comparative table
     html += '<div class="evolution-section"><h3>Tabela Comparativa</h3>';
     html += '<div class="evo-table-wrap"><table class="evo-table"><thead><tr>';
     html += '<th>Exame</th>';
@@ -852,12 +1156,11 @@ function renderEvolucao() {
         html += `<td>${exam.name} <span style="color:#a0aec0;font-weight:400;font-size:0.85em">(${exam.unit})</span></td>`;
         exam.values.forEach((val, i) => {
             if (val === null) {
-                html += '<td style="color:#cbd5e0">—</td>';
+                html += '<td style="color:#cbd5e0">\u2014</td>';
             } else {
                 let arrow = '';
                 let cls = '';
                 if (i > 0) {
-                    // Find previous non-null value
                     let prev = null;
                     for (let j = i - 1; j >= 0; j--) {
                         if (exam.values[j] !== null) { prev = exam.values[j]; break; }
@@ -866,17 +1169,17 @@ function renderEvolucao() {
                         const went_up = val > prev;
                         if (exam.higher_is_worse === true) {
                             cls = went_up ? 'val-up' : 'val-down';
-                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                            arrow = went_up ? ' <span class="arrow">\u2191</span>' : ' <span class="arrow">\u2193</span>';
                         } else if (exam.higher_is_worse === false) {
                             cls = went_up ? 'val-down' : 'val-up';
-                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                            arrow = went_up ? ' <span class="arrow">\u2191</span>' : ' <span class="arrow">\u2193</span>';
                         } else {
                             cls = 'val-same';
-                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                            arrow = went_up ? ' <span class="arrow">\u2191</span>' : ' <span class="arrow">\u2193</span>';
                         }
                     }
                 }
-                const displayVal = exam.name === 'Plaquetas' || exam.name === 'Leucócitos'
+                const displayVal = exam.name === 'Plaquetas' || exam.name === 'Leuc\u00F3citos'
                     ? val.toLocaleString('pt-BR')
                     : val;
                 html += `<td class="${cls}">${displayVal}${arrow}</td>`;
@@ -887,8 +1190,7 @@ function renderEvolucao() {
 
     html += '</tbody></table></div></div>';
 
-    // Charts
-    html += '<div class="evolution-section"><h3>Gráficos de Evolução</h3>';
+    html += '<div class="evolution-section"><h3>Gr\u00E1ficos de Evolu\u00E7\u00E3o</h3>';
     html += '<div class="charts-grid">';
     CHART_GROUPS.forEach((group, gi) => {
         html += `<div class="chart-card"><h4>${group.title}</h4><canvas id="chart-${gi}"></canvas></div>`;
@@ -898,13 +1200,10 @@ function renderEvolucao() {
     html += '</div>';
     content.innerHTML = html;
 
-    // Render charts after DOM update
     requestAnimationFrame(() => renderCharts());
 }
 
 function renderCharts() {
-    const dateLabels = EVO_DATES;
-
     CHART_GROUPS.forEach((group, gi) => {
         const canvas = document.getElementById(`chart-${gi}`);
         if (!canvas) return;
@@ -915,26 +1214,16 @@ function renderCharts() {
         group.exams.forEach((examName, ei) => {
             const exam = EVO_EXAMS.find(e => e.name === examName);
             if (!exam) return;
-
-            if (ei === 0) {
-                refMin = exam.refMin;
-                refMax = exam.refMax;
-            }
-
+            if (ei === 0) { refMin = exam.refMin; refMax = exam.refMax; }
             datasets.push({
                 label: exam.name,
                 data: exam.values.map(v => v === null ? undefined : v),
                 borderColor: CHART_COLORS[ei % CHART_COLORS.length],
                 backgroundColor: CHART_COLORS[ei % CHART_COLORS.length] + '20',
-                borderWidth: 2.5,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                tension: 0.3,
-                spanGaps: true,
+                borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6, tension: 0.3, spanGaps: true,
             });
         });
 
-        // Reference band as annotation via plugin
         const refBandPlugin = {
             id: 'refBand',
             beforeDraw(chart) {
@@ -951,29 +1240,17 @@ function renderCharts() {
 
         const chart = new Chart(canvas, {
             type: 'line',
-            data: { labels: dateLabels, datasets },
+            data: { labels: EVO_DATES, datasets },
             options: {
-                responsive: true,
-                maintainAspectRatio: true,
+                responsive: true, maintainAspectRatio: true,
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
                     legend: { display: group.exams.length > 1, position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
-                    tooltip: {
-                        backgroundColor: 'white',
-                        titleColor: '#2d3748',
-                        bodyColor: '#4a5568',
-                        borderColor: '#e2e8f0',
-                        borderWidth: 1,
-                        padding: 10,
-                        cornerRadius: 8,
-                    }
+                    tooltip: { backgroundColor: 'white', titleColor: '#2d3748', bodyColor: '#4a5568', borderColor: '#e2e8f0', borderWidth: 1, padding: 10, cornerRadius: 8 }
                 },
                 scales: {
                     x: { grid: { display: false } },
-                    y: {
-                        beginAtZero: false,
-                        grid: { color: '#f0f0f0' },
-                    }
+                    y: { beginAtZero: false, grid: { color: '#f0f0f0' } }
                 }
             },
             plugins: [refBandPlugin]
@@ -982,36 +1259,23 @@ function renderCharts() {
     });
 }
 
-// ===== RENDER TABLE =====
+// ===== RENDER TABLE (fallback) =====
 function renderTable(rows, sheetName) {
     const content = document.getElementById('tabContent');
-
     if (!rows || rows.length === 0) {
-        content.innerHTML = `
-            <div class="table-card">
-                <div class="empty-state">Nenhum dado encontrado em "${sheetName}".</div>
-            </div>`;
+        content.innerHTML = `<div class="table-card"><div class="empty-state">Nenhum dado encontrado em "${sheetName}".</div></div>`;
         return;
     }
-
     const headers = rows[0];
     const dataRows = rows.slice(1);
-
     let html = '<div class="table-card"><table class="data-table"><thead><tr>';
-    headers.forEach(h => {
-        html += `<th>${escapeHTML(h)}</th>`;
-    });
+    headers.forEach(h => { html += `<th>${escapeHTML(h)}</th>`; });
     html += '</tr></thead><tbody>';
-
     dataRows.forEach(row => {
         html += '<tr>';
-        for (let i = 0; i < headers.length; i++) {
-            const cell = row[i] || '';
-            html += `<td>${escapeHTML(cell)}</td>`;
-        }
+        for (let i = 0; i < headers.length; i++) { html += `<td>${escapeHTML(row[i] || '')}</td>`; }
         html += '</tr>';
     });
-
     html += '</tbody></table></div>';
     content.innerHTML = html;
 }
