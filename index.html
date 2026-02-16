@@ -952,6 +952,156 @@
             color: #a0aec0;
         }
 
+        /* --- ANIMAÇÃO DE CONTAGEM NOS CARDS --- */
+        .card-value[data-target] {
+            transition: color 0.3s ease;
+        }
+
+        /* --- TOOLTIP NOS CARDS --- */
+        .health-card {
+            position: relative;
+        }
+        .card-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.82em;
+            line-height: 1.5;
+            width: 260px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        .card-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #2d3748;
+        }
+        .health-card:hover .card-tooltip {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        /* --- ALERTA PULSANTE --- */
+        .alert-pulse {
+            animation: alertPulse 2s ease-in-out infinite;
+        }
+        @keyframes alertPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
+            50% { box-shadow: 0 0 20px 4px rgba(255, 117, 140, 0.3); }
+        }
+
+        /* --- BARRA DE PROGRESSO GERAL --- */
+        .progress-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .progress-banner-label {
+            font-weight: 600;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+        .progress-banner-bar {
+            flex: 1;
+            min-width: 200px;
+            height: 14px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-banner-fill {
+            height: 100%;
+            background: var(--success);
+            border-radius: 10px;
+            transition: width 1.5s ease;
+        }
+        .progress-banner-text {
+            font-weight: 700;
+            font-size: 1.1em;
+            white-space: nowrap;
+        }
+
+        /* --- CALCULADORA IMC --- */
+        .imc-calculator {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--secondary);
+        }
+        .imc-calculator h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        .imc-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        .imc-result.visible {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        .imc-result .imc-number {
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .imc-result .imc-class {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .imc-result.imc-normal { background: rgba(56,239,125,0.15); }
+        .imc-result.imc-normal .imc-number { color: var(--success); }
+        .imc-result.imc-sobrepeso { background: rgba(247,151,30,0.15); }
+        .imc-result.imc-sobrepeso .imc-number { color: var(--warning); }
+        .imc-result.imc-obeso { background: rgba(255,117,140,0.15); }
+        .imc-result.imc-obeso .imc-number { color: var(--danger); }
+        .imc-scale {
+            display: flex;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 8px;
+        }
+        .imc-scale-segment {
+            flex: 1;
+            transition: opacity 0.3s;
+        }
+        .imc-scale .seg-low { background: #4facfe; }
+        .imc-scale .seg-normal { background: #38ef7d; }
+        .imc-scale .seg-over { background: #f7971e; }
+        .imc-scale .seg-obese1 { background: #ff758c; }
+        .imc-scale .seg-obese2 { background: #e74c3c; }
+        .imc-scale .seg-obese3 { background: #c0392b; }
+        body.dark-mode .imc-calculator {
+            background: #2d3748;
+        }
+        body.dark-mode .card-tooltip {
+            background: #4a5568;
+        }
+        body.dark-mode .card-tooltip::after {
+            border-top-color: #4a5568;
+        }
+
         /* --- PRINT --- */
         @media print {
             body { background: white; font-size: 12pt; }
@@ -985,6 +1135,14 @@
         </div>
     </header>
 
+    <div class="progress-banner">
+        <span class="progress-banner-label">Meta de Peso:</span>
+        <div class="progress-banner-bar">
+            <div class="progress-banner-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-banner-text" id="progressText"></span>
+    </div>
+
     <main class="main-container">
         <nav class="tabs-nav">
             <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
@@ -1003,7 +1161,7 @@
 
         <!-- ABA: VISÃO GERAL -->
         <section id="visao-geral" class="tab-content active">
-            <div class="alert-box alert-danger">
+            <div class="alert-box alert-danger alert-pulse">
                 <span class="alert-icon">🚨</span>
                 <div class="alert-content">
                     <h4>ALERTA CRÍTICO: Esteatose Hepática Grau III</h4>
@@ -1034,73 +1192,107 @@
 
             <div class="cards-grid">
                 <div class="health-card status-danger">
+                    <div class="card-tooltip">O IMC mede a relação entre peso e altura. Acima de 30 indica obesidade. A meta é chegar abaixo de 30.</div>
                     <div class="card-header">
                         <span class="card-title">IMC</span>
                         <span class="card-icon">⚖️</span>
                     </div>
-                    <div class="card-value danger">37.63</div>
+                    <div class="card-value danger" data-target="37.63" data-decimals="2">0</div>
                     <p class="card-reference">Referência: 18,5 - 24,9</p>
                     <span class="status-badge danger">Obesidade Grau II</span>
                 </div>
 
                 <div class="health-card status-danger">
+                    <div class="card-tooltip">Porcentagem do corpo composta por gordura. Para homens, o ideal é entre 8% e 19,9%.</div>
                     <div class="card-header">
                         <span class="card-title">Gordura Corporal</span>
                         <span class="card-icon">📊</span>
                     </div>
-                    <div class="card-value danger">40.5%</div>
+                    <div class="card-value danger" data-target="40.5" data-decimals="1" data-suffix="%">0</div>
                     <p class="card-reference">Normal: 8 - 19,9%</p>
                     <span class="status-badge danger">Muito Alto</span>
                 </div>
 
                 <div class="health-card status-danger">
+                    <div class="card-tooltip">O HDL é o "colesterol bom" que protege o coração. Exercício aeróbico é a melhor forma de aumentá-lo.</div>
                     <div class="card-header">
                         <span class="card-title">HDL (Colesterol Bom)</span>
                         <span class="card-icon">💊</span>
                     </div>
-                    <div class="card-value danger">30</div>
+                    <div class="card-value danger" data-target="30" data-decimals="0">0</div>
                     <p class="card-reference">Referência: >40 mg/dL</p>
                     <span class="status-badge danger">Muito Baixo</span>
                 </div>
 
                 <div class="health-card status-warning">
+                    <div class="card-tooltip">Marcador genético de risco cardiovascular. Não muda com dieta, mas exige controle dos outros fatores.</div>
                     <div class="card-header">
                         <span class="card-title">Lipoproteína(a)</span>
                         <span class="card-icon">🫀</span>
                     </div>
-                    <div class="card-value warning">47.8</div>
+                    <div class="card-value warning" data-target="47.8" data-decimals="1">0</div>
                     <p class="card-reference">Referência: &lt;30 mg/dL</p>
                     <span class="status-badge warning">Elevada - Risco CV</span>
                 </div>
 
                 <div class="health-card status-warning">
+                    <div class="card-tooltip">Nível de açúcar no sangue em jejum. Acima de 100 indica pré-diabetes. Dieta e exercício ajudam a controlar.</div>
                     <div class="card-header">
                         <span class="card-title">Glicose</span>
                         <span class="card-icon">🍬</span>
                     </div>
-                    <div class="card-value warning">101</div>
+                    <div class="card-value warning" data-target="101" data-decimals="0">0</div>
                     <p class="card-reference">Referência: 70-99 mg/dL</p>
                     <span class="status-badge warning">Levemente Elevada</span>
                 </div>
 
                 <div class="health-card status-danger">
+                    <div class="card-tooltip">Porcentagem de gordura acumulada no fígado. Normal é menos de 5%. Acima de 33% é grau III (severo).</div>
                     <div class="card-header">
                         <span class="card-title">Gordura no Fígado</span>
                         <span class="card-icon">🫘</span>
                     </div>
-                    <div class="card-value danger">43.9%</div>
+                    <div class="card-value danger" data-target="43.9" data-decimals="1" data-suffix="%">0</div>
                     <p class="card-reference">Normal: &lt;5%</p>
                     <span class="status-badge danger">Grau III - Severo</span>
                 </div>
 
                 <div class="health-card status-danger">
+                    <div class="card-tooltip">Gordura ao redor dos órgãos internos. É a gordura mais perigosa. Acima de 9 aumenta o risco de doenças cardíacas.</div>
                     <div class="card-header">
                         <span class="card-title">Gordura Visceral</span>
                         <span class="card-icon">🫀</span>
                     </div>
-                    <div class="card-value danger">22</div>
+                    <div class="card-value danger" data-target="22" data-decimals="0">0</div>
                     <p class="card-reference">Normal: ≤9</p>
                     <span class="status-badge danger">Muito Alto</span>
+                </div>
+            </div>
+
+            <div class="imc-calculator">
+                <h3>🧮 Calculadora de IMC</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 125" value="127.4">
+                    </div>
+                    <div class="form-group">
+                        <label>Altura (m)</label>
+                        <input type="number" id="imcHeight" step="0.01" min="1.0" max="2.5" placeholder="Ex: 1.84" value="1.84">
+                    </div>
+                    <button class="btn-add-weight" onclick="calcIMC()">Calcular</button>
+                </div>
+                <div class="imc-scale">
+                    <div class="imc-scale-segment seg-low"></div>
+                    <div class="imc-scale-segment seg-normal"></div>
+                    <div class="imc-scale-segment seg-over"></div>
+                    <div class="imc-scale-segment seg-obese1"></div>
+                    <div class="imc-scale-segment seg-obese2"></div>
+                    <div class="imc-scale-segment seg-obese3"></div>
+                </div>
+                <div class="imc-result" id="imcResult">
+                    <div class="imc-number" id="imcNumber"></div>
+                    <div class="imc-class" id="imcClass"></div>
                 </div>
             </div>
         </section>
@@ -1756,6 +1948,13 @@
                             <p class="sub-text">ℹ️ Valor estimado baseado em músculo e gordura</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📊 Composição Corporal</h3>
+                <div class="chart-wrapper">
+                    <canvas id="bodyCompChart"></canvas>
                 </div>
             </div>
 
@@ -2459,7 +2658,7 @@
                 <h2>Ressonância Magnética</h2>
             </div>
 
-            <div class="alert-box alert-danger">
+            <div class="alert-box alert-danger alert-pulse">
                 <span class="alert-icon">🚨</span>
                 <div class="alert-content">
                     <h4>ACHADO CRÍTICO: Esteatose Hepática Grau III</h4>
@@ -2808,6 +3007,113 @@
                     }
                 }
             });
+        }
+
+        // GRÁFICO DE COMPOSIÇÃO CORPORAL (BIOIMPEDÂNCIA)
+        const bodyCompCtx = document.getElementById('bodyCompChart');
+        if (bodyCompCtx) {
+            new Chart(bodyCompCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Gordura (40.5%)', 'Massa Muscular (26.2%)', 'Água (~33.3%)'],
+                    datasets: [{
+                        data: [40.5, 26.2, 33.3],
+                        backgroundColor: [
+                            'rgba(245, 87, 108, 0.8)',
+                            'rgba(79, 172, 254, 0.8)',
+                            'rgba(67, 233, 123, 0.8)'
+                        ],
+                        borderColor: ['#f5576c', '#4facfe', '#43e97b'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 14 }, padding: 20 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ANIMAÇÃO DE CONTAGEM NOS CARDS
+        function animateValue(el, target, decimals, suffix) {
+            var start = 0;
+            var duration = 1500;
+            var startTime = null;
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = start + (target - start) * eased;
+                el.textContent = current.toFixed(decimals) + (suffix || '');
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = 'true';
+                    var target = parseFloat(entry.target.dataset.target);
+                    var decimals = parseInt(entry.target.dataset.decimals) || 0;
+                    var suffix = entry.target.dataset.suffix || '';
+                    animateValue(entry.target, target, decimals, suffix);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.card-value[data-target]').forEach(function(el) {
+            observer.observe(el);
+        });
+
+        // BARRA DE PROGRESSO
+        var pesoInicial = 127.4;
+        var pesoMeta = 108;
+        var pesoAtual = 127.0;
+        var totalPerder = pesoInicial - pesoMeta;
+        var jaPerdeu = pesoInicial - pesoAtual;
+        var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
+        document.getElementById('progressFill').style.width = percent.toFixed(1) + '%';
+        document.getElementById('progressText').textContent = percent.toFixed(1) + '% (' + jaPerdeu.toFixed(1) + ' de ' + totalPerder.toFixed(1) + ' kg)';
+
+        // CALCULADORA DE IMC
+        function calcIMC() {
+            var peso = parseFloat(document.getElementById('imcWeight').value);
+            var altura = parseFloat(document.getElementById('imcHeight').value);
+            if (isNaN(peso) || isNaN(altura) || altura === 0) {
+                alert('Preencha peso e altura!');
+                return;
+            }
+            var imc = peso / (altura * altura);
+            var result = document.getElementById('imcResult');
+            var numberEl = document.getElementById('imcNumber');
+            var classEl = document.getElementById('imcClass');
+            numberEl.textContent = imc.toFixed(2);
+            result.className = 'imc-result visible';
+            if (imc < 18.5) {
+                classEl.textContent = 'Abaixo do peso';
+                result.classList.add('imc-normal');
+            } else if (imc < 25) {
+                classEl.textContent = 'Peso normal';
+                result.classList.add('imc-normal');
+            } else if (imc < 30) {
+                classEl.textContent = 'Sobrepeso';
+                result.classList.add('imc-sobrepeso');
+            } else if (imc < 35) {
+                classEl.textContent = 'Obesidade Grau I';
+                result.classList.add('imc-obeso');
+            } else if (imc < 40) {
+                classEl.textContent = 'Obesidade Grau II';
+                result.classList.add('imc-obeso');
+            } else {
+                classEl.textContent = 'Obesidade Grau III (Mórbida)';
+                result.classList.add('imc-obeso');
+            }
         }
     </script>
 </body>
