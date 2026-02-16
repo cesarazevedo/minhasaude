@@ -628,6 +628,23 @@
         }
 
         /* --- RESPONSIVIDADE --- */
+        @media (max-width: 1024px) {
+            .body-composition {
+                grid-template-columns: 1fr;
+            }
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            .main-container {
+                padding: 20px;
+            }
+            .consult-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .top-header {
                 flex-direction: column;
@@ -673,6 +690,28 @@
             }
             .calendar-day {
                 font-size: 0.7em;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+            .form-group { width: 100%; }
+            .form-group input, .form-group select {
+                width: 100%;
+            }
+            .med-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .progress-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                padding: 12px 15px;
+            }
+            .reminder-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
             }
         }
 
@@ -810,6 +849,148 @@
         body.dark-mode .weight-log-entry {
             border-bottom-color: #4a5568;
         }
+
+        /* --- FORMULÁRIO DE ATIVIDADES --- */
+        .activity-form {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--success);
+        }
+        .activity-form h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        .activity-log {
+            margin-top: 15px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .activity-log-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+        .activity-log-entry:last-child { border-bottom: none; }
+        .activity-type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .badge-corrida { background: rgba(102,126,234,0.15); color: var(--primary); }
+        .badge-ciclismo { background: rgba(118,75,162,0.15); color: var(--secondary); }
+        .badge-caminhada { background: rgba(56,239,125,0.15); color: #11998e; }
+        .btn-export {
+            padding: 8px 18px;
+            background: #2d3748;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-export:hover {
+            background: #4a5568;
+            transform: translateY(-1px);
+        }
+        .btn-delete-entry {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.1em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .btn-delete-entry:hover { background: rgba(255,117,140,0.15); }
+        body.dark-mode .activity-form { background: #2d3748; }
+        body.dark-mode .activity-log-entry { border-bottom-color: #4a5568; }
+
+        /* --- LEMBRETE DE PESAGEM --- */
+        .reminder-banner {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.95em;
+            display: none;
+        }
+        .reminder-banner.visible { display: flex; }
+        .reminder-banner .reminder-icon { font-size: 1.3em; }
+        .reminder-dismiss {
+            margin-left: auto;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .reminder-dismiss:hover { background: rgba(255,255,255,0.3); }
+
+        /* --- SEÇÃO MEDICAMENTOS/CONSULTAS --- */
+        .med-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        .med-icon { font-size: 2em; }
+        .med-info { flex: 1; }
+        .med-name { font-weight: 700; color: var(--text-dark); font-size: 1.05em; }
+        .med-dose { font-size: 0.9em; color: #718096; margin-top: 3px; }
+        .med-schedule {
+            padding: 6px 14px;
+            background: rgba(102,126,234,0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .consult-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .consult-info h4 { color: var(--text-dark); }
+        .consult-info p { font-size: 0.85em; color: #718096; margin-top: 4px; }
+        .consult-date {
+            text-align: center;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            font-weight: 700;
+            min-width: 80px;
+        }
+        .consult-date .day { font-size: 1.8em; line-height: 1; }
+        .consult-date .month { font-size: 0.8em; text-transform: uppercase; }
+        body.dark-mode .med-card,
+        body.dark-mode .consult-card { background: #2d3748; }
 
         /* --- BOTÕES FLUTUANTES --- */
         .floating-buttons {
@@ -1150,6 +1331,12 @@
         <span class="progress-banner-text" id="progressText"></span>
     </div>
 
+    <div class="reminder-banner" id="weightReminder">
+        <span class="reminder-icon">⏰</span>
+        <span id="reminderText">Você não registra seu peso há alguns dias. Que tal pesar hoje?</span>
+        <button class="reminder-dismiss" onclick="dismissReminder()">OK</button>
+    </div>
+
     <main class="main-container">
         <nav class="tabs-nav">
             <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
@@ -1164,6 +1351,7 @@
             <button class="tab-btn" data-target="hemograma">🩸 Hemograma</button>
             <button class="tab-btn" data-target="endoscopia">🔍 Endoscopia</button>
             <button class="tab-btn" data-target="ressonancia">🧲 Ressonância</button>
+            <button class="tab-btn" data-target="medicamentos">💊 Medicamentos</button>
         </nav>
 
         <!-- ABA: VISÃO GERAL -->
@@ -1706,6 +1894,38 @@
             <div class="section-header">
                 <span class="section-icon">🏃</span>
                 <h2>Registro de Atividades Físicas</h2>
+            </div>
+
+            <div class="activity-form">
+                <h3>🏃 Registrar Nova Atividade</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="actDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="actType" style="padding:10px 14px;border:2px solid #e2e8f0;border-radius:8px;font-size:1em;">
+                            <option value="corrida">🏃 Corrida</option>
+                            <option value="ciclismo">🚴 Ciclismo</option>
+                            <option value="caminhada">🚶 Caminhada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Distância (km)</label>
+                        <input type="number" id="actDistance" step="0.1" min="0" placeholder="Ex: 5.2">
+                    </div>
+                    <div class="form-group">
+                        <label>Duração (min)</label>
+                        <input type="number" id="actDuration" step="1" min="0" placeholder="Ex: 45">
+                    </div>
+                    <button class="btn-add-weight" onclick="addActivity()">+ Registrar</button>
+                </div>
+                <div class="form-row mt-15">
+                    <button class="btn-export" onclick="exportCSV('activities')">📥 Exportar Atividades (CSV)</button>
+                    <button class="btn-export" onclick="exportCSV('weight')">📥 Exportar Pesagens (CSV)</button>
+                </div>
+                <div class="activity-log" id="activityLog"></div>
             </div>
 
             <div class="alert-box alert-success">
@@ -2709,6 +2929,103 @@
             </div>
         </section>
 
+        <!-- ABA: MEDICAMENTOS E CONSULTAS -->
+        <section id="medicamentos" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">💊</span>
+                <h2>Medicamentos e Consultas</h2>
+            </div>
+
+            <h3 class="section-subtitle">💊 Medicamentos em Uso</h3>
+            <div class="alert-box alert-success">
+                <span class="alert-icon">ℹ️</span>
+                <div class="alert-content">
+                    <p class="no-margin">Lista de medicamentos conforme prescrição médica. Sempre consulte seu médico antes de alterar dosagens.</p>
+                </div>
+            </div>
+
+            <div class="med-card">
+                <span class="med-icon">💊</span>
+                <div class="med-info">
+                    <div class="med-name">Omeprazol 20mg</div>
+                    <div class="med-dose">1 cápsula em jejum — Para gastrite e refluxo</div>
+                </div>
+                <span class="med-schedule">Manhã (jejum)</span>
+            </div>
+
+            <div class="med-card">
+                <span class="med-icon">💪</span>
+                <div class="med-info">
+                    <div class="med-name">Whey Protein 30g</div>
+                    <div class="med-dose">1 dose no shake — Suplemento proteico</div>
+                </div>
+                <span class="med-schedule">Lanche / Jantar</span>
+            </div>
+
+            <div class="med-card">
+                <span class="med-icon">⚡</span>
+                <div class="med-info">
+                    <div class="med-name">Creatina 5g</div>
+                    <div class="med-dose">1 dose diária — Suplemento muscular</div>
+                </div>
+                <span class="med-schedule">Jantar (shake)</span>
+            </div>
+
+            <div class="alert-box alert-warning mt-25">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-content">
+                    <h4>Suplementação sugerida</h4>
+                    <p>Considerar suplementação de <strong>Vitamina B12</strong> (nível em 192 pg/mL, limite inferior). Consultar médico para prescrição.</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📅 Próximas Consultas</h3>
+
+            <div class="consult-card">
+                <div class="consult-info">
+                    <h4>Hepatologista</h4>
+                    <p>Acompanhamento da esteatose hepática grau III — URGENTE</p>
+                </div>
+                <div class="consult-date">
+                    <div class="day">--</div>
+                    <div class="month">Agendar</div>
+                </div>
+            </div>
+
+            <div class="consult-card">
+                <div class="consult-info">
+                    <h4>Nutricionista — Retorno</h4>
+                    <p>Avaliação do progresso da dieta e ajustes no plano alimentar</p>
+                </div>
+                <div class="consult-date">
+                    <div class="day">09</div>
+                    <div class="month">MAR</div>
+                </div>
+            </div>
+
+            <div class="consult-card">
+                <div class="consult-info">
+                    <h4>Endocrinologista</h4>
+                    <p>Acompanhamento geral — metabolismo e hormônios</p>
+                </div>
+                <div class="consult-date">
+                    <div class="day">--</div>
+                    <div class="month">Agendar</div>
+                </div>
+            </div>
+
+            <div class="consult-card">
+                <div class="consult-info">
+                    <h4>Cardiologista</h4>
+                    <p>Avaliação cardiovascular — Lp(a) elevada e HDL baixo</p>
+                </div>
+                <div class="consult-date">
+                    <div class="day">--</div>
+                    <div class="month">Agendar</div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <div class="floating-buttons">
@@ -2778,6 +3095,7 @@
             dateInput.value = '';
             weightInput.value = '';
             loadWeightLog();
+            updateWeightChart();
         }
 
         // Definir data padrão como hoje e carregar log
@@ -3130,6 +3448,162 @@
                 result.classList.add('imc-obeso');
             }
         }
+
+        // REGISTRO DE ATIVIDADES
+        function loadActivityLog() {
+            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
+            var container = document.getElementById('activityLog');
+            if (log.length === 0) {
+                container.innerHTML = '<p class="sub-text mt-10">Nenhuma atividade registrada ainda.</p>';
+                return;
+            }
+            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+            container.innerHTML = log.map(function(entry, i) {
+                var d = new Date(entry.date + 'T00:00:00');
+                var dateStr = d.toLocaleDateString('pt-BR');
+                var typeLabels = { corrida: '🏃 Corrida', ciclismo: '🚴 Ciclismo', caminhada: '🚶 Caminhada' };
+                var badgeClass = 'badge-' + entry.type;
+                return '<div class="activity-log-entry">' +
+                    '<span>' + dateStr + '</span>' +
+                    '<span class="activity-type-badge ' + badgeClass + '">' + (typeLabels[entry.type] || entry.type) + '</span>' +
+                    '<strong>' + entry.distance.toFixed(1) + ' km</strong>' +
+                    '<span>' + (entry.duration || '-') + ' min</span>' +
+                    '<button class="btn-delete-entry" onclick="deleteActivity(' + i + ')" title="Remover">✕</button>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function addActivity() {
+            var date = document.getElementById('actDate').value;
+            var type = document.getElementById('actType').value;
+            var distance = parseFloat(document.getElementById('actDistance').value);
+            var duration = parseInt(document.getElementById('actDuration').value) || 0;
+            if (!date || isNaN(distance) || distance <= 0) {
+                alert('Preencha data e distância!');
+                return;
+            }
+            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
+            log.push({ date: date, type: type, distance: distance, duration: duration });
+            localStorage.setItem('activityLog', JSON.stringify(log));
+            document.getElementById('actDistance').value = '';
+            document.getElementById('actDuration').value = '';
+            loadActivityLog();
+        }
+
+        function deleteActivity(index) {
+            var log = JSON.parse(localStorage.getItem('activityLog') || '[]');
+            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+            log.splice(index, 1);
+            localStorage.setItem('activityLog', JSON.stringify(log));
+            loadActivityLog();
+        }
+
+        document.getElementById('actDate').valueAsDate = new Date();
+        loadActivityLog();
+
+        // EXPORTAR CSV
+        function exportCSV(type) {
+            var data, filename, headers;
+            if (type === 'weight') {
+                data = JSON.parse(localStorage.getItem('weightLog') || '[]');
+                if (data.length === 0) { alert('Nenhuma pesagem para exportar!'); return; }
+                headers = 'Data,Peso (kg)\n';
+                filename = 'pesagens.csv';
+                var csv = headers + data.map(function(e) {
+                    return e.date + ',' + e.weight.toFixed(1);
+                }).join('\n');
+            } else {
+                data = JSON.parse(localStorage.getItem('activityLog') || '[]');
+                if (data.length === 0) { alert('Nenhuma atividade para exportar!'); return; }
+                headers = 'Data,Tipo,Distância (km),Duração (min)\n';
+                filename = 'atividades.csv';
+                var csv = headers + data.map(function(e) {
+                    return e.date + ',' + e.type + ',' + e.distance.toFixed(1) + ',' + (e.duration || '');
+                }).join('\n');
+            }
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // LEMBRETE DE PESAGEM
+        function checkWeightReminder() {
+            var log = JSON.parse(localStorage.getItem('weightLog') || '[]');
+            var dismissed = localStorage.getItem('reminderDismissed');
+            var banner = document.getElementById('weightReminder');
+            if (dismissed) {
+                var dismissDate = new Date(dismissed);
+                var now = new Date();
+                if ((now - dismissDate) < 24 * 60 * 60 * 1000) return;
+            }
+            if (log.length === 0) {
+                document.getElementById('reminderText').textContent = 'Você ainda não registrou nenhuma pesagem. Que tal começar hoje?';
+                banner.classList.add('visible');
+                return;
+            }
+            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+            var lastDate = new Date(log[0].date + 'T00:00:00');
+            var now = new Date();
+            var diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+            if (diffDays >= 7) {
+                document.getElementById('reminderText').textContent = 'Faz ' + diffDays + ' dias que você não registra seu peso. Que tal pesar hoje?';
+                banner.classList.add('visible');
+            }
+        }
+
+        function dismissReminder() {
+            localStorage.setItem('reminderDismissed', new Date().toISOString());
+            document.getElementById('weightReminder').classList.remove('visible');
+        }
+
+        checkWeightReminder();
+
+        // GRÁFICO DE PESO DINÂMICO
+        function updateWeightChart() {
+            var weightChart = Chart.getChart('weightChart');
+            if (!weightChart) return;
+            var log = JSON.parse(localStorage.getItem('weightLog') || '[]');
+            if (log.length === 0) return;
+            log.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+            var labels = log.map(function(e) {
+                var d = new Date(e.date + 'T00:00:00');
+                return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+            });
+            var values = log.map(function(e) { return e.weight; });
+            // Adicionar dataset de registros reais se não existe
+            if (weightChart.data.datasets.length < 4) {
+                weightChart.data.datasets.push({
+                    label: 'Seus Registros',
+                    data: [],
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    borderWidth: 3,
+                    pointRadius: 7,
+                    pointBackgroundColor: '#e74c3c',
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    fill: false,
+                    tension: 0.2
+                });
+            }
+            // Mapear registros nas labels existentes do gráfico
+            var existingLabels = weightChart.data.labels;
+            var mappedData = existingLabels.map(function() { return null; });
+            // Adicionar novos pontos
+            labels.forEach(function(label, i) {
+                var idx = existingLabels.indexOf(label);
+                if (idx >= 0) {
+                    mappedData[idx] = values[i];
+                }
+            });
+            weightChart.data.datasets[3].data = mappedData;
+            weightChart.update();
+        }
+
+        // Chamar ao carregar se a aba de peso estiver visível
+        setTimeout(updateWeightChart, 1000);
     </script>
 </body>
 </html>
