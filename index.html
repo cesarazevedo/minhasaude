@@ -879,7 +879,7 @@ function parseLabReport(rows) {
             const unitM = nextLine.match(/^\s*([\w\/³²%µ\.]+)/);
             if (unitM) unit = unitM[1];
         }
-        // Look backwards for exam name
+        // Look backwards for exam name 
         const before = fullText.substring(Math.max(0, m.index - 400), m.index);
         const lines = before.split('\n').filter(l => l.trim());
         let name = '';
