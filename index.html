@@ -737,17 +737,149 @@ const EVO_EXAMS = [
     { name: 'PSA Total', unit: 'ng/mL', ref: '<4.0', refMin: null, refMax: 4.0, values: [null, null, null, 0.46, 0.46], higher_is_worse: true },
 ];
 
-const CHART_GROUPS = [
-    { title: 'Glicose & HbA1c', exams: ['Glicose', 'HbA1c'] },
-    { title: 'Colesterol / HDL / Triglicer\u00EDdeos', exams: ['Colesterol Total', 'HDL', 'Triglicer\u00EDdeos'] },
-    { title: 'Creatinina & \u00C1cido \u00DArico', exams: ['Creatinina', '\u00C1cido \u00DArico'] },
-    { title: 'TGO / TGP / GGT', exams: ['TGO (AST)', 'TGP (ALT)', 'GGT'] },
-    { title: 'TSH', exams: ['TSH'] },
-    { title: 'PSA Total', exams: ['PSA Total'] },
-    { title: 'Vitamina D & B12', exams: ['Vitamina D', 'B12'] },
-    { title: 'Hemoglobina', exams: ['Hemoglobina'] },
-    { title: 'Leuc\u00F3citos & Plaquetas', exams: ['Leuc\u00F3citos', 'Plaquetas'] },
-];
+// Alias map to normalize exam names across different labs
+const EXAM_ALIASES = {
+    'GLICOSE (EM JEJUM)': 'Glicose', 'GLICOSE': 'Glicose', 'GLICEMIA': 'Glicose', 'GLICOSE DE JEJUM': 'Glicose',
+    'HEMOGLOBINA GLICOSILADA': 'HbA1c', 'HB A1C': 'HbA1c', 'HEMOGLOBINA GLICADA': 'HbA1c', 'HEMOGLOBINA GLICADA (HBA1C)': 'HbA1c',
+    'COLESTEROL TOTAL': 'Colesterol Total', 'COLESTEROL TOTAL E FRAÇÕES': 'Colesterol Total',
+    'HDL COLESTEROL': 'HDL', 'HDL': 'HDL', 'COLESTEROL HDL': 'HDL',
+    'LDL COLESTEROL': 'LDL', 'LDL': 'LDL', 'COLESTEROL LDL': 'LDL',
+    'VLDL COLESTEROL': 'VLDL', 'VLDL': 'VLDL', 'COLESTEROL VLDL': 'VLDL',
+    'TRIGLICERÍDEOS': 'Triglicerídeos', 'TRIGLICERIDEOS': 'Triglicerídeos', 'TRIGLICÉRIDES': 'Triglicerídeos', 'TRIGLICERIDES': 'Triglicerídeos',
+    'CREATININA': 'Creatinina',
+    'ÁCIDO ÚRICO': 'Ácido Úrico', 'ACIDO URICO': 'Ácido Úrico',
+    'AST - ASPARTATO AMINOTRANSFERASE (TGO)': 'TGO (AST)', 'TGO': 'TGO (AST)', 'TGO (AST)': 'TGO (AST)', 'AST (TGO)': 'TGO (AST)', 'ASPARTATO AMINOTRANSFERASE': 'TGO (AST)',
+    'ALT - ALANINA AMINOTRANSFERASE (TGP)': 'TGP (ALT)', 'TGP': 'TGP (ALT)', 'TGP (ALT)': 'TGP (ALT)', 'ALT (TGP)': 'TGP (ALT)', 'ALANINA AMINOTRANSFERASE': 'TGP (ALT)',
+    'GAMA GLUTAMIL TRANSFERASE (GGT)': 'GGT', 'GGT': 'GGT', 'GAMA GT': 'GGT', 'GAMA GLUTAMIL TRANSFERASE': 'GGT',
+    'TSH ULTRASSENSÍVEL': 'TSH', 'TSH': 'TSH', 'TSH ULTRA SENSÍVEL': 'TSH',
+    'T4 LIVRE': 'T4 Livre', 'TIROXINA LIVRE': 'T4 Livre',
+    'VITAMINA D': 'Vitamina D', '25-HIDROXI VITAMINA D': 'Vitamina D', '25 OH VITAMINA D': 'Vitamina D', 'VITAMINA D - 25 HIDROXI': 'Vitamina D',
+    'VITAMINA B12': 'B12', 'B12': 'B12',
+    'VITAMINA A': 'Vitamina A', 'RETINOL': 'Vitamina A',
+    'HEMOGLOBINA': 'Hemoglobina',
+    'HEMATÓCRITO': 'Hematócrito', 'HEMATOCRITO': 'Hematócrito',
+    'HEMÁCIAS': 'Hemácias', 'HEMACIAS': 'Hemácias',
+    'LEUCÓCITOS': 'Leucócitos', 'LEUCOCITOS': 'Leucócitos',
+    'PLAQUETAS': 'Plaquetas',
+    'PSA TOTAL': 'PSA Total', 'PSA': 'PSA Total', 'ANTÍGENO PROSTÁTICO ESPECÍFICO': 'PSA Total',
+    'URÉIA': 'Ureia', 'UREIA': 'Ureia',
+    'FERRITINA': 'Ferritina',
+    'FOSFATASE ALCALINA': 'Fosfatase Alcalina',
+    'BILIRRUBINA TOTAL': 'Bilirrubina Total',
+    'TESTOSTERONA TOTAL': 'Testosterona Total',
+    'TESTOSTERONA LIVRE': 'Testosterona Livre',
+    'LIPOPROTEÍNA (A)': 'Lipoproteína A', 'LIPOPROTEINA A': 'Lipoproteína A', 'LIPOPROTEÍNA A': 'Lipoproteína A',
+    'VCM': 'VCM', 'VOL. GLOB. MÉDIO (VCM)': 'VCM',
+    'HCM': 'HCM', 'HEM. GLOB. MÉDIO (HCM)': 'HCM',
+    'CHCM': 'CHCM', 'C.H.GLOB. MÉDIA (CHCM)': 'CHCM',
+    'RDW-CV': 'RDW-CV', 'RDW': 'RDW-CV',
+    'VOLUME PLAQUETÁRIO (MPV)': 'MPV', 'MPV': 'MPV',
+    'SHBG': 'SHBG',
+};
+
+function normalizeExamName(name) {
+    const upper = name.toUpperCase().replace(/\s+/g, ' ').trim();
+    return EXAM_ALIASES[upper] || name;
+}
+
+// Extract date from sheet name (e.g. "Hemograma 31/01/2026" -> "31/01/2026")
+function extractDateFromSheet(sheetName) {
+    const m = sheetName.match(/(\d{2}\/\d{2}\/\d{4})/);
+    return m ? m[1] : null;
+}
+
+// Parse date string dd/mm/yyyy to comparable value
+function dateToSort(dateStr) {
+    const [d, m, y] = dateStr.split('/');
+    return `${y}${m}${d}`;
+}
+
+// Load all CSVs and build dynamic exam history
+let dynamicExamData = null;
+async function loadAllExamData() {
+    if (dynamicExamData) return dynamicExamData;
+
+    const examMap = {}; // normalized name -> { dates: {dateStr: {value, unit, ref, refMin, refMax}}, ... }
+    const allDates = new Set();
+
+    const fetchPromises = SHEETS.map(async (sheet) => {
+        const date = extractDateFromSheet(sheet.name);
+        if (!date) return;
+        allDates.add(date);
+
+        try {
+            let rows;
+            if (csvCache[sheet.gid]) {
+                rows = csvCache[sheet.gid];
+            } else {
+                const resp = await fetch(csvUrl(sheet.gid));
+                if (!resp.ok) return;
+                const text = await resp.text();
+                rows = parseCSV(text);
+                csvCache[sheet.gid] = rows;
+            }
+
+            const { exams } = parseLabReport(rows);
+            exams.forEach(ex => {
+                if (isNaN(ex.numValue)) return; // skip qualitative results
+                const normalized = normalizeExamName(ex.name);
+                if (!examMap[normalized]) {
+                    examMap[normalized] = { unit: ex.unit, ref: ex.ref, refMin: ex.refMin, refMax: ex.refMax, dates: {} };
+                }
+                // Don't overwrite if already set for this date (first match wins)
+                if (!examMap[normalized].dates[date]) {
+                    examMap[normalized].dates[date] = ex.numValue;
+                }
+                // Update ref if we have better data
+                if (ex.refMin !== null && examMap[normalized].refMin === null) examMap[normalized].refMin = ex.refMin;
+                if (ex.refMax !== null && examMap[normalized].refMax === null) examMap[normalized].refMax = ex.refMax;
+                if (ex.ref && !examMap[normalized].ref) examMap[normalized].ref = ex.ref;
+            });
+        } catch (err) {
+            console.warn('Erro ao carregar sheet para evolução:', sheet.name, err);
+        }
+    });
+
+    await Promise.all(fetchPromises);
+
+    // Sort dates chronologically
+    const sortedDates = [...allDates].sort((a, b) => dateToSort(a).localeCompare(dateToSort(b)));
+
+    // Filter exams with 2+ data points
+    const chartsData = [];
+    for (const [name, data] of Object.entries(examMap)) {
+        const dateEntries = Object.keys(data.dates);
+        if (dateEntries.length >= 2) {
+            const values = sortedDates.map(d => data.dates[d] !== undefined ? data.dates[d] : null);
+            chartsData.push({
+                name,
+                unit: data.unit,
+                ref: data.ref,
+                refMin: data.refMin,
+                refMax: data.refMax,
+                values,
+            });
+        }
+    }
+
+    // Sort charts: prioritize key exams first, then alphabetical
+    const priorityOrder = ['Glicose', 'HbA1c', 'Colesterol Total', 'HDL', 'LDL', 'VLDL', 'Triglicerídeos',
+        'Creatinina', 'Ácido Úrico', 'Ureia', 'TGO (AST)', 'TGP (ALT)', 'GGT', 'Fosfatase Alcalina',
+        'Bilirrubina Total', 'TSH', 'T4 Livre', 'Testosterona Total', 'Testosterona Livre',
+        'PSA Total', 'Vitamina D', 'B12', 'Vitamina A', 'Ferritina',
+        'Hemoglobina', 'Hematócrito', 'Hemácias', 'Leucócitos', 'Plaquetas', 'VCM', 'HCM', 'CHCM', 'RDW-CV', 'MPV'];
+    chartsData.sort((a, b) => {
+        const ia = priorityOrder.indexOf(a.name);
+        const ib = priorityOrder.indexOf(b.name);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.name.localeCompare(b.name);
+    });
+
+    dynamicExamData = { dates: sortedDates, charts: chartsData };
+    return dynamicExamData;
+}
 
 const CHART_COLORS = ['#667eea', '#f7971e', '#38ef7d', '#ff758c', '#764ba2', '#00b4d8'];
 let chartInstances = [];
@@ -1082,7 +1214,7 @@ async function switchTab(tab) {
     const content = document.getElementById('tabContent');
 
     if (tab === 'dashboard') { renderDashboard(); return; }
-    if (tab === 'evolucao') { renderEvolucao(); return; }
+    if (tab === 'evolucao') { await renderEvolucao(); return; }
 
     const index = tab;
     const sheet = SHEETS[index];
@@ -1168,10 +1300,25 @@ function renderDashboard() {
 }
 
 // ===== RENDER EVOLUÇÃO =====
-function renderEvolucao() {
+async function renderEvolucao() {
     const content = document.getElementById('tabContent');
+
+    // Show loading while fetching all CSVs
+    content.innerHTML = `
+        <div class="tab-content">
+            <div class="table-card">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Carregando dados de todos os exames...</div>
+                </div>
+            </div>
+        </div>`;
+
+    const data = await loadAllExamData();
+
     let html = '<div class="tab-content">';
 
+    // Comparative table (still uses hardcoded EVO_EXAMS for curated view)
     html += '<div class="evolution-section"><h3>Tabela Comparativa</h3>';
     html += '<div class="evo-table-wrap"><table class="evo-table"><thead><tr>';
     html += '<th>Exame</th>';
@@ -1217,49 +1364,36 @@ function renderEvolucao() {
 
     html += '</tbody></table></div></div>';
 
-    html += '<div class="evolution-section"><h3>Gr\u00E1ficos de Evolu\u00E7\u00E3o</h3>';
+    // Dynamic charts section
+    html += `<div class="evolution-section"><h3>Gr\u00E1ficos de Evolu\u00E7\u00E3o</h3>`;
+    html += `<p style="color:#718096;font-size:0.9em;margin-bottom:15px;">${data.charts.length} exames com hist\u00F3rico em ${data.dates.length} datas</p>`;
     html += '<div class="charts-grid">';
-    CHART_GROUPS.forEach((group, gi) => {
-        html += `<div class="chart-card"><h4>${group.title}</h4><canvas id="chart-${gi}"></canvas></div>`;
+    data.charts.forEach((exam, i) => {
+        const unitLabel = exam.unit ? ` (${exam.unit})` : '';
+        html += `<div class="chart-card"><h4>${exam.name}${unitLabel}</h4><canvas id="chart-${i}"></canvas></div>`;
     });
     html += '</div></div>';
 
     html += '</div>';
     content.innerHTML = html;
 
-    requestAnimationFrame(() => renderCharts());
+    requestAnimationFrame(() => renderDynamicCharts(data));
 }
 
-function renderCharts() {
-    CHART_GROUPS.forEach((group, gi) => {
-        const canvas = document.getElementById(`chart-${gi}`);
+function renderDynamicCharts(data) {
+    data.charts.forEach((exam, i) => {
+        const canvas = document.getElementById(`chart-${i}`);
         if (!canvas) return;
-
-        const datasets = [];
-        let refMin = null, refMax = null;
-
-        group.exams.forEach((examName, ei) => {
-            const exam = EVO_EXAMS.find(e => e.name === examName);
-            if (!exam) return;
-            if (ei === 0) { refMin = exam.refMin; refMax = exam.refMax; }
-            datasets.push({
-                label: exam.name,
-                data: exam.values.map(v => v === null ? undefined : v),
-                borderColor: CHART_COLORS[ei % CHART_COLORS.length],
-                backgroundColor: CHART_COLORS[ei % CHART_COLORS.length] + '20',
-                borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6, tension: 0.3, spanGaps: true,
-            });
-        });
 
         const refBandPlugin = {
             id: 'refBand',
             beforeDraw(chart) {
-                if (refMin === null && refMax === null) return;
+                if (exam.refMin === null && exam.refMax === null) return;
                 const { ctx, chartArea: { top, bottom, left, right }, scales: { y } } = chart;
                 ctx.save();
                 ctx.fillStyle = 'rgba(0,0,0,0.04)';
-                const yTop = refMax !== null ? y.getPixelForValue(refMax) : top;
-                const yBottom = refMin !== null ? y.getPixelForValue(refMin) : bottom;
+                const yTop = exam.refMax !== null ? y.getPixelForValue(exam.refMax) : top;
+                const yBottom = exam.refMin !== null ? y.getPixelForValue(exam.refMin) : bottom;
                 ctx.fillRect(left, Math.min(yTop, yBottom), right - left, Math.abs(yBottom - yTop));
                 ctx.restore();
             }
@@ -1267,12 +1401,21 @@ function renderCharts() {
 
         const chart = new Chart(canvas, {
             type: 'line',
-            data: { labels: EVO_DATES, datasets },
+            data: {
+                labels: data.dates,
+                datasets: [{
+                    label: exam.name,
+                    data: exam.values.map(v => v === null ? undefined : v),
+                    borderColor: CHART_COLORS[0],
+                    backgroundColor: CHART_COLORS[0] + '20',
+                    borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6, tension: 0.3, spanGaps: true,
+                }]
+            },
             options: {
                 responsive: true, maintainAspectRatio: true,
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: { display: group.exams.length > 1, position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                    legend: { display: false },
                     tooltip: { backgroundColor: 'white', titleColor: '#2d3748', bodyColor: '#4a5568', borderColor: '#e2e8f0', borderWidth: 1, padding: 10, cornerRadius: 8 }
                 },
                 scales: {
