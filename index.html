@@ -7,13 +7,16 @@
     <meta name="author" content="César Augusto de Freitas Azevedo">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
     <title>MinhaSaúde - Dashboard de Exames</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --primary: #667eea;
             --secondary: #764ba2;
             --success: #38ef7d;
+            --success-dark: #22c55e;
             --warning: #f7971e;
             --danger: #ff758c;
+            --danger-dark: #ef4444;
             --bg-light: #f4f7fe;
             --text-dark: #2d3748;
             --table-header: #009879;
@@ -94,6 +97,7 @@
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 2px;
             flex-wrap: wrap;
+            align-items: center;
         }
         .tab-btn {
             padding: 10px 18px;
@@ -126,6 +130,13 @@
             background: var(--primary);
             border-radius: 4px 4px 0 0;
         }
+        .tab-separator {
+            width: 2px;
+            height: 24px;
+            background: #cbd5e0;
+            margin: 0 6px;
+            flex-shrink: 0;
+        }
 
         /* CONTENT AREA */
         .tab-content {
@@ -136,7 +147,186 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TABLE */
+        /* ====== DASHBOARD ====== */
+        .alerts-section {
+            margin-bottom: 28px;
+        }
+        .alerts-section h3 {
+            font-size: 1.05em;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.92em;
+            font-weight: 500;
+        }
+        .alert-danger {
+            background: #fff5f5;
+            border-left: 4px solid var(--danger-dark);
+            color: #9b2c2c;
+        }
+        .alert-warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+        .alert-icon { font-size: 1.2em; }
+        .alert-name { font-weight: 700; }
+        .alert-detail { opacity: 0.8; font-size: 0.9em; }
+
+        .category-section {
+            margin-bottom: 32px;
+        }
+        .category-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 14px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .exam-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .exam-card.status-normal { border-left-color: var(--success-dark); }
+        .exam-card.status-warning { border-left-color: var(--warning); }
+        .exam-card.status-danger { border-left-color: var(--danger-dark); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        .card-name {
+            font-size: 0.85em;
+            color: #718096;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .card-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 0.72em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-normal { background: #f0fff4; color: #276749; }
+        .badge-warning { background: #fffbeb; color: #92400e; }
+        .badge-danger { background: #fff5f5; color: #9b2c2c; }
+
+        .card-value {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            line-height: 1.1;
+        }
+        .card-unit {
+            font-size: 0.45em;
+            font-weight: 500;
+            color: #a0aec0;
+            margin-left: 2px;
+        }
+        .card-ref {
+            font-size: 0.78em;
+            color: #a0aec0;
+        }
+
+        /* ====== EVOLUÇÃO ====== */
+        .evolution-section {
+            margin-bottom: 36px;
+        }
+        .evolution-section h3 {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 14px;
+        }
+        .evo-table-wrap {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow-x: auto;
+            margin-bottom: 36px;
+        }
+        .evo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+            min-width: 700px;
+        }
+        .evo-table thead tr {
+            background: var(--table-header);
+            color: white;
+        }
+        .evo-table th {
+            padding: 12px 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .evo-table th:first-child { text-align: left; }
+        .evo-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .evo-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .evo-table tbody tr:hover { background: #f6f8ff; }
+        .evo-table tbody tr:last-child td { border-bottom: none; }
+        .val-up { color: var(--danger-dark); }
+        .val-down { color: var(--success-dark); }
+        .val-same { color: #718096; }
+        .arrow { font-size: 0.85em; margin-left: 2px; }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 24px;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .chart-card h4 {
+            font-size: 0.95em;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        /* TABLE (CSV tabs) */
         .table-card {
             background: white;
             border-radius: 16px;
@@ -273,6 +463,13 @@
         }
         .btn-refresh:hover { opacity: 0.7; }
 
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .top-header {
@@ -291,13 +488,17 @@
                 padding: 8px 10px;
             }
             .table-card { overflow-x: auto; }
-        }
-
-        /* EMPTY STATE */
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #a0aec0;
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 10px;
+            }
+            .exam-card { padding: 14px; }
+            .card-value { font-size: 1.4em; }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .chart-card { padding: 14px; }
+            .tab-separator { display: none; }
         }
     </style>
 </head>
@@ -351,7 +552,115 @@ const SHEETS = [
 ];
 
 const csvCache = {};
-let activeSheet = null;
+let activeTab = 'dashboard'; // 'dashboard', 'evolucao', or sheet index
+
+// ===== DASHBOARD DATA =====
+const DASHBOARD_DATA = {
+    alerts: [
+        { icon: '🔴', name: 'HDL', value: '30 mg/dL', ref: 'ref: >40', detail: 'Abaixo do desejável', type: 'danger' },
+        { icon: '⚠️', name: 'Glicose', value: '101 mg/dL', ref: 'ref: 70-99', detail: 'Alterada', type: 'warning' },
+        { icon: '⚠️', name: 'Lipoproteína A', value: '47.8 mg/dL', ref: 'ref: <30', detail: 'Elevada', type: 'warning' },
+        { icon: '⚠️', name: 'Vitamina A', value: '0.84 mg/L', ref: 'ref: 0.30-0.70', detail: 'Acima', type: 'warning' },
+    ],
+    categories: [
+        {
+            title: 'Metabolismo',
+            exams: [
+                { name: 'Glicose', value: 101, unit: 'mg/dL', ref: '70 - 99', status: 'warning' },
+                { name: 'HbA1c', value: 5.0, unit: '%', ref: '< 5.7', status: 'normal' },
+                { name: 'Ácido Úrico', value: 5.4, unit: 'mg/dL', ref: '3.5 - 7.2', status: 'normal' },
+            ]
+        },
+        {
+            title: 'Lipídios',
+            exams: [
+                { name: 'Colesterol Total', value: 148, unit: 'mg/dL', ref: '< 190', status: 'normal' },
+                { name: 'HDL', value: 30, unit: 'mg/dL', ref: '> 40', status: 'danger' },
+                { name: 'LDL', value: 96.8, unit: 'mg/dL', ref: '< 130', status: 'normal' },
+                { name: 'VLDL', value: 21.2, unit: 'mg/dL', ref: '< 30', status: 'normal' },
+                { name: 'Triglicerídeos', value: 106, unit: 'mg/dL', ref: '< 150', status: 'normal' },
+                { name: 'Lipoproteína A', value: 47.8, unit: 'mg/dL', ref: '< 30', status: 'warning' },
+            ]
+        },
+        {
+            title: 'Renal / Hepática',
+            exams: [
+                { name: 'Creatinina', value: 1.00, unit: 'mg/dL', ref: '0.7 - 1.3', status: 'normal' },
+                { name: 'Ureia', value: 35, unit: 'mg/dL', ref: '15 - 40', status: 'normal' },
+                { name: 'TGO (AST)', value: 25, unit: 'U/L', ref: '< 40', status: 'normal' },
+                { name: 'TGP (ALT)', value: 36, unit: 'U/L', ref: '< 41', status: 'normal' },
+                { name: 'GGT', value: 32, unit: 'U/L', ref: '< 60', status: 'normal' },
+                { name: 'Fosfatase Alcalina', value: 47, unit: 'U/L', ref: '40 - 129', status: 'normal' },
+                { name: 'Bilirrubina Total', value: 0.98, unit: 'mg/dL', ref: '< 1.2', status: 'normal' },
+            ]
+        },
+        {
+            title: 'Hormônios',
+            exams: [
+                { name: 'TSH', value: 1.82, unit: 'mUI/L', ref: '0.27 - 4.20', status: 'normal' },
+                { name: 'T4 Livre', value: 1.02, unit: 'ng/dL', ref: '0.93 - 1.70', status: 'normal' },
+                { name: 'Testosterona Total', value: 319, unit: 'ng/dL', ref: '249 - 836', status: 'normal' },
+                { name: 'Testosterona Livre', value: 8.95, unit: 'pg/mL', ref: '4.5 - 42', status: 'normal' },
+                { name: 'PSA Total', value: 0.46, unit: 'ng/mL', ref: '< 4.0', status: 'normal' },
+            ]
+        },
+        {
+            title: 'Vitaminas / Minerais',
+            exams: [
+                { name: 'Vitamina D', value: 37.6, unit: 'ng/mL', ref: '30 - 60', status: 'normal' },
+                { name: 'Vitamina B12', value: 192, unit: 'pg/mL', ref: '187 - 883', status: 'normal' },
+                { name: 'Vitamina A', value: 0.84, unit: 'mg/L', ref: '0.30 - 0.70', status: 'warning' },
+                { name: 'Ferritina', value: 139.5, unit: 'ng/mL', ref: '30 - 400', status: 'normal' },
+            ]
+        },
+        {
+            title: 'Hemograma',
+            exams: [
+                { name: 'Hemoglobina', value: 15.6, unit: 'g/dL', ref: '13.0 - 17.5', status: 'normal' },
+                { name: 'Hematócrito', value: 44.7, unit: '%', ref: '39 - 50', status: 'normal' },
+                { name: 'Leucócitos', value: 5630, unit: '/mm³', ref: '3500 - 10500', status: 'normal' },
+                { name: 'Plaquetas', value: 183000, unit: '/mm³', ref: '150.000 - 400.000', status: 'normal' },
+            ]
+        },
+    ]
+};
+
+// ===== EVOLUÇÃO DATA =====
+const EVO_DATES = ['19/03/2021', '06/10/2021', '04/07/2022', '09/10/2023', '31/01/2026'];
+
+// null = not measured on that date
+const EVO_EXAMS = [
+    { name: 'Glicose', unit: 'mg/dL', ref: '70-99', refMin: 70, refMax: 99, values: [92, 93, 94, 97, 101], higher_is_worse: true },
+    { name: 'HbA1c', unit: '%', ref: '<5.7', refMin: null, refMax: 5.7, values: [null, 5.4, null, 5.2, 5.0], higher_is_worse: true },
+    { name: 'Colesterol Total', unit: 'mg/dL', ref: '<190', refMin: null, refMax: 190, values: [185, 193, 180, 169, 148], higher_is_worse: true },
+    { name: 'HDL', unit: 'mg/dL', ref: '>40', refMin: 40, refMax: null, values: [39, 47, 38, 38, 30], higher_is_worse: false },
+    { name: 'Triglicerídeos', unit: 'mg/dL', ref: '<150', refMin: null, refMax: 150, values: [116, 123, 92, 104, 106], higher_is_worse: true },
+    { name: 'Creatinina', unit: 'mg/dL', ref: '0.7-1.3', refMin: 0.7, refMax: 1.3, values: [0.93, 1.06, 0.99, 1.06, 1.00], higher_is_worse: true },
+    { name: 'Ácido Úrico', unit: 'mg/dL', ref: '3.5-7.2', refMin: 3.5, refMax: 7.2, values: [5.3, 6.1, 5.2, 5.4, 5.4], higher_is_worse: true },
+    { name: 'TGO (AST)', unit: 'U/L', ref: '<40', refMin: null, refMax: 40, values: [24, 19, 27, 26, 25], higher_is_worse: true },
+    { name: 'TGP (ALT)', unit: 'U/L', ref: '<41', refMin: null, refMax: 41, values: [35, 24, 35, 41, 36], higher_is_worse: true },
+    { name: 'GGT', unit: 'U/L', ref: '<60', refMin: null, refMax: 60, values: [37, 32, 35, 39, 32], higher_is_worse: true },
+    { name: 'TSH', unit: 'mUI/L', ref: '0.27-4.20', refMin: 0.27, refMax: 4.20, values: [1.70, 2.15, null, 2.32, 1.82], higher_is_worse: null },
+    { name: 'Vitamina D', unit: 'ng/mL', ref: '30-60', refMin: 30, refMax: 60, values: [20.4, 50.2, null, 43.5, 37.6], higher_is_worse: false },
+    { name: 'B12', unit: 'pg/mL', ref: '187-883', refMin: 187, refMax: 883, values: [null, 300, null, 276, 192], higher_is_worse: false },
+    { name: 'Hemoglobina', unit: 'g/dL', ref: '13-17.5', refMin: 13, refMax: 17.5, values: [15.5, 15.8, 16.0, 15.8, 15.6], higher_is_worse: null },
+    { name: 'Leucócitos', unit: '/mm³', ref: '3500-10500', refMin: 3500, refMax: 10500, values: [5850, 6290, 7150, 6280, 5630], higher_is_worse: null },
+    { name: 'Plaquetas', unit: '/mm³', ref: '150k-400k', refMin: 150000, refMax: 400000, values: [186000, 195000, 197000, 189000, 183000], higher_is_worse: null },
+    { name: 'PSA Total', unit: 'ng/mL', ref: '<4.0', refMin: null, refMax: 4.0, values: [null, null, null, 0.46, 0.46], higher_is_worse: true },
+];
+
+// Chart groupings
+const CHART_GROUPS = [
+    { title: 'Glicose & HbA1c', exams: ['Glicose', 'HbA1c'] },
+    { title: 'Colesterol / HDL / Triglicerídeos', exams: ['Colesterol Total', 'HDL', 'Triglicerídeos'] },
+    { title: 'Creatinina', exams: ['Creatinina'] },
+    { title: 'TGO / TGP / GGT', exams: ['TGO (AST)', 'TGP (ALT)', 'GGT'] },
+    { title: 'PSA Total', exams: ['PSA Total'] },
+    { title: 'Vitamina D & B12', exams: ['Vitamina D', 'B12'] },
+];
+
+const CHART_COLORS = ['#667eea', '#f7971e', '#38ef7d', '#ff758c', '#764ba2', '#00b4d8'];
+let chartInstances = [];
 
 // ===== CSV URL =====
 function csvUrl(gid) {
@@ -403,30 +712,52 @@ function parseCSV(text) {
 // ===== RENDER TABS =====
 function renderTabs() {
     const nav = document.getElementById('tabsNav');
-    nav.innerHTML = SHEETS.map((sheet, i) => {
-        const active = i === 0 ? ' active' : '';
-        return `<button class="tab-btn${active}" data-index="${i}" onclick="switchTab(${i})">${sheet.name}</button>`;
-    }).join('');
+    let html = '';
+    html += `<button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>`;
+    html += `<button class="tab-btn" onclick="switchTab('evolucao')">Evolução</button>`;
+    html += `<div class="tab-separator"></div>`;
+    SHEETS.forEach((sheet, i) => {
+        html += `<button class="tab-btn" data-sheet="${i}" onclick="switchTab(${i})">${sheet.name}</button>`;
+    });
+    nav.innerHTML = html;
 }
 
 // ===== SWITCH TAB =====
-async function switchTab(index) {
+async function switchTab(tab) {
+    // Destroy old charts
+    chartInstances.forEach(c => c.destroy());
+    chartInstances = [];
+
     // Update active button
-    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', i === index);
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        let isActive = false;
+        if (tab === 'dashboard' && btn.textContent === 'Dashboard') isActive = true;
+        else if (tab === 'evolucao' && btn.textContent === 'Evolução') isActive = true;
+        else if (typeof tab === 'number' && btn.dataset.sheet == tab) isActive = true;
+        btn.classList.toggle('active', isActive);
     });
 
-    activeSheet = index;
-    const sheet = SHEETS[index];
+    activeTab = tab;
     const content = document.getElementById('tabContent');
 
-    // Check cache
+    if (tab === 'dashboard') {
+        renderDashboard();
+        return;
+    }
+    if (tab === 'evolucao') {
+        renderEvolucao();
+        return;
+    }
+
+    // CSV sheet tab
+    const index = tab;
+    const sheet = SHEETS[index];
+
     if (csvCache[sheet.gid]) {
         renderTable(csvCache[sheet.gid], sheet.name);
         return;
     }
 
-    // Show loading
     content.innerHTML = `
         <div class="table-card">
             <div class="loading-container">
@@ -440,19 +771,14 @@ async function switchTab(index) {
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const text = await resp.text();
         const rows = parseCSV(text);
-
-        // Cache it
         csvCache[sheet.gid] = rows;
-
-        // Only render if still on same tab
-        if (activeSheet === index) {
+        if (activeTab === index) {
             renderTable(rows, sheet.name);
         }
-
         showDataSource(true);
     } catch (err) {
         console.warn('Erro ao carregar:', err);
-        if (activeSheet === index) {
+        if (activeTab === index) {
             content.innerHTML = `
                 <div class="table-card">
                     <div class="error-container">
@@ -465,6 +791,195 @@ async function switchTab(index) {
         }
         showDataSource(false);
     }
+}
+
+// ===== RENDER DASHBOARD =====
+function renderDashboard() {
+    const content = document.getElementById('tabContent');
+    let html = '<div class="tab-content">';
+
+    // Alerts
+    html += '<div class="alerts-section"><h3>Alertas — Exames fora da faixa</h3>';
+    DASHBOARD_DATA.alerts.forEach(a => {
+        html += `<div class="alert-item alert-${a.type}">
+            <span class="alert-icon">${a.icon}</span>
+            <span class="alert-name">${a.name}:</span>
+            <span>${a.value}</span>
+            <span class="alert-detail">(${a.ref}) — ${a.detail}</span>
+        </div>`;
+    });
+    html += '</div>';
+
+    // Categories
+    DASHBOARD_DATA.categories.forEach(cat => {
+        html += `<div class="category-section">
+            <div class="category-title">${cat.title}</div>
+            <div class="cards-grid">`;
+        cat.exams.forEach(ex => {
+            const badgeClass = ex.status === 'normal' ? 'badge-normal' : ex.status === 'warning' ? 'badge-warning' : 'badge-danger';
+            const badgeText = ex.status === 'normal' ? 'Normal' : ex.status === 'warning' ? 'Alerta' : 'Crítico';
+            const displayValue = ex.name === 'Plaquetas' ? (ex.value / 1000).toFixed(0) + '.000' : ex.value;
+            html += `<div class="exam-card status-${ex.status}">
+                <div class="card-header">
+                    <span class="card-name">${ex.name}</span>
+                    <span class="card-badge ${badgeClass}">${badgeText}</span>
+                </div>
+                <div class="card-value">${displayValue}<span class="card-unit">${ex.unit}</span></div>
+                <div class="card-ref">Ref: ${ex.ref}</div>
+            </div>`;
+        });
+        html += '</div></div>';
+    });
+
+    html += '</div>';
+    content.innerHTML = html;
+}
+
+// ===== RENDER EVOLUÇÃO =====
+function renderEvolucao() {
+    const content = document.getElementById('tabContent');
+    let html = '<div class="tab-content">';
+
+    // Comparative table
+    html += '<div class="evolution-section"><h3>Tabela Comparativa</h3>';
+    html += '<div class="evo-table-wrap"><table class="evo-table"><thead><tr>';
+    html += '<th>Exame</th>';
+    EVO_DATES.forEach(d => { html += `<th>${d}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    EVO_EXAMS.forEach(exam => {
+        html += '<tr>';
+        html += `<td>${exam.name} <span style="color:#a0aec0;font-weight:400;font-size:0.85em">(${exam.unit})</span></td>`;
+        exam.values.forEach((val, i) => {
+            if (val === null) {
+                html += '<td style="color:#cbd5e0">—</td>';
+            } else {
+                let arrow = '';
+                let cls = '';
+                if (i > 0) {
+                    // Find previous non-null value
+                    let prev = null;
+                    for (let j = i - 1; j >= 0; j--) {
+                        if (exam.values[j] !== null) { prev = exam.values[j]; break; }
+                    }
+                    if (prev !== null && val !== prev) {
+                        const went_up = val > prev;
+                        if (exam.higher_is_worse === true) {
+                            cls = went_up ? 'val-up' : 'val-down';
+                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                        } else if (exam.higher_is_worse === false) {
+                            cls = went_up ? 'val-down' : 'val-up';
+                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                        } else {
+                            cls = 'val-same';
+                            arrow = went_up ? ' <span class="arrow">↑</span>' : ' <span class="arrow">↓</span>';
+                        }
+                    }
+                }
+                const displayVal = exam.name === 'Plaquetas' || exam.name === 'Leucócitos'
+                    ? val.toLocaleString('pt-BR')
+                    : val;
+                html += `<td class="${cls}">${displayVal}${arrow}</td>`;
+            }
+        });
+        html += '</tr>';
+    });
+
+    html += '</tbody></table></div></div>';
+
+    // Charts
+    html += '<div class="evolution-section"><h3>Gráficos de Evolução</h3>';
+    html += '<div class="charts-grid">';
+    CHART_GROUPS.forEach((group, gi) => {
+        html += `<div class="chart-card"><h4>${group.title}</h4><canvas id="chart-${gi}"></canvas></div>`;
+    });
+    html += '</div></div>';
+
+    html += '</div>';
+    content.innerHTML = html;
+
+    // Render charts after DOM update
+    requestAnimationFrame(() => renderCharts());
+}
+
+function renderCharts() {
+    const dateLabels = EVO_DATES;
+
+    CHART_GROUPS.forEach((group, gi) => {
+        const canvas = document.getElementById(`chart-${gi}`);
+        if (!canvas) return;
+
+        const datasets = [];
+        let refMin = null, refMax = null;
+
+        group.exams.forEach((examName, ei) => {
+            const exam = EVO_EXAMS.find(e => e.name === examName);
+            if (!exam) return;
+
+            if (ei === 0) {
+                refMin = exam.refMin;
+                refMax = exam.refMax;
+            }
+
+            datasets.push({
+                label: exam.name,
+                data: exam.values.map(v => v === null ? undefined : v),
+                borderColor: CHART_COLORS[ei % CHART_COLORS.length],
+                backgroundColor: CHART_COLORS[ei % CHART_COLORS.length] + '20',
+                borderWidth: 2.5,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                tension: 0.3,
+                spanGaps: true,
+            });
+        });
+
+        // Reference band as annotation via plugin
+        const refBandPlugin = {
+            id: 'refBand',
+            beforeDraw(chart) {
+                if (refMin === null && refMax === null) return;
+                const { ctx, chartArea: { top, bottom, left, right }, scales: { y } } = chart;
+                ctx.save();
+                ctx.fillStyle = 'rgba(0,0,0,0.04)';
+                const yTop = refMax !== null ? y.getPixelForValue(refMax) : top;
+                const yBottom = refMin !== null ? y.getPixelForValue(refMin) : bottom;
+                ctx.fillRect(left, Math.min(yTop, yBottom), right - left, Math.abs(yBottom - yTop));
+                ctx.restore();
+            }
+        };
+
+        const chart = new Chart(canvas, {
+            type: 'line',
+            data: { labels: dateLabels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: group.exams.length > 1, position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
+                    tooltip: {
+                        backgroundColor: 'white',
+                        titleColor: '#2d3748',
+                        bodyColor: '#4a5568',
+                        borderColor: '#e2e8f0',
+                        borderWidth: 1,
+                        padding: 10,
+                        cornerRadius: 8,
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: '#f0f0f0' },
+                    }
+                }
+            },
+            plugins: [refBandPlugin]
+        });
+        chartInstances.push(chart);
+    });
 }
 
 // ===== RENDER TABLE =====
@@ -490,7 +1005,6 @@ function renderTable(rows, sheetName) {
 
     dataRows.forEach(row => {
         html += '<tr>';
-        // Pad row to match headers length
         for (let i = 0; i < headers.length; i++) {
             const cell = row[i] || '';
             html += `<td>${escapeHTML(cell)}</td>`;
@@ -523,7 +1037,7 @@ function showDataSource(online) {
 
 // ===== INIT =====
 renderTabs();
-switchTab(0);
+switchTab('dashboard');
 </script>
 
 </body>
