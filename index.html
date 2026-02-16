@@ -995,10 +995,17 @@
         /* --- ALERTA PULSANTE --- */
         .alert-pulse {
             animation: alertPulse 2s ease-in-out infinite;
+            border: 2px solid transparent;
         }
         @keyframes alertPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 117, 140, 0); }
-            50% { box-shadow: 0 0 20px 4px rgba(255, 117, 140, 0.3); }
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255, 117, 140, 0);
+                border-color: transparent;
+            }
+            50% {
+                box-shadow: 0 0 25px 8px rgba(255, 117, 140, 0.4);
+                border-color: var(--danger);
+            }
         }
 
         /* --- BARRA DE PROGRESSO GERAL --- */
@@ -2719,6 +2726,7 @@
 
     <script>
         // CONTROLE DAS ABAS
+        var pendingCharts = {};
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -2730,6 +2738,11 @@
                     tabContents.forEach(content => content.classList.remove('active'));
                     const targetId = button.getAttribute('data-target');
                     document.getElementById(targetId).classList.add('active');
+                    // Renderizar gráficos pendentes da aba
+                    if (pendingCharts[targetId]) {
+                        pendingCharts[targetId]();
+                        delete pendingCharts[targetId];
+                    }
                 });
             });
         });
@@ -3009,35 +3022,37 @@
             });
         }
 
-        // GRÁFICO DE COMPOSIÇÃO CORPORAL (BIOIMPEDÂNCIA)
-        const bodyCompCtx = document.getElementById('bodyCompChart');
-        if (bodyCompCtx) {
-            new Chart(bodyCompCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Gordura (40.5%)', 'Massa Muscular (26.2%)', 'Água (~33.3%)'],
-                    datasets: [{
-                        data: [40.5, 26.2, 33.3],
-                        backgroundColor: [
-                            'rgba(245, 87, 108, 0.8)',
-                            'rgba(79, 172, 254, 0.8)',
-                            'rgba(67, 233, 123, 0.8)'
-                        ],
-                        borderColor: ['#f5576c', '#4facfe', '#43e97b'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { font: { size: 14 }, padding: 20 }
+        // GRÁFICO DE COMPOSIÇÃO CORPORAL (BIOIMPEDÂNCIA) - renderizado ao abrir a aba
+        pendingCharts['bioimpedancia'] = function() {
+            var ctx = document.getElementById('bodyCompChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Gordura (40.5%)', 'Massa Muscular (26.2%)', 'Água (~33.3%)'],
+                        datasets: [{
+                            data: [40.5, 26.2, 33.3],
+                            backgroundColor: [
+                                'rgba(245, 87, 108, 0.8)',
+                                'rgba(79, 172, 254, 0.8)',
+                                'rgba(67, 233, 123, 0.8)'
+                            ],
+                            borderColor: ['#f5576c', '#4facfe', '#43e97b'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 14 }, padding: 20 }
+                            }
                         }
                     }
-                }
-            });
-        }
+                });
+            }
+        };
 
         // ANIMAÇÃO DE CONTAGEM NOS CARDS
         function animateValue(el, target, decimals, suffix) {
