@@ -1504,7 +1504,7 @@
                 <div class="alert-content">
                     <h4>Prescrição Nutricional - 09/02/2026</h4>
                     <p><strong>Paciente:</strong> César Augusto de Freitas Azevedo</p>
-                    <p><strong>Peso Atual:</strong> 127kg → <strong>Meta:</strong> 112kg</p>
+                    <p><strong>Peso Atual:</strong> 124kg → <strong>Meta:</strong> 112kg</p>
                     <p><strong>Diagnóstico:</strong> Obesidade / Gastrite / Refluxo / Esteatose hepática grau III</p>
                 </div>
             </div>
@@ -1802,6 +1802,12 @@
                         <div class="weight-label">✅ Pesado</div>
                     </div>
                     <div class="weight-point">
+                        <div class="weight-value recorded">124,0 kg</div>
+                        <div class="weight-dot recorded"></div>
+                        <div class="weight-date">19/02/2026*</div>
+                        <div class="weight-label">✅ Pesado</div>
+                    </div>
+                    <div class="weight-point">
                         <div class="weight-value recorded">127,0 kg</div>
                         <div class="weight-dot recorded"></div>
                         <div class="weight-date">07/02/2026*</div>
@@ -1844,7 +1850,7 @@
                         <div class="weight-label weight-goal-label">🎯 Meta Final</div>
                     </div>
                 </div>
-                <p class="tiny-text">* Pesagem avulsa registrada em 07/02/2026</p>
+                <p class="tiny-text">* Pesagens avulsas: 07/02/2026 (127,0 kg) e 19/02/2026 (124,0 kg)</p>
             </div>
 
             <div class="weight-summary-cards">
@@ -1855,13 +1861,13 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Peso Atual</div>
-                    <div class="value value-primary">127,0 kg</div>
-                    <div class="sub">07/02/2026</div>
+                    <div class="value value-primary">124,0 kg</div>
+                    <div class="sub">19/02/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Já Perdeu</div>
-                    <div class="value value-success">0,4 kg</div>
-                    <div class="sub">Início da jornada!</div>
+                    <div class="value value-success">3,4 kg</div>
+                    <div class="sub">Continue assim! 💪</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Meta (-10%)</div>
@@ -3226,6 +3232,7 @@
                     labels: [
                         '07/02\n(Pesado)',
                         '09/02\n(Bioimpedância)',
+                        '19/02\n(Pesado)',
                         '09/03\nMeta 30d',
                         '09/04\nMeta 60d',
                         '09/05\nMeta 90d',
@@ -3235,7 +3242,7 @@
                     ],
                     datasets: [{
                         label: 'Peso Real (kg)',
-                        data: [127.0, 127.4, null, null, null, null, null, null],
+                        data: [127.0, 127.4, 124.0, null, null, null, null, null, null],
                         borderColor: '#764ba2',
                         backgroundColor: 'rgba(118, 75, 162, 0.2)',
                         borderWidth: 3,
@@ -3248,7 +3255,7 @@
                         spanGaps: false
                     }, {
                         label: 'Meta Projetada (kg)',
-                        data: [null, 127.4, 123, 119, 115, 112, 109, 108],
+                        data: [null, 127.4, null, 123, 119, 115, 112, 109, 108],
                         borderColor: '#667eea',
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         borderWidth: 2,
@@ -3407,7 +3414,7 @@
         // BARRA DE PROGRESSO
         var pesoInicial = 127.4;
         var pesoMeta = 108;
-        var pesoAtual = 127.0;
+        var pesoAtual = 124.0;
         var totalPerder = pesoInicial - pesoMeta;
         var jaPerdeu = pesoInicial - pesoAtual;
         var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
