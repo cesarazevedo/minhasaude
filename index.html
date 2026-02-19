@@ -1783,7 +1783,7 @@
                 <span class="alert-icon">🎯</span>
                 <div class="alert-content">
                     <h4>Meta: Perder 10-15% do peso em 6 meses</h4>
-                    <p>Peso inicial: <strong>127,4 kg</strong> (09/02/2026) → Meta mínima: <strong>~108 kg</strong>. Perda necessária: ~12,7 a 19,1 kg. Ritmo saudável: ~0,8 a 1,2 kg/semana.</p>
+                    <p>Peso inicial: <strong>127,0 kg</strong> (07/02/2026) → Meta mínima: <strong>~108 kg</strong>. Perda necessária: ~12,7 a 19,1 kg. Ritmo saudável: ~0,8 a 1,2 kg/semana.</p>
                 </div>
             </div>
 
@@ -1795,12 +1795,6 @@
             <div class="chart-container">
                 <h3 class="chart-title">📅 Linha do Tempo - Marcações a cada 30 dias</h3>
                 <div class="weight-timeline">
-                    <div class="weight-point">
-                        <div class="weight-value recorded">127,4 kg</div>
-                        <div class="weight-dot recorded"></div>
-                        <div class="weight-date">09/02/2026</div>
-                        <div class="weight-label">✅ Pesado</div>
-                    </div>
                     <div class="weight-point">
                         <div class="weight-value recorded">124,0 kg</div>
                         <div class="weight-dot recorded"></div>
@@ -1850,14 +1844,14 @@
                         <div class="weight-label weight-goal-label">🎯 Meta Final</div>
                     </div>
                 </div>
-                <p class="tiny-text">* Pesagens avulsas: 07/02/2026 (127,0 kg) e 19/02/2026 (124,0 kg)</p>
+                <p class="tiny-text">* Pesagens registradas em balança convencional</p>
             </div>
 
             <div class="weight-summary-cards">
                 <div class="weight-summary-card">
                     <div class="label">Peso Inicial</div>
-                    <div class="value value-danger">127,4 kg</div>
-                    <div class="sub">09/02/2026</div>
+                    <div class="value value-danger">127,0 kg</div>
+                    <div class="sub">07/02/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Peso Atual</div>
@@ -1866,7 +1860,7 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Já Perdeu</div>
-                    <div class="value value-success">3,4 kg</div>
+                    <div class="value value-success">3,0 kg</div>
                     <div class="sub">Continue assim! 💪</div>
                 </div>
                 <div class="weight-summary-card">
@@ -3231,7 +3225,6 @@
                 data: {
                     labels: [
                         '07/02\n(Pesado)',
-                        '09/02\n(Bioimpedância)',
                         '19/02\n(Pesado)',
                         '09/03\nMeta 30d',
                         '09/04\nMeta 60d',
@@ -3242,7 +3235,7 @@
                     ],
                     datasets: [{
                         label: 'Peso Real (kg)',
-                        data: [127.0, 127.4, 124.0, null, null, null, null, null, null],
+                        data: [127.0, 124.0, null, null, null, null, null, null],
                         borderColor: '#764ba2',
                         backgroundColor: 'rgba(118, 75, 162, 0.2)',
                         borderWidth: 3,
@@ -3255,7 +3248,7 @@
                         spanGaps: false
                     }, {
                         label: 'Meta Projetada (kg)',
-                        data: [null, 127.4, null, 123, 119, 115, 112, 109, 108],
+                        data: [127.0, null, 123, 119, 115, 112, 109, 108],
                         borderColor: '#667eea',
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         borderWidth: 2,
@@ -3412,7 +3405,7 @@
         });
 
         // BARRA DE PROGRESSO
-        var pesoInicial = 127.4;
+        var pesoInicial = 127.0;
         var pesoMeta = 108;
         var pesoAtual = 124.0;
         var totalPerder = pesoInicial - pesoMeta;
