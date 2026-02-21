@@ -1504,7 +1504,7 @@
                 <div class="alert-content">
                     <h4>Prescrição Nutricional - 09/02/2026</h4>
                     <p><strong>Paciente:</strong> César Augusto de Freitas Azevedo</p>
-                    <p><strong>Peso Atual:</strong> 124kg → <strong>Meta:</strong> 112kg</p>
+                    <p><strong>Peso Atual:</strong> 122,7kg → <strong>Meta:</strong> 100kg</p>
                     <p><strong>Diagnóstico:</strong> Obesidade / Gastrite / Refluxo / Esteatose hepática grau III</p>
                 </div>
             </div>
@@ -1783,7 +1783,7 @@
                 <span class="alert-icon">🎯</span>
                 <div class="alert-content">
                     <h4>Meta: Perder 10-15% do peso em 6 meses</h4>
-                    <p>Peso inicial: <strong>127,0 kg</strong> (07/02/2026) → Meta mínima: <strong>~108 kg</strong>. Perda necessária: ~12,7 a 19,1 kg. Ritmo saudável: ~0,8 a 1,2 kg/semana.</p>
+                    <p>Peso inicial: <strong>127,0 kg</strong> (07/02/2026) → Meta: <strong>100 kg</strong>. Perda necessária: ~27 kg. Ritmo saudável: ~0,8 a 1,2 kg/semana.</p>
                 </div>
             </div>
 
@@ -1844,9 +1844,21 @@
                         <div class="weight-label">Meta 150 dias</div>
                     </div>
                     <div class="weight-point">
-                        <div class="weight-value weight-goal-value">~108 kg 🏆</div>
-                        <div class="weight-dot weight-goal-dot"></div>
+                        <div class="weight-value target">~106 kg</div>
+                        <div class="weight-dot future"></div>
                         <div class="weight-date">09/08/2026</div>
+                        <div class="weight-label">Meta 180 dias</div>
+                    </div>
+                    <div class="weight-point">
+                        <div class="weight-value target">~103 kg</div>
+                        <div class="weight-dot future"></div>
+                        <div class="weight-date">09/09/2026</div>
+                        <div class="weight-label">Meta 210 dias</div>
+                    </div>
+                    <div class="weight-point">
+                        <div class="weight-value weight-goal-value">100 kg 🏆</div>
+                        <div class="weight-dot weight-goal-dot"></div>
+                        <div class="weight-date">09/10/2026</div>
                         <div class="weight-label weight-goal-label">🎯 Meta Final</div>
                     </div>
                 </div>
@@ -1870,13 +1882,13 @@
                     <div class="sub">Continue assim! 💪</div>
                 </div>
                 <div class="weight-summary-card">
-                    <div class="label">Meta (-10%)</div>
-                    <div class="value value-teal">~108 kg</div>
-                    <div class="sub">Até 09/08/2026</div>
+                    <div class="label">Meta Final</div>
+                    <div class="value value-teal">100 kg</div>
+                    <div class="sub">Até 09/10/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Falta Perder</div>
-                    <div class="value value-warning">14,7 kg</div>
+                    <div class="value value-warning">22,7 kg</div>
                     <div class="sub">Para atingir a meta</div>
                 </div>
                 <div class="weight-summary-card">
@@ -3238,11 +3250,13 @@
                         '09/05\nMeta 90d',
                         '09/06\nMeta 120d',
                         '09/07\nMeta 150d',
-                        '09/08\nMeta 180d'
+                        '09/08\nMeta 180d',
+                        '09/09\nMeta 210d',
+                        '09/10\nMeta Final'
                     ],
                     datasets: [{
                         label: 'Peso Real (kg)',
-                        data: [127.0, 124.0, 122.7, null, null, null, null, null, null],
+                        data: [127.0, 124.0, 122.7, null, null, null, null, null, null, null, null],
                         borderColor: '#764ba2',
                         backgroundColor: 'rgba(118, 75, 162, 0.2)',
                         borderWidth: 3,
@@ -3255,7 +3269,7 @@
                         spanGaps: false
                     }, {
                         label: 'Meta Projetada (kg)',
-                        data: [127.0, null, null, 123, 119, 115, 112, 109, 108],
+                        data: [127.0, null, null, 123, 119, 115, 112, 109, 106, 103, 100],
                         borderColor: '#667eea',
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         borderWidth: 2,
@@ -3268,8 +3282,8 @@
                         tension: 0.3,
                         spanGaps: true
                     }, {
-                        label: 'Meta Final (-10%)',
-                        data: [108, 108, 108, 108, 108, 108, 108, 108, 108],
+                        label: 'Meta Final (100 kg)',
+                        data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
                         borderColor: 'rgba(56, 239, 125, 0.5)',
                         backgroundColor: 'rgba(56, 239, 125, 0.05)',
                         borderWidth: 2,
@@ -3413,7 +3427,7 @@
 
         // BARRA DE PROGRESSO
         var pesoInicial = 127.0;
-        var pesoMeta = 108;
+        var pesoMeta = 100;
         var pesoAtual = 122.7;
         var totalPerder = pesoInicial - pesoMeta;
         var jaPerdeu = pesoInicial - pesoAtual;
