@@ -1469,7 +1469,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Peso (kg)</label>
-                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 121" value="121.0">
+                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 120.4" value="120.4">
                     </div>
                     <div class="form-group">
                         <label>Altura (m)</label>
@@ -1504,7 +1504,7 @@
                 <div class="alert-content">
                     <h4>Prescrição Nutricional - 09/02/2026</h4>
                     <p><strong>Paciente:</strong> César Augusto de Freitas Azevedo</p>
-                    <p><strong>Peso Atual:</strong> 121,0kg → <strong>Meta:</strong> 100kg</p>
+                    <p><strong>Peso Atual:</strong> 120,4kg → <strong>Meta:</strong> 100kg</p>
                     <p><strong>Diagnóstico:</strong> Obesidade / Gastrite / Refluxo / Esteatose hepática grau III</p>
                 </div>
             </div>
@@ -1820,6 +1820,12 @@
                         <div class="weight-label">✅ Pesado</div>
                     </div>
                     <div class="weight-point">
+                        <div class="weight-value recorded">120,4 kg</div>
+                        <div class="weight-dot recorded"></div>
+                        <div class="weight-date">07/03/2026*</div>
+                        <div class="weight-label">✅ Pesado</div>
+                    </div>
+                    <div class="weight-point">
                         <div class="weight-value target">~119 kg</div>
                         <div class="weight-dot future"></div>
                         <div class="weight-date">09/03/2026</div>
@@ -1879,12 +1885,12 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Peso Atual</div>
-                    <div class="value value-primary">121,0 kg</div>
-                    <div class="sub">03/03/2026</div>
+                    <div class="value value-primary">120,4 kg</div>
+                    <div class="sub">07/03/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Já Perdeu</div>
-                    <div class="value value-success">6,0 kg</div>
+                    <div class="value value-success">6,6 kg</div>
                     <div class="sub">Continue assim! 💪</div>
                 </div>
                 <div class="weight-summary-card">
@@ -1894,12 +1900,12 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Falta Perder</div>
-                    <div class="value value-warning">21,0 kg</div>
+                    <div class="value value-warning">20,4 kg</div>
                     <div class="sub">Para atingir a meta</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">IMC Atual</div>
-                    <div class="value value-danger">35,7</div>
+                    <div class="value value-danger">35,55</div>
                     <div class="sub">Meta: &lt;30 (Sair da obesidade)</div>
                 </div>
             </div>
@@ -3252,6 +3258,7 @@
                         '19/02\n(Pesado)',
                         '21/02\n(Pesado)',
                         '03/03\n(Pesado)',
+                        '07/03\n(Pesado)',
                         '09/03\nMeta 30d',
                         '09/04\nMeta 60d',
                         '09/05\nMeta 90d',
@@ -3263,7 +3270,7 @@
                     ],
                     datasets: [{
                         label: 'Peso Real (kg)',
-                        data: [127.0, 124.0, 122.7, 121.0, null, null, null, null, null, null, null, null],
+                        data: [127.0, 124.0, 122.7, 121.0, 120.4, null, null, null, null, null, null, null, null],
                         borderColor: '#764ba2',
                         backgroundColor: 'rgba(118, 75, 162, 0.2)',
                         borderWidth: 3,
@@ -3435,7 +3442,7 @@
         // BARRA DE PROGRESSO
         var pesoInicial = 127.0;
         var pesoMeta = 100;
-        var pesoAtual = 121.0;
+        var pesoAtual = 120.4;
         var totalPerder = pesoInicial - pesoMeta;
         var jaPerdeu = pesoInicial - pesoAtual;
         var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
