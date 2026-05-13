@@ -1379,9 +1379,9 @@
                         <span class="card-title">IMC</span>
                         <span class="card-icon">⚖️</span>
                     </div>
-                    <div class="card-value danger" data-target="35.27" data-decimals="2">0</div>
+                    <div class="card-value danger" data-target="33.50" data-decimals="2">0</div>
                     <p class="card-reference">Referência: 18,5 - 24,9</p>
-                    <span class="status-badge danger">Obesidade Grau II</span>
+                    <span class="status-badge danger">Obesidade Grau I</span>
                 </div>
 
                 <div class="health-card status-danger">
@@ -1456,7 +1456,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Peso (kg)</label>
-                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 117.0" value="117.0">
+                        <input type="number" id="imcWeight" step="0.1" min="30" max="300" placeholder="Ex: 113.4" value="113.4">
                     </div>
                     <div class="form-group">
                         <label>Altura (m)</label>
@@ -1840,6 +1840,12 @@
                         <div class="weight-dot"></div>
                         <div class="weight-date">19/04/2026*</div>
                     </div>
+                    <div class="weight-point">
+                        <div class="weight-value recorded">113,4 kg</div>
+                        <div class="weight-dot recorded"></div>
+                        <div class="weight-date">12/05/2026*</div>
+                        <div class="weight-label">✅ Pesado</div>
+                    </div>
                 </div>
                 <p class="tiny-text">* Pesagens registradas em balança convencional</p>
             </div>
@@ -1852,12 +1858,12 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Peso Atual</div>
-                    <div class="value value-primary">114,7 kg</div>
-                    <div class="sub">19/04/2026</div>
+                    <div class="value value-primary">113,4 kg</div>
+                    <div class="sub">12/05/2026</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Já Perdeu</div>
-                    <div class="value value-success">12,3 kg</div>
+                    <div class="value value-success">13,6 kg</div>
                     <div class="sub">Continue assim! 💪</div>
                 </div>
                 <div class="weight-summary-card">
@@ -1867,12 +1873,12 @@
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">Falta Perder</div>
-                    <div class="value value-warning">4,7 kg</div>
+                    <div class="value value-warning">3,4 kg</div>
                     <div class="sub">Para atingir a meta</div>
                 </div>
                 <div class="weight-summary-card">
                     <div class="label">IMC Atual</div>
-                    <div class="value value-danger">33,88</div>
+                    <div class="value value-danger">33,50</div>
                     <div class="sub">Meta: &lt;30 (Sair da obesidade)</div>
                 </div>
             </div>
@@ -3215,7 +3221,7 @@
         <p class="footer-title">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
         <p class="footer-subtitle">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
         <p class="footer-urgent">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
-        <p class="footer-date">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 15/02/2026</p>
+        <p class="footer-date">Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 13/05/2026</p>
     </footer>
 
     <script>
@@ -3409,11 +3415,12 @@
                         '09/03\n(Pesado)',
                         '17/03\n(Pesado)',
                         '18/04\n(Pesado)',
-                        '19/04\n(Pesado)'
+                        '19/04\n(Pesado)',
+                        '12/05\n(Pesado)'
                     ],
                     datasets: [{
                         label: 'Peso Real (kg)',
-                        data: [127.0, 124.0, 122.7, 121.0, 120.4, 119.4, 117.0, 115.0, 114.7],
+                        data: [127.0, 124.0, 122.7, 121.0, 120.4, 119.4, 117.0, 115.0, 114.7, 113.4],
                         borderColor: '#764ba2',
                         backgroundColor: 'rgba(118, 75, 162, 0.2)',
                         borderWidth: 3,
@@ -3426,7 +3433,7 @@
                         spanGaps: false
                     }, {
                         label: 'Meta Final (110 kg)',
-                        data: [110, 110, 110, 110, 110, 110, 110, 110, 110],
+                        data: [110, 110, 110, 110, 110, 110, 110, 110, 110, 110],
                         borderColor: 'rgba(56, 239, 125, 0.5)',
                         backgroundColor: 'rgba(56, 239, 125, 0.05)',
                         borderWidth: 2,
@@ -3616,7 +3623,7 @@
         // BARRA DE PROGRESSO
         var pesoInicial = 127.0;
         var pesoMeta = 100;
-        var pesoAtual = 117.0;
+        var pesoAtual = 113.4;
         var totalPerder = pesoInicial - pesoMeta;
         var jaPerdeu = pesoInicial - pesoAtual;
         var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
