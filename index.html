@@ -1337,6 +1337,7 @@
             <button class="tab-btn" data-target="hemograma">🩸 Hemograma</button>
             <button class="tab-btn" data-target="endoscopia">🔍 Endoscopia</button>
             <button class="tab-btn" data-target="ressonancia">🧲 Ressonância</button>
+            <button class="tab-btn" data-target="mapa">🩺 MAPA</button>
             <button class="tab-btn" data-target="medicamentos">💊 Medicamentos</button>
         </nav>
 
@@ -2947,6 +2948,164 @@
             </div>
         </section>
 
+        <!-- ABA: MAPA -->
+        <section id="mapa" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">🩺</span>
+                <h2>MAPA — Monitorização Ambulatorial da Pressão Arterial</h2>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">✅</span>
+                <div class="alert-content">
+                    <h4>CONCLUSÃO: Pressão Arterial Normal nas 24 Horas</h4>
+                    <p>Comportamento <strong>normal</strong> das pressões sistólica e diastólica baseado nas médias de 24 horas, vigília e sono. Exame realizado de <strong>04/05/2026</strong> a <strong>05/05/2026</strong>.</p>
+                    <p class="paragraph-mt">📍 Solicitante: Dr. Paulo Roberto Davim — NATAL COR &nbsp;|&nbsp; Laudo: Dr. Domingos Santana (CRM 3756)</p>
+                </div>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-content">
+                    <h4>Atenção: Descenso Noturno Sistólico Ausente (Padrão Non-Dipper)</h4>
+                    <p>A pressão sistólica reduziu apenas <strong>7%</strong> durante o sono — abaixo dos 10% considerados normais. Esse padrão <em>"non-dipper"</em> pode estar associado a maior risco cardiovascular e requer acompanhamento cardiológico.</p>
+                    <p class="paragraph-mt">✅ Descenso diastólico <strong>presente</strong>: 17% (dentro do esperado: 10–20%)</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📊 Médias de Pressão Arterial</h3>
+            <div class="cards-grid mb-30">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PA 24 Horas</span>
+                        <span class="card-icon">🕐</span>
+                    </div>
+                    <div class="card-value normal">107/74</div>
+                    <p class="card-reference">mmHg — Normal: &lt;130/80</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PA Vigília</span>
+                        <span class="card-icon">☀️</span>
+                    </div>
+                    <div class="card-value normal">109/77</div>
+                    <p class="card-reference">mmHg — Normal: &lt;135/85</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PA Sono</span>
+                        <span class="card-icon">🌙</span>
+                    </div>
+                    <div class="card-value normal">101/63</div>
+                    <p class="card-reference">mmHg — Normal: &lt;120/70</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">PA Matinal</span>
+                        <span class="card-icon">🌅</span>
+                    </div>
+                    <div class="card-value normal">106/80</div>
+                    <p class="card-reference">Ascenso matinal: +12 mmHg</p>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">📊 Pressão Arterial: Paciente vs Valores Normais (mmHg)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="mapaChart"></canvas>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📉 Descenso Noturno e Carga Pressórica</h3>
+            <div class="cards-grid mb-30">
+                <div class="health-card status-warning">
+                    <div class="card-header">
+                        <span class="card-title">Descenso Sistólico</span>
+                        <span class="card-icon">📉</span>
+                    </div>
+                    <div class="card-value warning">7%</div>
+                    <p class="card-reference">Esperado: ≥10%</p>
+                    <span class="status-badge warning">⚠ Ausente</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Descenso Diastólico</span>
+                        <span class="card-icon">📉</span>
+                    </div>
+                    <div class="card-value normal">17%</div>
+                    <p class="card-reference">Esperado: 10–20%</p>
+                    <span class="status-badge normal">✓ Presente</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Carga Pressórica Vigília</span>
+                        <span class="card-icon">📋</span>
+                    </div>
+                    <div class="card-value normal">2% / 17%</div>
+                    <p class="card-reference">Sistólica / Diastólica — Normal: &lt;50%</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Carga Pressórica Sono</span>
+                        <span class="card-icon">📋</span>
+                    </div>
+                    <div class="card-value normal">0% / 7%</div>
+                    <p class="card-reference">Sistólica / Diastólica — Normal: &lt;50%</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📋 Valores Máximos Registrados</h3>
+            <div class="cards-grid mb-30">
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Pico Sistólico Vigília</span>
+                        <span class="card-icon">⬆️</span>
+                    </div>
+                    <div class="card-value">142 mmHg</div>
+                    <p class="card-reference">Registrado às 12:00h</p>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Pico Diastólico Vigília</span>
+                        <span class="card-icon">⬆️</span>
+                    </div>
+                    <div class="card-value">117 mmHg</div>
+                    <p class="card-reference">Registrado às 12:00h</p>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Pico Sistólico Sono</span>
+                        <span class="card-icon">🌙</span>
+                    </div>
+                    <div class="card-value">118 mmHg</div>
+                    <p class="card-reference">Registrado às 02:03h</p>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-header">
+                        <span class="card-title">Pico Diastólico Sono</span>
+                        <span class="card-icon">🌙</span>
+                    </div>
+                    <div class="card-value">75 mmHg</div>
+                    <p class="card-reference">Registrado às 01:00h</p>
+                </div>
+            </div>
+
+            <div class="alert-box alert-tip">
+                <span class="alert-icon">ℹ️</span>
+                <div class="alert-content">
+                    <h4>Dados Técnicos do Exame</h4>
+                    <p>Total de medições: <strong>83</strong> &nbsp;|&nbsp; Válidas: <strong>62 (75%)</strong> &nbsp;|&nbsp; Qualidade técnica: Regular &nbsp;|&nbsp; Duração: 22h22min</p>
+                    <p class="paragraph-mt">Desvio padrão total: <strong>11,4 / 11,7 mmHg</strong> &nbsp;|&nbsp; Vigília: <strong>11,7 / 11,3 mmHg</strong> &nbsp;|&nbsp; Sono: <strong>7,9 / 6,2 mmHg</strong></p>
+                    <p class="paragraph-mt">Paciente assintomático durante todo o exame. Peso no exame: <strong>114 kg</strong>.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- ABA: MEDICAMENTOS E CONSULTAS -->
         <section id="medicamentos" class="tab-content">
             <div class="section-header">
@@ -3375,6 +3534,51 @@
                     }
                 });
             }
+        }
+
+        // GRÁFICO DE MAPA (Pressão Arterial Ambulatorial)
+        const mapaCtx = document.getElementById('mapaChart');
+        if(mapaCtx) {
+            new Chart(mapaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['PA 24h — Sistólica', 'PA 24h — Diastólica', 'Vigília — Sistólica', 'Vigília — Diastólica', 'Sono — Sistólica', 'Sono — Diastólica'],
+                    datasets: [{
+                        label: 'Paciente (mmHg)',
+                        data: [107, 74, 109, 77, 101, 63],
+                        backgroundColor: 'rgba(102, 126, 234, 0.75)',
+                        borderColor: '#667eea',
+                        borderWidth: 2,
+                        borderRadius: 5
+                    }, {
+                        label: 'Limite Normal (mmHg)',
+                        data: [130, 80, 135, 85, 120, 70],
+                        backgroundColor: 'rgba(56, 239, 125, 0.35)',
+                        borderColor: '#38ef7d',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'Todos os valores do paciente estão dentro dos limites normais'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 150,
+                            title: { display: true, text: 'Pressão Arterial (mmHg)' }
+                        }
+                    }
+                }
+            });
         }
 
         // ANIMAÇÃO DE CONTAGEM NOS CARDS
