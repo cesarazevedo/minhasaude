@@ -1133,6 +1133,22 @@
             color: #a0aec0;
         }
 
+        /* --- DESCRIÇÃO DOS EXAMES --- */
+        .card-description {
+            font-size: 0.78em;
+            color: #718096;
+            margin-top: 6px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            font-style: italic;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 6px;
+        }
+        body.dark-mode .card-description {
+            color: #a0aec0;
+            border-top-color: #4a5568;
+        }
+
         /* --- ANIMAÇÃO DE CONTAGEM NOS CARDS --- */
         .card-value[data-target] {
             transition: color 0.3s ease;
@@ -2236,6 +2252,7 @@
                     </div>
                     <div class="card-value normal">155</div>
                     <p class="card-reference">Referência: &lt;190 mg/dL</p>
+                    <p class="card-description">Soma de todo o colesterol no sangue. Necessário para produzir hormônios, vitamina D e ácidos biliares.</p>
                     <span class="status-badge normal">✓ Excelente</span>
                 </div>
 
@@ -2246,6 +2263,7 @@
                     </div>
                     <div class="card-value danger">32</div>
                     <p class="card-reference">Referência: >40 mg/dL</p>
+                    <p class="card-description">Remove o excesso de colesterol dos vasos e o leva ao fígado para eliminação. Quanto maior, melhor para o coração.</p>
                     <span class="status-badge danger">✗ Muito Baixo</span>
                 </div>
 
@@ -2256,6 +2274,7 @@
                     </div>
                     <div class="card-value normal">104.2</div>
                     <p class="card-reference">Referência: &lt;130 mg/dL</p>
+                    <p class="card-description">Transporta colesterol para os tecidos. Em excesso, deposita-se nas paredes das artérias causando aterosclerose.</p>
                     <span class="status-badge normal">✓ Ótimo</span>
                 </div>
 
@@ -2266,6 +2285,7 @@
                     </div>
                     <div class="card-value normal">18.8</div>
                     <p class="card-reference">Referência: ≤30 mg/dL</p>
+                    <p class="card-description">Transporta triglicerídeos no sangue. Precursor do LDL; calculado a partir dos triglicerídeos.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2276,6 +2296,7 @@
                     </div>
                     <div class="card-value normal">94</div>
                     <p class="card-reference">Referência: &lt;150 mg/dL</p>
+                    <p class="card-description">Gorduras no sangue usadas como reserva de energia. Em excesso aumentam risco cardiovascular e de pancreatite.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2286,6 +2307,7 @@
                     </div>
                     <div class="card-value warning">47.8</div>
                     <p class="card-reference">Referência: &lt;30 mg/dL</p>
+                    <p class="card-description">Variante genética do LDL, mais aderente às paredes vasculares. Fator de risco cardiovascular independente que não muda com dieta.</p>
                     <span class="status-badge warning">⚠ Elevada</span>
                 </div>
             </div>
@@ -2314,6 +2336,7 @@
                     </div>
                     <div class="card-value normal">92</div>
                     <p class="card-reference">Referência: 70-99 mg/dL</p>
+                    <p class="card-description">Nível de açúcar no sangue após 8h de jejum. Avalia risco de pré-diabetes e diabetes mellitus.</p>
                     <span class="status-badge normal">✓ Normalizada!</span>
                 </div>
 
@@ -2324,6 +2347,7 @@
                     </div>
                     <div class="card-value normal">5.2%</div>
                     <p class="card-reference">Referência: &lt;5.7%</p>
+                    <p class="card-description">Reflete a média do açúcar no sangue dos últimos 90 dias. O "histórico" do controle glicêmico.</p>
                     <span class="status-badge normal">✓ Excelente</span>
                 </div>
 
@@ -2334,6 +2358,7 @@
                     </div>
                     <div class="card-value normal">16.8</div>
                     <p class="card-reference">µU/mL — Ref: 2,6-24,9</p>
+                    <p class="card-description">Hormônio que regula a entrada de glicose nas células. Elevado em jejum indica resistência à insulina.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2347,6 +2372,7 @@
                     </div>
                     <div class="card-value normal">33</div>
                     <p class="card-reference">Ref: 19,3-43 mg/dL</p>
+                    <p class="card-description">Produto final do metabolismo de proteínas, eliminado pelos rins. Avalia a função renal e o consumo proteico.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2357,6 +2383,7 @@
                     </div>
                     <div class="card-value normal">1.09</div>
                     <p class="card-reference">Ref: 0,66-1,25 mg/dL</p>
+                    <p class="card-description">Resíduo do metabolismo muscular filtrado pelos rins. Elevada indica que os rins estão com dificuldade de filtrar.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2367,6 +2394,7 @@
                     </div>
                     <div class="card-value normal">79.5</div>
                     <p class="card-reference">ml/min/1,73m²</p>
+                    <p class="card-description">Estima quanto sangue os rins filtram por minuto. Quanto maior o valor, melhor a saúde renal. Normal: acima de 90.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2377,6 +2405,7 @@
                     </div>
                     <div class="card-value normal">17</div>
                     <p class="card-reference">Ref: 17-59 U/L</p>
+                    <p class="card-description">Enzima presente no fígado e nos músculos. Elevada indica lesão hepática, muscular ou cardíaca.</p>
                     <span class="status-badge normal">✓ Excelente ↓</span>
                 </div>
 
@@ -2387,6 +2416,7 @@
                     </div>
                     <div class="card-value normal">23</div>
                     <p class="card-reference">Ref: &lt;50 U/L</p>
+                    <p class="card-description">Enzima mais específica do fígado que o TGO. É o principal marcador de inflamação e lesão hepática.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2397,6 +2427,7 @@
                     </div>
                     <div class="card-value normal">32</div>
                     <p class="card-reference">Ref: 15-73 U/L</p>
+                    <p class="card-description">Enzima dos ductos biliares e fígado. Muito sensível ao álcool e a doenças do fígado e das vias biliares.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2407,6 +2438,7 @@
                     </div>
                     <div class="card-value normal">47</div>
                     <p class="card-reference">Ref: 38-126 U/L</p>
+                    <p class="card-description">Enzima presente no fígado, ossos e intestino. Elevada pode indicar doenças hepáticas, ósseas ou biliares.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2417,6 +2449,7 @@
                     </div>
                     <div class="card-value normal">162</div>
                     <p class="card-reference">Ref: 120-246 U/L</p>
+                    <p class="card-description">Enzima presente em vários tecidos. Elevada indica lesão celular como infarto, anemia hemolítica ou hepatite.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2430,6 +2463,7 @@
                     </div>
                     <div class="card-value normal">0.98</div>
                     <p class="card-reference">Ref: 0,2-1,3 mg/dL</p>
+                    <p class="card-description">Pigmento produzido na destruição dos glóbulos vermelhos. Soma das frações direta e indireta. Elevada causa icterícia (pele e olhos amarelos).</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2440,6 +2474,7 @@
                     </div>
                     <div class="card-value warning">0.34</div>
                     <p class="card-reference">Ref: ≤0,3 mg/dL</p>
+                    <p class="card-description">Fração já processada pelo fígado, pronta para ser eliminada pela bile. Elevada indica problema no fígado ou obstrução das vias biliares.</p>
                     <span class="status-badge warning">⚠ Leve elevação</span>
                 </div>
 
@@ -2450,6 +2485,7 @@
                     </div>
                     <div class="card-value normal">0.64</div>
                     <p class="card-reference">Ref: ≤1,1 mg/dL</p>
+                    <p class="card-description">Fração ainda não processada pelo fígado. Elevada indica destruição excessiva de glóbulos vermelhos (anemia hemolítica).</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2463,6 +2499,7 @@
                     </div>
                     <div class="card-value normal">5.8</div>
                     <p class="card-reference">Ref: 3,5-7,2 mg/dL</p>
+                    <p class="card-description">Produto da degradação de purinas (carnes, frutos do mar, bebidas alcoólicas). Em excesso causa gota e cálculos renais.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2473,6 +2510,7 @@
                     </div>
                     <div class="card-value normal">225.7</div>
                     <p class="card-reference">Ref: 18,2-341,2 ng/mL</p>
+                    <p class="card-description">Proteína que armazena ferro no organismo. Indica as reservas de ferro. Baixa = anemia; muito alta = inflamação ou sobrecarga de ferro.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2483,6 +2521,7 @@
                     </div>
                     <div class="card-value normal">0.90</div>
                     <p class="card-reference">Ref: até 5,0 mg/L</p>
+                    <p class="card-description">Marcador de inflamação sistêmica produzido pelo fígado. Elevada em infecções, inflamações crônicas e doenças cardiovasculares.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2493,6 +2532,7 @@
                     </div>
                     <div class="card-value normal">327</div>
                     <p class="card-reference">Ref: 220-496 mg/dL</p>
+                    <p class="card-description">Proteína essencial para a coagulação do sangue. Convertida em fibrina para formar o coágulo. Elevada também indica inflamação.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2503,6 +2543,7 @@
                     </div>
                     <div class="card-value normal">0.46</div>
                     <p class="card-reference">Ref: &lt;2,5 ng/mL</p>
+                    <p class="card-description">Antígeno prostático específico. Proteína produzida pela próstata usada no rastreamento do câncer de próstata e hiperplasia benigna.</p>
                     <span class="status-badge normal">✓ Excelente</span>
                 </div>
 
@@ -2513,6 +2554,7 @@
                     </div>
                     <div class="card-value normal">24%</div>
                     <p class="card-reference">Ref: ≥15%</p>
+                    <p class="card-description">Relação entre PSA livre e total. Valores baixos (&lt;15%) aumentam suspeita de câncer; valores altos favorecem hiperplasia benigna.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2534,6 +2576,7 @@
                     </div>
                     <div class="card-value normal">2.650</div>
                     <p class="card-reference">Ref: 0,300-3,180 µUI/mL</p>
+                    <p class="card-description">Hormônio da hipófise que controla a tireoide. TSH alto = hipotireoidismo (tireoide lenta); TSH baixo = hipertireoidismo (tireoide acelerada).</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2544,6 +2587,7 @@
                     </div>
                     <div class="card-value normal">1.31</div>
                     <p class="card-reference">Ref: 0,93-1,70 ng/dL</p>
+                    <p class="card-description">Hormônio tireoidiano ativo que circula livremente. Regula o metabolismo, temperatura corporal, frequência cardíaca e energia.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2557,6 +2601,7 @@
                     </div>
                     <div class="card-value normal">319</div>
                     <p class="card-reference">Ref: 132-813 ng/dL</p>
+                    <p class="card-description">Principal hormônio sexual masculino. Regula libido, massa muscular, força, densidade óssea, humor e energia.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2567,6 +2612,7 @@
                     </div>
                     <div class="card-value normal">8.95</div>
                     <p class="card-reference">Ref: 3,4-24,6 ng/dL</p>
+                    <p class="card-description">Fração da testosterona disponível para agir nos tecidos. Clinicamente mais relevante que a total para avaliar sintomas.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2577,6 +2623,7 @@
                     </div>
                     <div class="card-value warning">16.7</div>
                     <p class="card-reference">Ref: 13,2-89,5 nmol/L</p>
+                    <p class="card-description">Proteína que "sequestra" a testosterona no sangue, tornando-a inativa. SHBG baixo (como no excesso de gordura) aumenta a testosterona livre.</p>
                     <span class="status-badge warning">⚠ Limite inferior</span>
                 </div>
             </div>
@@ -2605,6 +2652,7 @@
                     </div>
                     <div class="card-value warning">22.4</div>
                     <p class="card-reference">Ideal: 30-60 ng/mL</p>
+                    <p class="card-description">Essencial para absorção de cálcio, saúde dos ossos, sistema imunológico, humor e prevenção de doenças crônicas. Produzida pela exposição solar.</p>
                     <span class="status-badge warning">⚠ Abaixo do ideal</span>
                 </div>
 
@@ -2615,6 +2663,7 @@
                     </div>
                     <div class="card-value warning">192</div>
                     <p class="card-reference">Ref: 130-868 pg/mL</p>
+                    <p class="card-description">Fundamental para formação das hemácias, funcionamento do sistema nervoso e síntese de DNA. Encontrada apenas em alimentos de origem animal.</p>
                     <span class="status-badge warning">⚠ Limite inferior</span>
                 </div>
 
@@ -2625,6 +2674,7 @@
                     </div>
                     <div class="card-value normal">0.84</div>
                     <p class="card-reference">Ref: 0,3-0,7 mg/L</p>
+                    <p class="card-description">Importante para a visão (especialmente noturna), sistema imune, saúde da pele e mucosas, e desenvolvimento celular.</p>
                     <span class="status-badge normal">✓ Adequado</span>
                 </div>
             </div>
@@ -2654,6 +2704,7 @@
                     </div>
                     <div class="card-value normal">139</div>
                     <p class="card-reference">Ref: 137-145 mmol/L</p>
+                    <p class="card-description">Principal eletrólito do líquido extracelular. Regula pressão osmótica, volume sanguíneo, pressão arterial e equilíbrio hídrico do corpo.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2664,6 +2715,7 @@
                     </div>
                     <div class="card-value normal">4.40</div>
                     <p class="card-reference">Ref: 3,5-5,1 mmol/L</p>
+                    <p class="card-description">Principal eletrólito intracelular. Essencial para a função cardíaca (ritmo), contração muscular e transmissão dos impulsos nervosos.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2674,6 +2726,7 @@
                     </div>
                     <div class="card-value normal">105</div>
                     <p class="card-reference">Ref: 98-107 mmol/L</p>
+                    <p class="card-description">Eletrólito que acompanha o sódio. Fundamental para o equilíbrio ácido-base do sangue e para a produção do suco gástrico (HCl).</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2684,6 +2737,7 @@
                     </div>
                     <div class="card-value normal">9.2</div>
                     <p class="card-reference">Ref: 8,4-10,2 mg/dL</p>
+                    <p class="card-description">Mineral mais abundante no corpo. Essencial para a saúde dos ossos e dentes, contração muscular, coagulação e transmissão nervosa.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2694,6 +2748,7 @@
                     </div>
                     <div class="card-value normal">3.10</div>
                     <p class="card-reference">Ref: 2,5-4,5 mg/dL</p>
+                    <p class="card-description">Trabalha em parceria com o cálcio na formação dos ossos. Também é parte do ATP, a "moeda de energia" de todas as células do corpo.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2704,6 +2759,7 @@
                     </div>
                     <div class="card-value warning">1.8</div>
                     <p class="card-reference">Ref: 1,8-2,6 mg/dL</p>
+                    <p class="card-description">Cofator de mais de 300 reações enzimáticas. Essencial para função muscular, nervosa, cardíaca, qualidade do sono e controle do açúcar.</p>
                     <span class="status-badge warning">⚠ Limite inferior</span>
                 </div>
             </div>
@@ -2733,6 +2789,7 @@
                     </div>
                     <div class="card-value normal">5.20</div>
                     <p class="card-reference">Ref: 4,5-5,5 milhões/mm³</p>
+                    <p class="card-description">Glóbulos vermelhos responsáveis por transportar oxigênio dos pulmões para todos os tecidos e órgãos do corpo.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2743,6 +2800,7 @@
                     </div>
                     <div class="card-value normal">15.6</div>
                     <p class="card-reference">Ref: 13-17 g/dL</p>
+                    <p class="card-description">Proteína dentro dos glóbulos vermelhos que carrega o oxigênio. Valor baixo indica anemia; muito alto pode indicar desidratação.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2753,6 +2811,7 @@
                     </div>
                     <div class="card-value normal">46.3%</div>
                     <p class="card-reference">Ref: 40-50%</p>
+                    <p class="card-description">Percentual do volume sanguíneo ocupado pelos glóbulos vermelhos. Baixo = anemia; alto = desidratação ou policitemia.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2763,6 +2822,7 @@
                     </div>
                     <div class="card-value normal">89.1</div>
                     <p class="card-reference">Ref: 83-101 fl</p>
+                    <p class="card-description">Volume Corpuscular Médio — tamanho médio dos glóbulos vermelhos. Ajuda a classificar o tipo de anemia (micro, normo ou macrocitose).</p>
                     <span class="status-badge normal">✓ Normocitose</span>
                 </div>
 
@@ -2773,6 +2833,7 @@
                     </div>
                     <div class="card-value normal">30.0</div>
                     <p class="card-reference">Ref: 27-32 pg</p>
+                    <p class="card-description">Hemoglobina Corpuscular Média — quantidade de hemoglobina em cada glóbulo vermelho. Avalia se as células estão bem "carregadas" de oxigênio.</p>
                     <span class="status-badge normal">✓ Normocromia</span>
                 </div>
 
@@ -2783,6 +2844,7 @@
                     </div>
                     <div class="card-value normal">12.6%</div>
                     <p class="card-reference">Ref: 11,6-14%</p>
+                    <p class="card-description">Amplitude de distribuição dos glóbulos vermelhos — mede a variação de tamanho entre eles. Elevado indica mistura de células grandes e pequenas.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
@@ -2796,6 +2858,7 @@
                     </div>
                     <div class="card-value normal">7.020</div>
                     <p class="card-reference">Ref: 4.000-10.000/mm³</p>
+                    <p class="card-description">Glóbulos brancos — as células de defesa do sistema imunológico. Alto pode indicar infecção; baixo indica imunossupressão.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2806,6 +2869,7 @@
                     </div>
                     <div class="card-value normal">4.493</div>
                     <p class="card-reference">Ref: 2.000-7.000/mm³</p>
+                    <p class="card-description">Principal célula de defesa contra bactérias e fungos. Os primeiros a chegar ao local de uma infecção para destruir os invasores.</p>
                     <span class="status-badge normal">✓ 64%</span>
                 </div>
 
@@ -2816,6 +2880,7 @@
                     </div>
                     <div class="card-value normal">1.334</div>
                     <p class="card-reference">Ref: 1.000-3.000/mm³</p>
+                    <p class="card-description">Células que produzem anticorpos (linfócitos B) e destroem vírus e células tumorais (linfócitos T). Base da imunidade adaptativa.</p>
                     <span class="status-badge normal">✓ 19%</span>
                 </div>
 
@@ -2826,6 +2891,7 @@
                     </div>
                     <div class="card-value normal">491</div>
                     <p class="card-reference">Ref: 200-1.000/mm³</p>
+                    <p class="card-description">Células que "comem" (fagocitam) bactérias, células mortas e debris celulares. Nos tecidos se transformam em macrófagos.</p>
                     <span class="status-badge normal">✓ 7%</span>
                 </div>
 
@@ -2836,6 +2902,7 @@
                     </div>
                     <div class="card-value normal">632</div>
                     <p class="card-reference">Ref: 0-660/mm³</p>
+                    <p class="card-description">Combatem parasitas intestinais e participam das reações alérgicas. Elevados em alergias, asma ou infestações parasitárias.</p>
                     <span class="status-badge normal">✓ 9%</span>
                 </div>
 
@@ -2846,6 +2913,7 @@
                     </div>
                     <div class="card-value normal">70</div>
                     <p class="card-reference">Ref: 0-72/mm³</p>
+                    <p class="card-description">O leucócito menos comum. Libera histamina e heparina nas reações alérgicas e inflamatórias. Papel na resposta imune imediata.</p>
                     <span class="status-badge normal">✓ 1%</span>
                 </div>
             </div>
@@ -2859,6 +2927,7 @@
                     </div>
                     <div class="card-value normal">184.000</div>
                     <p class="card-reference">Ref: 150.000-400.000/mm³</p>
+                    <p class="card-description">Fragmentos celulares essenciais para a coagulação do sangue e cicatrização. Baixas causam sangramentos; altas aumentam risco de trombose.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
 
@@ -2869,6 +2938,7 @@
                     </div>
                     <div class="card-value normal">9.70</div>
                     <p class="card-reference">Ref: 9-12 fl</p>
+                    <p class="card-description">Tamanho médio das plaquetas. Plaquetas maiores são mais jovens e mais ativas. Elevado pode indicar destruição acelerada de plaquetas.</p>
                     <span class="status-badge normal">✓ Normal</span>
                 </div>
             </div>
