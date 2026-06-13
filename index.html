@@ -7,128 +7,197 @@
     <meta name="author" content="César Augusto de Freitas Azevedo">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
     <title>Dashboard Saúde Completo - César Augusto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* --- RESET E BASE --- */
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --success: #38ef7d;
-            --warning: #f7971e;
-            --danger: #ff758c;
-            --bg-light: #f4f7fe;
-            --text-dark: #2d3748;
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-light: #f1f5f9;
+            --text-dark: #1e293b;
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #94a3b8;
+            --sidebar-active: #3b82f6;
+            --sidebar-hover: #1e293b;
+            --sidebar-width: 260px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-light);
             color: var(--text-dark);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
         }
 
-        /* --- HEADER SUPERIOR --- */
-        .top-header {
-            background: white;
-            padding: 15px 30px;
+        /* --- LAYOUT PRINCIPAL --- */
+        .app-layout {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            z-index: 10;
+            min-height: 100vh;
         }
-        .brand {
-            font-size: 1.5em;
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            scrollbar-width: thin;
+            scrollbar-color: #1e293b transparent;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+
+        .sidebar-brand {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid #1e293b;
+        }
+        .sidebar-brand .brand-logo {
+            font-size: 1.3em;
             font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: white;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .brand-icons {
-            font-size: 1.2em;
+        .sidebar-brand .brand-logo span { font-size: 1.3em; }
+        .sidebar-brand .brand-sub {
+            font-size: 0.75em;
+            color: var(--sidebar-text);
+            margin-top: 4px;
+            padding-left: 2px;
         }
-        .brand-text {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .sidebar-section-label {
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 20px 20px 8px;
         }
-        
-        .patient-info-header {
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .sidebar-nav-item {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            padding: 10px 20px;
+            color: var(--sidebar-text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-nav-item:hover {
+            background: var(--sidebar-hover);
+            color: #cbd5e1;
+        }
+        .sidebar-nav-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--sidebar-active);
+            border-left-color: var(--sidebar-active);
+        }
+        .sidebar-nav-item .nav-icon { font-size: 1.1em; width: 20px; text-align: center; }
+        .sidebar-nav-item .nav-label { flex: 1; }
+
+        .sidebar-patient {
+            padding: 16px 20px;
+            border-top: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .patient-avatar {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 1.2em;
+            font-weight: 700;
+            font-size: 0.9em;
+            flex-shrink: 0;
         }
-        .patient-details h3 {
+        .patient-info-sidebar .patient-name {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.2;
+        }
+        .patient-info-sidebar .patient-meta {
+            font-size: 0.75em;
+            color: var(--sidebar-text);
+        }
+
+        /* --- ÁREA PRINCIPAL --- */
+        .main-area {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- TOPBAR --- */
+        .topbar {
+            background: white;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .topbar-title {
+            font-family: 'Poppins', sans-serif;
             font-size: 1.1em;
+            font-weight: 600;
             color: var(--text-dark);
         }
-        .patient-details p {
-            font-size: 0.85em;
-            color: #718096;
-        }
+        .topbar-title span { color: var(--primary); }
+        .topbar-actions { display: flex; align-items: center; gap: 10px; }
 
         /* --- CONTAINER PRINCIPAL --- */
         .main-container {
             flex: 1;
-            padding: 30px;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
+            padding: 28px 32px;
         }
 
-        /* NAVEGAÇÃO POR ABAS */
-        .tabs-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 2px;
-            flex-wrap: wrap;
-        }
+        /* NAVEGAÇÃO POR ABAS (sidebar items) */
+        .tabs-nav { display: none; }
         .tab-btn {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            font-size: 1em;
-            font-weight: 600;
-            color: #718096;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s;
-            border-radius: 8px 8px 0 0;
-        }
-        .tab-btn:hover { 
-            color: var(--primary); 
-            background: rgba(102, 126, 234, 0.05); 
-        }
-        .tab-btn.active {
-            color: var(--primary);
-            background: white;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 4px 4px 0 0;
+            display: none;
         }
 
         /* CONTEÚDO DAS ABAS */
@@ -164,9 +233,9 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
         
-        .health-card.status-normal { border-left-color: var(--success); }
-        .health-card.status-warning { border-left-color: var(--warning); }
-        .health-card.status-danger { border-left-color: var(--danger); }
+        .health-card.status-normal { border-left-color: #10b981; }
+        .health-card.status-warning { border-left-color: #f59e0b; }
+        .health-card.status-danger { border-left-color: #ef4444; }
         
         .card-header {
             display: flex;
@@ -188,9 +257,9 @@
             font-weight: 700;
             margin: 10px 0;
         }
-        .card-value.normal { color: var(--success); }
-        .card-value.warning { color: var(--warning); }
-        .card-value.danger { color: var(--danger); }
+        .card-value.normal { color: #059669; }
+        .card-value.warning { color: #d97706; }
+        .card-value.danger { color: #dc2626; }
         
         .card-reference {
             font-size: 0.85em;
@@ -207,16 +276,16 @@
             text-transform: uppercase;
         }
         .status-badge.normal {
-            background: rgba(56, 239, 125, 0.15);
-            color: #11998e;
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
         }
         .status-badge.warning {
-            background: rgba(247, 151, 30, 0.15);
-            color: #f7971e;
+            background: rgba(245, 158, 11, 0.15);
+            color: #d97706;
         }
         .status-badge.danger {
-            background: rgba(255, 117, 140, 0.15);
-            color: #ff758c;
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
         }
 
         /* --- BIOIMPEDÂNCIA VISUAL --- */
@@ -628,7 +697,7 @@
         }
 
         /* --- RESPONSIVIDADE --- */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .body-composition {
                 grid-template-columns: 1fr;
             }
@@ -636,7 +705,7 @@
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             }
             .main-container {
-                padding: 20px;
+                padding: 20px 24px;
             }
             .consult-card {
                 flex-direction: column;
@@ -646,58 +715,36 @@
         }
 
         @media (max-width: 768px) {
-            .top-header {
-                flex-direction: column;
-                gap: 15px;
+            :root { --sidebar-width: 0px; }
+            .sidebar {
+                transform: translateX(-260px);
+                transition: transform 0.3s ease;
             }
-            .body-composition {
-                grid-template-columns: 1fr;
+            .sidebar.open {
+                transform: translateX(0);
+                width: 260px;
             }
-            .body-icon {
-                font-size: 8em;
-            }
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-            .tabs-nav {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                flex-wrap: nowrap;
-                padding-bottom: 10px;
-                gap: 5px;
-            }
-            .tabs-nav::-webkit-scrollbar {
-                display: none;
-            }
-            .tab-btn {
-                padding: 10px 16px;
-                font-size: 0.85em;
-                white-space: nowrap;
-                flex-shrink: 0;
-            }
+            .main-area { margin-left: 0; }
+            .topbar { padding: 12px 16px; }
+            .main-container { padding: 16px; }
+            #menuToggle { display: flex !important; }
+            .body-composition { grid-template-columns: 1fr; }
+            .body-icon { font-size: 8em; }
+            .cards-grid { grid-template-columns: 1fr; }
             .weight-timeline {
                 flex-wrap: wrap;
                 gap: 15px;
                 justify-content: center;
             }
-            .weight-timeline::before {
-                display: none;
-            }
+            .weight-timeline::before { display: none; }
             .calendar-grid {
                 grid-template-columns: repeat(7, 1fr);
                 gap: 5px;
             }
-            .calendar-day {
-                font-size: 0.7em;
-            }
-            .form-row {
-                flex-direction: column;
-            }
+            .calendar-day { font-size: 0.7em; }
+            .form-row { flex-direction: column; }
             .form-group { width: 100%; }
-            .form-group input, .form-group select {
-                width: 100%;
-            }
+            .form-group input, .form-group select { width: 100%; }
             .med-card {
                 flex-direction: column;
                 text-align: center;
@@ -992,23 +1039,14 @@
         body.dark-mode .med-card,
         body.dark-mode .consult-card { background: #2d3748; }
 
-        /* --- BOTÕES FLUTUANTES --- */
-        .floating-buttons {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        }
+        /* --- BOTÕES --- */
         .floating-btn {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            font-size: 1.3em;
+            font-size: 1.2em;
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
@@ -1017,51 +1055,58 @@
             justify-content: center;
         }
         .floating-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0,0,0,0.4);
         }
         .btn-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
             background: var(--primary);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            z-index: 1000;
         }
         .btn-top.visible {
             opacity: 1;
             visibility: visible;
         }
         .btn-print {
-            background: linear-gradient(135deg, var(--success), #11998e);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3em;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
+        .btn-print:hover { background: #f1f5f9; }
         .dark-toggle {
-            background: #2d3748;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3em;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
+        .dark-toggle:hover { background: #f1f5f9; }
 
         /* --- DARK MODE --- */
         body.dark-mode {
-            --bg-light: #1a202c;
+            --bg-light: #0f172a;
             --text-dark: #e2e8f0;
             background-color: var(--bg-light);
             color: var(--text-dark);
         }
-        body.dark-mode .top-header {
-            background: #2d3748;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        body.dark-mode .topbar {
+            background: #1e293b;
+            border-bottom-color: #334155;
         }
-        body.dark-mode .tab-btn {
-            color: #a0aec0;
-        }
-        body.dark-mode .tab-btn:hover {
-            color: var(--primary);
-            background: rgba(102, 126, 234, 0.1);
-        }
-        body.dark-mode .tab-btn.active {
-            color: var(--primary);
-            background: #2d3748;
-        }
-        body.dark-mode .tabs-nav {
-            border-bottom-color: #4a5568;
-        }
+        body.dark-mode .sidebar { background: #020617; }
+        body.dark-mode .sidebar-brand { border-bottom-color: #0f172a; }
+        body.dark-mode .sidebar-patient { border-top-color: #0f172a; }
         body.dark-mode .health-card,
         body.dark-mode .chart-container,
         body.dark-mode .bioimpedance-visual,
@@ -1309,8 +1354,8 @@
         /* --- PRINT --- */
         @media print {
             body { background: white; font-size: 12pt; }
-            .top-header { box-shadow: none; }
-            .tabs-nav { display: none; }
+            .sidebar, .topbar, .btn-top, .btn-print, .dark-toggle { display: none !important; }
+            .main-area { margin-left: 0; }
             .tab-content { display: block !important; page-break-inside: avoid; }
             .health-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
             .health-card:hover { transform: none; }
@@ -1318,47 +1363,102 @@
             .chart-container { break-inside: avoid; }
             .bioimpedance-visual { box-shadow: none; border: 1px solid #ddd; }
             .footer { background: white; color: #333; border-top: 2px solid #ddd; }
-            .floating-buttons, .btn-print, .btn-top, .dark-toggle { display: none !important; }
             canvas { max-height: 300px; }
         }
     </style>
 </head>
 <body>
 
-    <header class="top-header">
-        <div class="brand">
-            <span class="brand-icons">❤️💪</span>
-            <span class="brand-text">Health Dashboard Completo</span>
-        </div>
-        <div class="patient-info-header">
-            <div class="text-right">
-                <h3>César Augusto de Freitas Azevedo</h3>
-                <p>47 anos</p>
-            </div>
-            <div class="patient-avatar">CA</div>
-        </div>
-    </header>
+<div class="app-layout">
 
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo"><span>❤️</span> Health Dashboard</div>
+            <div class="brand-sub">Acompanhamento de Saúde</div>
+        </div>
 
-    <main class="main-container">
-        <nav class="tabs-nav">
-            <button class="tab-btn active" data-target="visao-geral">📊 Visão Geral</button>
-            <button class="tab-btn" data-target="dieta">🥗 Plano Alimentar</button>
-            <button class="tab-btn" data-target="peso">📉 Acompanhamento Peso</button>
-            <button class="tab-btn" data-target="bioimpedancia">💪 Bioimpedância</button>
-            <button class="tab-btn" data-target="laboratoriais">🔬 Exames Lab</button>
-            <button class="tab-btn" data-target="hormonios">🧬 Hormônios</button>
-            <button class="tab-btn" data-target="vitaminas">💊 Vitaminas</button>
-            <button class="tab-btn" data-target="eletrolitos">⚡ Eletrólitos</button>
-            <button class="tab-btn" data-target="hemograma">🩸 Hemograma</button>
-            <button class="tab-btn" data-target="endoscopia">🔍 Endoscopia</button>
-            <button class="tab-btn" data-target="ressonancia">🧲 Ressonância</button>
-            <button class="tab-btn" data-target="doppler">🫀 Doppler Carótidas</button>
-            <button class="tab-btn" data-target="ecocardiograma">❤️ Ecocardiograma</button>
-            <button class="tab-btn" data-target="mapa">🩺 MAPA</button>
-            <button class="tab-btn" data-target="ergometrico">🏃 Teste Ergométrico</button>
-            <button class="tab-btn" data-target="medicamentos">💊 Medicamentos</button>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Visão Geral</div>
+            <button class="sidebar-nav-item active" data-target="visao-geral">
+                <span class="nav-icon">📊</span><span class="nav-label">Visão Geral</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="dieta">
+                <span class="nav-icon">🥗</span><span class="nav-label">Plano Alimentar</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="peso">
+                <span class="nav-icon">📉</span><span class="nav-label">Peso</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="bioimpedancia">
+                <span class="nav-icon">💪</span><span class="nav-label">Bioimpedância</span>
+            </button>
+
+            <div class="sidebar-section-label">Exames Laboratoriais</div>
+            <button class="sidebar-nav-item" data-target="laboratoriais">
+                <span class="nav-icon">🔬</span><span class="nav-label">Exames Lab</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="hormonios">
+                <span class="nav-icon">🧬</span><span class="nav-label">Hormônios</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="vitaminas">
+                <span class="nav-icon">💊</span><span class="nav-label">Vitaminas</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="eletrolitos">
+                <span class="nav-icon">⚡</span><span class="nav-label">Eletrólitos</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="hemograma">
+                <span class="nav-icon">🩸</span><span class="nav-label">Hemograma</span>
+            </button>
+
+            <div class="sidebar-section-label">Imagens &amp; Exames</div>
+            <button class="sidebar-nav-item" data-target="endoscopia">
+                <span class="nav-icon">🔍</span><span class="nav-label">Endoscopia</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="ressonancia">
+                <span class="nav-icon">🧲</span><span class="nav-label">Ressonância</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="doppler">
+                <span class="nav-icon">🫀</span><span class="nav-label">Doppler Carótidas</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="ecocardiograma">
+                <span class="nav-icon">❤️</span><span class="nav-label">Ecocardiograma</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="mapa">
+                <span class="nav-icon">🩺</span><span class="nav-label">MAPA</span>
+            </button>
+            <button class="sidebar-nav-item" data-target="ergometrico">
+                <span class="nav-icon">🏃</span><span class="nav-label">Teste Ergométrico</span>
+            </button>
+
+            <div class="sidebar-section-label">Tratamento</div>
+            <button class="sidebar-nav-item" data-target="medicamentos">
+                <span class="nav-icon">💊</span><span class="nav-label">Medicamentos</span>
+            </button>
         </nav>
+
+        <div class="sidebar-patient">
+            <div class="patient-avatar">CA</div>
+            <div class="patient-info-sidebar">
+                <div class="patient-name">César Augusto</div>
+                <div class="patient-meta">47 anos • 184cm • 112,5kg</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="main-area">
+        <div class="topbar">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button id="menuToggle" style="display:none;background:none;border:none;font-size:1.4em;cursor:pointer;padding:4px;" title="Menu">☰</button>
+                <div class="topbar-title" id="topbar-title">📊 Visão Geral</div>
+            </div>
+            <div class="topbar-actions">
+                <button class="dark-toggle" id="darkToggle" title="Modo escuro">🌙</button>
+                <button class="btn-print" onclick="window.print()" title="Imprimir">🖨️</button>
+            </div>
+        </div>
+
+        <main class="main-container">
 
         <!-- ABA: VISÃO GERAL -->
         <section id="visao-geral" class="tab-content active">
@@ -3873,42 +3973,79 @@
             </div>
         </section>
 
-    </main>
+        </main>
 
-    <div class="floating-buttons">
-        <button class="floating-btn dark-toggle" id="darkToggle" title="Modo Escuro">🌙</button>
-        <button class="floating-btn btn-print" onclick="window.print()" title="Imprimir / Exportar PDF">🖨️</button>
-        <button class="floating-btn btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">⬆️</button>
-    </div>
+        <footer class="footer">
+            <p class="footer-title">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
+            <p class="footer-subtitle">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
+            <p class="footer-urgent">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
+            <p class="footer-date">Exames Lab: 23/05/2026 (Hemolab) • Outros Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 25/05/2026</p>
+        </footer>
 
-    <footer class="footer">
-        <p class="footer-title">⚕️ Dashboard Completo de Saúde + Plano Alimentar + Atividades Físicas</p>
-        <p class="footer-subtitle">Este relatório consolidado inclui TODOS os dados dos exames + prescrição nutricional + registro de atividades aeróbicas.</p>
-        <p class="footer-urgent">AÇÃO URGENTE: Agende consulta com hepatologista para tratar esteatose hepática grau III</p>
-        <p class="footer-date">Exames Lab: 23/05/2026 (Hemolab) • Outros Exames: 26/01 - 10/02/2026 • Dieta prescrita: 09/02/2026 • Atualizado: 25/05/2026</p>
-    </footer>
+    </div><!-- end main-area -->
+
+</div><!-- end app-layout -->
+
+    <button class="floating-btn btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">⬆️</button>
 
     <script>
         // CONTROLE DAS ABAS
         var bodyCompChartRendered = false;
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
 
-            tabButtons.forEach(button => {
+        var tabLabels = {
+            'visao-geral': '📊 Visão Geral',
+            'dieta': '🥗 Plano Alimentar',
+            'peso': '📉 Acompanhamento de Peso',
+            'bioimpedancia': '💪 Bioimpedância',
+            'laboratoriais': '🔬 Exames Laboratoriais',
+            'hormonios': '🧬 Hormônios',
+            'vitaminas': '💊 Vitaminas',
+            'eletrolitos': '⚡ Eletrólitos',
+            'hemograma': '🩸 Hemograma',
+            'endoscopia': '🔍 Endoscopia',
+            'ressonancia': '🧲 Ressonância',
+            'doppler': '🫀 Doppler Carótidas',
+            'ecocardiograma': '❤️ Ecocardiograma',
+            'mapa': '🩺 MAPA',
+            'ergometrico': '🏃 Teste Ergométrico',
+            'medicamentos': '💊 Medicamentos'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.sidebar-nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const topbarTitle = document.getElementById('topbar-title');
+
+            navItems.forEach(button => {
                 button.addEventListener('click', () => {
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    navItems.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     tabContents.forEach(content => content.classList.remove('active'));
                     const targetId = button.getAttribute('data-target');
                     document.getElementById(targetId).classList.add('active');
+                    if (topbarTitle) topbarTitle.textContent = tabLabels[targetId] || targetId;
+                    // Scroll to top
+                    document.querySelector('.main-container').scrollTop = 0;
+                    window.scrollTo(0, 0);
                     // Renderizar gráfico de composição corporal na primeira vez
                     if (targetId === 'bioimpedancia' && !bodyCompChartRendered) {
                         bodyCompChartRendered = true;
                         renderBodyCompChart();
                     }
+                    // Close sidebar on mobile
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
                 });
             });
+
+            // Mobile sidebar toggle
+            var menuBtn = document.getElementById('menuToggle');
+            if (menuBtn) {
+                menuBtn.addEventListener('click', function() {
+                    document.getElementById('sidebar').classList.toggle('open');
+                });
+            }
         });
 
         // REGISTRO DE PESO
