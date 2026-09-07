@@ -1351,6 +1351,53 @@
             border-top-color: #4a5568;
         }
 
+        /* --- CALCULADORA DE RISCO CARDÍACO (PREVENT) --- */
+        .risk-form {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--danger);
+        }
+        .risk-form h3 { margin-bottom: 5px; color: var(--text-dark); }
+        .risk-form .form-row { margin-top: 15px; }
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 10px 0 2px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95em;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+        .radio-option input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+        .risk-results { display: none; }
+        .risk-results.visible { display: block; animation: fadeIn 0.4s ease; }
+        .risk-category-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 5px 0 5px;
+            font-size: 0.85em;
+        }
+        .risk-category-legend span {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .legend-baixo { background: rgba(16,185,129,0.15); color: #059669; }
+        .legend-limitrofe { background: rgba(245,158,11,0.15); color: #d97706; }
+        .legend-intermediario { background: rgba(245,158,11,0.28); color: #b45309; }
+        .legend-alto { background: rgba(239,68,68,0.15); color: #dc2626; }
+        body.dark-mode .risk-form { background: #2d3748; }
+        body.dark-mode .radio-option { color: #e2e8f0; }
+
         /* --- PRINT --- */
         @media print {
             body { background: white; font-size: 12pt; }
@@ -1433,6 +1480,11 @@
             <div class="sidebar-section-label">Tratamento</div>
             <button class="sidebar-nav-item" data-target="medicamentos">
                 <span class="nav-icon">💊</span><span class="nav-label">Medicamentos</span>
+            </button>
+
+            <div class="sidebar-section-label">Ferramentas</div>
+            <button class="sidebar-nav-item" data-target="risco-cardiaco">
+                <span class="nav-icon">🫀</span><span class="nav-label">Risco Cardiovascular</span>
             </button>
         </nav>
 
@@ -4426,6 +4478,165 @@
             </div>
         </section>
 
+        <!-- ABA: CALCULADORA DE RISCO CARDIOVASCULAR (PREVENT) -->
+        <section id="risco-cardiaco" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">🫀</span>
+                <h2>Calculadora de Risco Cardiovascular</h2>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">💡</span>
+                <div class="alert-content">
+                    <h4>O que é isso?</h4>
+                    <p>Pense nisso como uma <strong>previsão do tempo para o coração</strong>: com alguns números simples (idade, pressão, colesterol...), ela estima a chance de você ter um problema cardiovascular — infarto, AVC ou insuficiência cardíaca — <strong>nos próximos 10 anos</strong>. Usa a fórmula oficial <strong>PREVENT</strong>, criada em 2023 pela American Heart Association (a maior associação de cardiologia dos EUA) e validada em milhões de pessoas.</p>
+                </div>
+            </div>
+
+            <div class="risk-form">
+                <h3>🧮 Calculadora PREVENT — Risco em 10 Anos</h3>
+                <p class="sub-text">Os campos já vêm preenchidos com os últimos exames registrados neste painel. Ajuste se tiver números mais recentes.</p>
+
+                <div class="form-row mt-15">
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="riskSex" value="male" checked> Masculino</label>
+                            <label class="radio-option"><input type="radio" name="riskSex" value="female"> Feminino</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Idade (anos)</label>
+                        <input type="number" id="riskAge" min="30" max="79" step="1" value="47">
+                    </div>
+                    <div class="form-group">
+                        <label>Pressão Sistólica — PAS (mmHg)</label>
+                        <input type="number" id="riskSbp" min="90" max="200" step="1" value="107">
+                    </div>
+                    <div class="form-group">
+                        <label>Colesterol Total (mg/dL)</label>
+                        <input type="number" id="riskChol" min="130" max="320" step="1" value="175">
+                    </div>
+                    <div class="form-group">
+                        <label>Colesterol HDL (mg/dL)</label>
+                        <input type="number" id="riskHdl" min="20" max="100" step="1" value="33">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>eGFR — Filtração Renal (mL/min/1,73m²)</label>
+                        <input type="number" id="riskEgfr" min="15" max="140" step="0.1" value="97.5">
+                    </div>
+                    <div class="form-group">
+                        <label>IMC (kg/m²)</label>
+                        <input type="number" id="riskBmi" min="18.5" max="39.9" step="0.1" value="30.5">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Diabetes</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="riskDiabetes" value="0" checked> Não</label>
+                            <label class="radio-option"><input type="radio" name="riskDiabetes" value="1"> Sim</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Fumante Atual</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="riskSmoker" value="0" checked> Não</label>
+                            <label class="radio-option"><input type="radio" name="riskSmoker" value="1"> Sim</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Usa Medicamento para Colesterol (estatina)</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="riskStatin" value="0" checked> Não</label>
+                            <label class="radio-option"><input type="radio" name="riskStatin" value="1"> Sim</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Usa Medicamento para Pressão Arterial</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="riskHtnMeds" value="0" checked> Não</label>
+                            <label class="radio-option"><input type="radio" name="riskHtnMeds" value="1"> Sim</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row mt-15">
+                    <button class="btn-add-weight" onclick="calcRiscoCardiaco()">❤️ Calcular Risco</button>
+                    <button class="btn-export" onclick="resetRiscoCardiaco()">↺ Restaurar Valores Padrão</button>
+                </div>
+            </div>
+
+            <div class="risk-results" id="riskResults">
+                <h3 class="section-subtitle">📊 Resultado — Risco Estimado em 10 Anos</h3>
+                <div class="cards-grid">
+                    <div class="health-card" id="riskCardCvd">
+                        <div class="card-tooltip">Soma o risco de infarto, AVC e insuficiência cardíaca juntos — a visão mais completa do risco cardiovascular.</div>
+                        <div class="card-header">
+                            <span class="card-title">Risco Cardiovascular Total</span>
+                            <span class="card-icon">❤️</span>
+                        </div>
+                        <div class="card-value" id="riskValueCvd">--</div>
+                        <p class="card-reference">Chance de infarto, AVC ou insuficiência cardíaca em 10 anos</p>
+                        <span class="status-badge" id="riskBadgeCvd">--</span>
+                    </div>
+                    <div class="health-card" id="riskCardAscvd">
+                        <div class="card-tooltip">Foca só no entupimento das artérias — a causa dos infartos e de boa parte dos AVCs.</div>
+                        <div class="card-header">
+                            <span class="card-title">Risco de Infarto / AVC (ASCVD)</span>
+                            <span class="card-icon">🧠</span>
+                        </div>
+                        <div class="card-value" id="riskValueAscvd">--</div>
+                        <p class="card-reference">Chance de infarto ou AVC por entupimento arterial em 10 anos</p>
+                        <span class="status-badge" id="riskBadgeAscvd">--</span>
+                    </div>
+                    <div class="health-card" id="riskCardHf">
+                        <div class="card-tooltip">O coração perde força para bombear o sangue de forma eficiente pelo corpo.</div>
+                        <div class="card-header">
+                            <span class="card-title">Risco de Insuficiência Cardíaca</span>
+                            <span class="card-icon">🫀</span>
+                        </div>
+                        <div class="card-value" id="riskValueHf">--</div>
+                        <p class="card-reference">Chance do coração enfraquecer e bombear com menos eficiência em 10 anos</p>
+                        <span class="status-badge" id="riskBadgeHf">--</span>
+                    </div>
+                </div>
+
+                <div class="risk-category-legend">
+                    <span class="legend-baixo">Baixo &lt; 5%</span>
+                    <span class="legend-limitrofe">Limítrofe 5 – 7,4%</span>
+                    <span class="legend-intermediario">Intermediário 7,5 – 19,9%</span>
+                    <span class="legend-alto">Alto ≥ 20%</span>
+                </div>
+
+                <div class="alert-box alert-warning mt-15">
+                    <span class="alert-icon">⚠️</span>
+                    <div class="alert-content">
+                        <h4>Isso não substitui uma consulta médica</h4>
+                        <p>Esse número é uma <strong>estimativa estatística</strong>, feita a partir de médias de estudos com milhões de pessoas — não é um diagnóstico individual. Fatores que já aparecem nos seus exames, como a <strong>Lipoproteína(a) elevada</strong>, não entram nesta conta, mas também pesam no risco real. Leve este resultado para o cardiologista conversar sobre os próximos passos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-box alert-tip mt-15">
+                <span class="alert-icon">📖</span>
+                <div class="alert-content">
+                    <h4>Como ler o resultado</h4>
+                    <p>Quanto <strong>menor</strong> o número, melhor. Ele responde: "em 100 pessoas parecidas com você, quantas teriam esse problema nos próximos 10 anos?" Um resultado de 5%, por exemplo, significa 5 em cada 100. O que mais pesa na conta: <strong>idade, pressão arterial, colesterol HDL baixo, excesso de peso (IMC) e a função dos rins (eGFR)</strong> — todos fatores que melhoram com dieta, exercício e, se necessário, remédio.</p>
+                </div>
+            </div>
+        </section>
+
         </main>
 
         <footer class="footer">
@@ -4461,7 +4672,8 @@
             'ecocardiograma': '❤️ Ecocardiograma',
             'mapa': '🩺 MAPA',
             'ergometrico': '🏃 Teste Ergométrico',
-            'medicamentos': '💊 Medicamentos'
+            'medicamentos': '💊 Medicamentos',
+            'risco-cardiaco': '🫀 Risco Cardiovascular'
         };
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -4498,6 +4710,11 @@
                 menuBtn.addEventListener('click', function() {
                     document.getElementById('sidebar').classList.toggle('open');
                 });
+            }
+
+            // Calcula o risco cardiovascular com os valores padrão já ao carregar a página
+            if (document.getElementById('riskResults')) {
+                calcRiscoCardiaco();
             }
         });
 
@@ -4894,8 +5111,10 @@
         var totalPerder = pesoInicial - pesoMeta;
         var jaPerdeu = pesoInicial - pesoAtual;
         var percent = Math.max(0, Math.min(100, (jaPerdeu / totalPerder) * 100));
-        document.getElementById('progressFill').style.width = percent.toFixed(1) + '%';
-        document.getElementById('progressText').textContent = percent.toFixed(1) + '% (' + jaPerdeu.toFixed(1) + ' de ' + totalPerder.toFixed(1) + ' kg)';
+        var progressFillEl = document.getElementById('progressFill');
+        var progressTextEl = document.getElementById('progressText');
+        if (progressFillEl) progressFillEl.style.width = percent.toFixed(1) + '%';
+        if (progressTextEl) progressTextEl.textContent = percent.toFixed(1) + '% (' + jaPerdeu.toFixed(1) + ' de ' + totalPerder.toFixed(1) + ' kg)';
 
         // CALCULADORA DE IMC
         function calcIMC() {
@@ -4930,6 +5149,188 @@
                 classEl.textContent = 'Obesidade Grau III (Mórbida)';
                 result.classList.add('imc-obeso');
             }
+        }
+
+        // ===================================================================
+        // CALCULADORA DE RISCO CARDIOVASCULAR — Equações PREVENT (AHA, 2023)
+        // Fonte dos coeficientes: Khan SS, Matsushita K, Sang Y, et al.
+        // "Development and Validation of the American Heart Association's
+        // PREVENT Equations." Circulation. 2024;149:430-449.
+        // Modelo base (sem UACR/HbA1c/índice de privação social).
+        // ===================================================================
+        var PREVENT_COEF = {
+            ascvd: {
+                male: {
+                    constant: -3.500655, age: 0.7099847, ageSq: 0.0, cholMult: 0.02586,
+                    nonHdl: 0.1658663, hdl: -0.1144285, sbpMin: -0.2837212, sbpMax: 0.3239977,
+                    diabetes: 0.7189597, smoker: 0.3956973, egfrMin: 0.3690075, egfrMax: 0.0203619,
+                    htnMeds: 0.2036522, statin: -0.0865581, htnMedsSbpMax: -0.0322916,
+                    statinNonHdl: 0.114563, ageNonHdl: -0.0300005, ageHdl: 0.0232747,
+                    ageSbpMax: -0.0927024, diabetesAge: -0.2018525, smokerAge: -0.0970527,
+                    ageEgfrMin: -0.1217081, bmiMin: 0.0, bmiMax: 0.0, ageBmiMax: 0.0
+                },
+                female: {
+                    constant: -3.819975, age: 0.719883, ageSq: 0.0, cholMult: 0.02586,
+                    nonHdl: 0.1176967, hdl: -0.151185, sbpMin: -0.0835358, sbpMax: 0.3592852,
+                    diabetes: 0.8348585, smoker: 0.4831078, egfrMin: 0.4864619, egfrMax: 0.0397779,
+                    htnMeds: 0.2265309, statin: -0.0592374, htnMedsSbpMax: -0.0395762,
+                    statinNonHdl: 0.0844423, ageNonHdl: -0.0567839, ageHdl: 0.0325692,
+                    ageSbpMax: -0.1035985, diabetesAge: -0.2417542, smokerAge: -0.0791142,
+                    ageEgfrMin: -0.1671492, bmiMin: 0.0, bmiMax: 0.0, ageBmiMax: 0.0
+                }
+            },
+            cvd: {
+                male: {
+                    constant: -3.031168, age: 0.7688528, ageSq: 0.0, cholMult: 0.02586,
+                    nonHdl: 0.0736174, hdl: -0.0954431, sbpMin: -0.4347345, sbpMax: 0.3362658,
+                    diabetes: 0.7692857, smoker: 0.4386871, egfrMin: 0.5378979, egfrMax: 0.0164827,
+                    htnMeds: 0.288879, statin: -0.1337349, htnMedsSbpMax: -0.0475924,
+                    statinNonHdl: 0.150273, ageNonHdl: -0.0517874, ageHdl: 0.0191169,
+                    ageSbpMax: -0.1049477, diabetesAge: -0.2251948, smokerAge: -0.0895067,
+                    ageEgfrMin: -0.1543702, bmiMin: 0.0, bmiMax: 0.0, ageBmiMax: 0.0
+                },
+                female: {
+                    constant: -3.307728, age: 0.7939329, ageSq: 0.0, cholMult: 0.02586,
+                    nonHdl: 0.0305239, hdl: -0.1606857, sbpMin: -0.2394003, sbpMax: 0.3600781,
+                    diabetes: 0.8667604, smoker: 0.5360739, egfrMin: 0.6045917, egfrMax: 0.0433769,
+                    htnMeds: 0.3151672, statin: -0.1477655, htnMedsSbpMax: -0.0663612,
+                    statinNonHdl: 0.1197879, ageNonHdl: -0.0819715, ageHdl: 0.0306769,
+                    ageSbpMax: -0.0946348, diabetesAge: -0.27057, smokerAge: -0.078715,
+                    ageEgfrMin: -0.1637806, bmiMin: 0.0, bmiMax: 0.0, ageBmiMax: 0.0
+                }
+            },
+            hf: {
+                male: {
+                    constant: -3.946391, age: 0.8972642, ageSq: 0.0, cholMult: 0.0,
+                    nonHdl: 0.0, hdl: 0.0, sbpMin: -0.6811466, sbpMax: 0.3634461,
+                    diabetes: 0.923776, smoker: 0.5023736, egfrMin: 0.6926917, egfrMax: 0.0251827,
+                    htnMeds: 0.2980922, statin: 0.0, htnMedsSbpMax: -0.0497731,
+                    statinNonHdl: 0.0, ageNonHdl: 0.0, ageHdl: 0.0,
+                    ageSbpMax: -0.1289201, diabetesAge: -0.3040924, smokerAge: -0.1401688,
+                    ageEgfrMin: -0.1797778, bmiMin: -0.0485841, bmiMax: 0.3726929, ageBmiMax: 0.0068126
+                },
+                female: {
+                    constant: -4.310409, age: 0.8998235, ageSq: 0.0, cholMult: 0.02586,
+                    nonHdl: 0.0, hdl: 0.0, sbpMin: -0.4559771, sbpMax: 0.3576505,
+                    diabetes: 1.038346, smoker: 0.583916, egfrMin: 0.7451638, egfrMax: 0.0557087,
+                    htnMeds: 0.3534442, statin: 0.0, htnMedsSbpMax: -0.0981511,
+                    statinNonHdl: 0.0, ageNonHdl: 0.0, ageHdl: 0.0,
+                    ageSbpMax: -0.0946663, diabetesAge: -0.3581041, smokerAge: -0.1159453,
+                    ageEgfrMin: -0.1884289, bmiMin: -0.0072294, bmiMax: 0.2997706, ageBmiMax: -0.003878
+                }
+            }
+        };
+
+        // Reproduz a equação logística oficial do modelo base PREVENT
+        function preventRisk(coef, p) {
+            var ageC = (p.age - 55) / 10;
+            var ageC2 = ageC * ageC;
+            var nonHdl = p.totalChol - p.hdl;
+            var nonHdlC = coef.cholMult * nonHdl - 3.5;
+            var hdlC = (coef.cholMult * p.hdl - 1.3) / 0.3;
+            var sbpMinC = (Math.min(p.sbp, 110) - 110) / 20;
+            var sbpMaxC = (Math.max(p.sbp, 110) - 130) / 20;
+            var egfrMinC = (Math.min(p.egfr, 60) - 60) / -15;
+            var egfrMaxC = (Math.max(p.egfr, 60) - 90) / -15;
+            var bmiMinC = (Math.min(p.bmi, 30) - 25) / 5;
+            var bmiMaxC = (Math.max(p.bmi, 30) - 30) / 5;
+
+            var sum = coef.constant;
+            sum += coef.age * ageC;
+            sum += coef.ageSq * ageC2;
+            sum += coef.nonHdl * nonHdlC;
+            sum += coef.hdl * hdlC;
+            sum += coef.sbpMin * sbpMinC;
+            sum += coef.sbpMax * sbpMaxC;
+            if (p.diabetes) sum += coef.diabetes;
+            if (p.smoker) sum += coef.smoker;
+            sum += coef.egfrMin * egfrMinC;
+            sum += coef.egfrMax * egfrMaxC;
+            if (p.htnMeds) sum += coef.htnMeds;
+            if (p.statin) sum += coef.statin;
+            if (p.htnMeds) sum += coef.htnMedsSbpMax * sbpMaxC;
+            if (p.statin) sum += coef.statinNonHdl * nonHdlC;
+            sum += coef.ageNonHdl * ageC * nonHdlC;
+            sum += coef.ageHdl * ageC * hdlC;
+            sum += coef.ageSbpMax * ageC * sbpMaxC;
+            if (p.diabetes) sum += coef.diabetesAge * ageC;
+            if (p.smoker) sum += coef.smokerAge * ageC;
+            sum += coef.ageEgfrMin * ageC * egfrMinC;
+            sum += coef.bmiMin * bmiMinC;
+            sum += coef.bmiMax * bmiMaxC;
+            sum += coef.ageBmiMax * ageC * bmiMaxC;
+
+            var expSum = Math.exp(sum);
+            return (expSum / (1 + expSum)) * 100;
+        }
+
+        function riskCategory(risk) {
+            if (risk < 5) return { label: 'Risco Baixo', css: 'normal' };
+            if (risk < 7.5) return { label: 'Risco Limítrofe', css: 'warning' };
+            if (risk < 20) return { label: 'Risco Intermediário', css: 'warning' };
+            return { label: 'Risco Alto', css: 'danger' };
+        }
+
+        function applyRiskCard(suffix, risk) {
+            var cat = riskCategory(risk);
+            var card = document.getElementById('riskCard' + suffix);
+            var valueEl = document.getElementById('riskValue' + suffix);
+            var badgeEl = document.getElementById('riskBadge' + suffix);
+            card.className = 'health-card status-' + cat.css;
+            valueEl.className = 'card-value ' + cat.css;
+            valueEl.textContent = risk.toFixed(1).replace('.', ',') + '%';
+            badgeEl.className = 'status-badge ' + cat.css;
+            badgeEl.textContent = cat.label;
+        }
+
+        function calcRiscoCardiaco() {
+            var sex = document.querySelector('input[name="riskSex"]:checked').value;
+            var age = parseFloat(document.getElementById('riskAge').value);
+            var sbp = parseFloat(document.getElementById('riskSbp').value);
+            var chol = parseFloat(document.getElementById('riskChol').value);
+            var hdl = parseFloat(document.getElementById('riskHdl').value);
+            var egfr = parseFloat(document.getElementById('riskEgfr').value);
+            var bmi = parseFloat(document.getElementById('riskBmi').value);
+            var diabetes = document.querySelector('input[name="riskDiabetes"]:checked').value === '1';
+            var smoker = document.querySelector('input[name="riskSmoker"]:checked').value === '1';
+            var statin = document.querySelector('input[name="riskStatin"]:checked').value === '1';
+            var htnMeds = document.querySelector('input[name="riskHtnMeds"]:checked').value === '1';
+
+            if ([age, sbp, chol, hdl, egfr, bmi].some(isNaN)) {
+                alert('Preencha todos os campos numéricos antes de calcular!');
+                return;
+            }
+            if (age < 30 || age > 79) {
+                alert('A fórmula PREVENT é validada apenas para idades entre 30 e 79 anos.');
+                return;
+            }
+
+            var p = { age: age, sbp: sbp, totalChol: chol, hdl: hdl, egfr: egfr, bmi: bmi, diabetes: diabetes, smoker: smoker, statin: statin, htnMeds: htnMeds };
+
+            var riskCvd = preventRisk(PREVENT_COEF.cvd[sex], p);
+            var riskAscvd = preventRisk(PREVENT_COEF.ascvd[sex], p);
+            var riskHf = preventRisk(PREVENT_COEF.hf[sex], p);
+
+            applyRiskCard('Cvd', riskCvd);
+            applyRiskCard('Ascvd', riskAscvd);
+            applyRiskCard('Hf', riskHf);
+
+            document.getElementById('riskResults').classList.add('visible');
+        }
+
+        function resetRiscoCardiaco() {
+            document.querySelector('input[name="riskSex"][value="male"]').checked = true;
+            document.getElementById('riskAge').value = 47;
+            document.getElementById('riskSbp').value = 107;
+            document.getElementById('riskChol').value = 175;
+            document.getElementById('riskHdl').value = 33;
+            document.getElementById('riskEgfr').value = 97.5;
+            document.getElementById('riskBmi').value = 30.5;
+            document.querySelector('input[name="riskDiabetes"][value="0"]').checked = true;
+            document.querySelector('input[name="riskSmoker"][value="0"]').checked = true;
+            document.querySelector('input[name="riskStatin"][value="0"]').checked = true;
+            document.querySelector('input[name="riskHtnMeds"][value="0"]').checked = true;
+            calcRiscoCardiaco();
         }
 
         // REGISTRO DE ATIVIDADES
