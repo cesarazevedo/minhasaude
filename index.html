@@ -1476,6 +1476,9 @@
             <button class="sidebar-nav-item" data-target="ergometrico">
                 <span class="nav-icon">🏃</span><span class="nav-label">Teste Ergométrico</span>
             </button>
+            <button class="sidebar-nav-item" data-target="polissonografia">
+                <span class="nav-icon">😴</span><span class="nav-label">Polissonografia</span>
+            </button>
 
             <div class="sidebar-section-label">Tratamento</div>
             <button class="sidebar-nav-item" data-target="medicamentos">
@@ -1551,6 +1554,14 @@
                 <div class="alert-content">
                     <h4>Função Renal e Glicemia Normalizadas (31/08/2026)</h4>
                     <p><strong>Creatinina caiu para 0,96 mg/dL</strong> (era 1,29) e <strong>eRFG subiu para 97,5 mL/min/1,73m²</strong> (era 65,4) — ambos de volta à faixa normal. <strong>Glicose em jejum caiu para 91 mg/dL</strong> (era 107, TTG com 2 dosagens: jejum 91 / após 120min 80, ambos normais) e a <strong>Hemoglobina Glicada melhorou para 4,8%</strong> (era 5,2%). Insulina também normalizou (10,9 µU/mL).</p>
+                </div>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <span class="alert-icon">😴</span>
+                <div class="alert-content">
+                    <h4>NOVO: Apneia Obstrutiva do Sono — Grau Leve</h4>
+                    <p>Polissonografia de <strong>26/08/2026</strong> detectou <strong>Índice de Apneia-Hipopneia (IAH) de 8,0 eventos/hora</strong> — compatível com apneia obstrutiva do sono leve (referência: normal &lt;5; leve 5-15; moderada 15-30; grave &gt;30). Os eventos são <strong>quase 3x mais frequentes dormindo de barriga para cima</strong> (10,5/h) do que de lado (3,7/h) — evitar essa posição pode ajudar bastante. Saturação mínima de O₂ chegou a 88%.</p>
                 </div>
             </div>
 
@@ -4381,6 +4392,99 @@
             </div>
         </section>
 
+        <!-- ABA: POLISSONOGRAFIA -->
+        <section id="polissonografia" class="tab-content">
+            <div class="section-header">
+                <span class="section-icon">😴</span>
+                <h2>Polissonografia — 26/08/2026</h2>
+            </div>
+
+            <div class="alert-box alert-warning">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-content">
+                    <h4>CONCLUSÃO: Apneia Obstrutiva do Sono — Grau Leve</h4>
+                    <p>Exame iniciado às <strong>22:08:49</strong> e encerrado às <strong>04:40:05</strong> (tempo total de registro: 06:32:00). Ocorreram <strong>52 eventos respiratórios</strong>, todos obstrutivos (nenhum central), resultando em <strong>Índice de Apneia-Hipopneia (IAH) de 8,0 eventos/hora</strong> — compatível com Apneia Obstrutiva do Sono de grau leve.</p>
+                    <p class="paragraph-mt">📍 Médico solicitante: Dra. Monise da Silva Pechutti &nbsp;|&nbsp; Laudo: Dr. Pedro Guilherme Barbalho Cavalcanti (CRM/RN 5805 | RQE 3938) &nbsp;|&nbsp; Exame nº: 21251</p>
+                </div>
+            </div>
+
+            <div class="alert-box alert-tip">
+                <span class="alert-icon">💡</span>
+                <div class="alert-content">
+                    <h4>O que é isso, em palavras simples?</h4>
+                    <p>Durante o sono, a garganta relaxa e às vezes fecha (apneia) ou aperta parcialmente (hipopneia) a passagem do ar, cortando a respiração por alguns segundos. O aparelho contou quantas vezes isso aconteceu por hora — 8 vezes por hora é considerado <strong>leve</strong> (o corte começa em 5, e vira "grave" acima de 30). Cada evento faz o oxigênio no sangue cair um pouco e o coração acelerar para compensar.</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📊 Principais Resultados</h3>
+            <div class="cards-grid mb-30">
+                <div class="health-card status-warning">
+                    <div class="card-tooltip">Quantas vezes por hora a respiração para (apneia) ou fica bem fraca (hipopneia) durante o sono.</div>
+                    <div class="card-header">
+                        <span class="card-title">IAH (Apneia-Hipopneia)</span>
+                        <span class="card-icon">📉</span>
+                    </div>
+                    <div class="card-value warning">8,0 /h</div>
+                    <p class="card-reference">Normal &lt;5 · Leve 5-15 · Moderada 15-30 · Grave &gt;30</p>
+                    <p class="card-description">1,1 apneia/hora (7 eventos) + 6,9 hipopneia/hora (45 eventos), todos de origem obstrutiva — nenhum evento central.</p>
+                    <span class="status-badge warning">Leve</span>
+                </div>
+                <div class="health-card status-warning">
+                    <div class="card-tooltip">O ponto mais baixo que o oxigênio no sangue chegou durante a noite.</div>
+                    <div class="card-header">
+                        <span class="card-title">Saturação Mínima O₂</span>
+                        <span class="card-icon">🫁</span>
+                    </div>
+                    <div class="card-value warning">88%</div>
+                    <p class="card-reference">Basal: 95% · Média: 94% · Máxima: 97%</p>
+                    <p class="card-description">Ficou apenas 0,1 min (0,0%) do registro com saturação abaixo de 90%, e 0,0 min abaixo de 80%. Ocorreram 49 dessaturações no total (índice de 7,5/hora).</p>
+                    <span class="status-badge warning">Queda pontual</span>
+                </div>
+                <div class="health-card status-normal">
+                    <div class="card-tooltip">O coração batendo mais rápido durante os eventos respiratórios é normal e esperado.</div>
+                    <div class="card-header">
+                        <span class="card-title">Frequência Cardíaca</span>
+                        <span class="card-icon">❤️</span>
+                    </div>
+                    <div class="card-value normal">74 bpm</div>
+                    <p class="card-reference">Mínima: 68 bpm · Máxima: 85 bpm</p>
+                    <p class="card-description">Frequência cardíaca média durante o sono, com variação dentro do esperado ao longo do registro.</p>
+                    <span class="status-badge normal">✓ Normal</span>
+                </div>
+                <div class="health-card status-danger">
+                    <div class="card-tooltip">Dormir de barriga para cima piora bastante a apneia — é a chamada "apneia posicional".</div>
+                    <div class="card-header">
+                        <span class="card-title">Posição Supina (de costas)</span>
+                        <span class="card-icon">🛌</span>
+                    </div>
+                    <div class="card-value danger">10,5 /h</div>
+                    <p class="card-reference">vs. 3,7 eventos/hora fora da posição supina</p>
+                    <p class="card-description">Passou 244,8 min de costas (a maior parte do registro). Os eventos respiratórios quase triplicam nessa posição — evitar dormir de barriga para cima pode reduzir bastante o IAH.</p>
+                    <span class="status-badge danger">Componente Posicional</span>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">📋 Eventos Respiratórios Detalhados</h3>
+            <div class="alert-box alert-tip">
+                <span class="alert-icon">🔬</span>
+                <div class="alert-content">
+                    <h4>Contagem por Tipo de Evento</h4>
+                    <p><strong>Apneia obstrutiva:</strong> 7 eventos (1,1/hora), duração média 10s.</p>
+                    <p class="paragraph-mt"><strong>Hipopneia:</strong> 45 eventos (6,9/hora), duração média 31s, maior duração 1min59s.</p>
+                    <p class="paragraph-mt"><strong>Apneia central e mista:</strong> 0 eventos — nenhum componente central detectado.</p>
+                    <p class="paragraph-mt"><strong>Ronco:</strong> 13 episódios registrados. <strong>Dessaturações de O₂:</strong> 49 episódios (7,5/hora), duração média 34s.</p>
+                </div>
+            </div>
+
+            <div class="alert-box alert-success">
+                <span class="alert-icon">💊</span>
+                <div class="alert-content">
+                    <h4>Dados do Paciente no Dia do Exame</h4>
+                    <p>Peso: <strong>107 kg</strong> &nbsp;|&nbsp; Altura: <strong>1,84 m</strong> &nbsp;|&nbsp; IMC: <strong>31,6</strong> &nbsp;|&nbsp; Idade: <strong>47 anos</strong></p>
+                </div>
+            </div>
+        </section>
+
         <!-- ABA: MEDICAMENTOS E CONSULTAS -->
         <section id="medicamentos" class="tab-content">
             <div class="section-header">
@@ -4470,6 +4574,17 @@
                 <div class="consult-info">
                     <h4>Cardiologista</h4>
                     <p>Avaliação cardiovascular — Lp(a) elevada e HDL baixo</p>
+                </div>
+                <div class="consult-date">
+                    <div class="day">--</div>
+                    <div class="month">Agendar</div>
+                </div>
+            </div>
+
+            <div class="consult-card">
+                <div class="consult-info">
+                    <h4>Pneumologista / Médico do Sono</h4>
+                    <p>Retorno com resultado da polissonografia — Apneia leve com componente posicional</p>
                 </div>
                 <div class="consult-date">
                     <div class="day">--</div>
@@ -4672,6 +4787,7 @@
             'ecocardiograma': '❤️ Ecocardiograma',
             'mapa': '🩺 MAPA',
             'ergometrico': '🏃 Teste Ergométrico',
+            'polissonografia': '😴 Polissonografia',
             'medicamentos': '💊 Medicamentos',
             'risco-cardiaco': '🫀 Risco Cardiovascular'
         };
