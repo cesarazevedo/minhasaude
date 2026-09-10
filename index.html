@@ -1351,6 +1351,59 @@
             border-top-color: #4a5568;
         }
 
+        /* --- CALCULADORA DE TAXA METABÓLICA BASAL (TMB) --- */
+        .tmb-calculator {
+            border-left: 4px solid var(--primary);
+        }
+        .form-group select {
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            transition: border-color 0.3s;
+        }
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .btn-clear {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-clear:hover {
+            background: rgba(102, 126, 234, 0.08);
+            box-shadow: none;
+        }
+        .tmb-result.imc-normal { background: rgba(102, 126, 234, 0.1); }
+        .tmb-values {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tmb-value-box { min-width: 160px; }
+        .tmb-value-box .tmb-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .tmb-value-box .tmb-label {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #718096;
+            margin-top: 3px;
+        }
+        body.dark-mode .form-group select {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .tmb-value-box .tmb-label {
+            color: #a0aec0;
+        }
+
         /* --- CALCULADORA DE RISCO CARDÍACO (PREVENT) --- */
         .risk-form {
             background: white;
@@ -1707,6 +1760,60 @@
                 <div class="imc-result" id="imcResult">
                     <div class="imc-number" id="imcNumber"></div>
                     <div class="imc-class" id="imcClass"></div>
+                </div>
+            </div>
+
+            <div class="imc-calculator tmb-calculator">
+                <h3>🔥 Calculadora de Taxa Metabólica</h3>
+                <p class="sub-text">A Taxa Metabólica Basal (TMB) é o mínimo de energia necessária para manter as funções do organismo em repouso, como os batimentos cardíacos, a pressão arterial, a respiração e a manutenção da temperatura corporal. Cálculo pela fórmula de Harris-Benedict.</p>
+                <div class="form-row mt-15">
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="tmbSex">
+                            <option value="male" selected>Homem</option>
+                            <option value="female">Mulher</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Altura (cm)</label>
+                        <input type="number" id="tmbHeight" step="0.1" min="100" max="250" placeholder="Ex: 184" value="184">
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" id="tmbWeight" step="0.1" min="30" max="300" placeholder="Ex: 69,2" value="103.15">
+                    </div>
+                    <div class="form-group">
+                        <label>Idade</label>
+                        <input type="number" id="tmbAge" step="1" min="10" max="120" placeholder="Anos" value="47">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:1;min-width:280px;">
+                        <label>Nível de Atividade Física</label>
+                        <select id="tmbActivity">
+                            <option value="1.2" selected>Sedentário – sem prática de exercício físico</option>
+                            <option value="1.375">Baixo – exercício físico 1 a 3 vezes por semana</option>
+                            <option value="1.55">Moderado – exercício físico 3 a 5 vezes por semana</option>
+                            <option value="1.725">Alto – exercício físico todos os dias</option>
+                            <option value="1.9">Muito alto – exercício duas vezes por dia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row mt-15">
+                    <button class="btn-add-weight" onclick="calcTMB()">Calcular</button>
+                    <button class="btn-add-weight btn-clear" onclick="limparTMB()">Limpar</button>
+                </div>
+                <div class="imc-result tmb-result" id="tmbResult">
+                    <div class="tmb-values">
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="tmbBasal"></div>
+                            <div class="tmb-label">TMB (em repouso)</div>
+                        </div>
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="tmbTotal"></div>
+                            <div class="tmb-label">Gasto Calórico Total</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -5529,6 +5636,38 @@
                 classEl.textContent = 'Obesidade Grau III (Mórbida)';
                 result.classList.add('imc-obeso');
             }
+        }
+
+        // CALCULADORA DE TAXA METABÓLICA BASAL (Harris-Benedict)
+        function calcTMB() {
+            var sexo = document.getElementById('tmbSex').value;
+            var altura = parseFloat(document.getElementById('tmbHeight').value);
+            var peso = parseFloat(document.getElementById('tmbWeight').value);
+            var idade = parseFloat(document.getElementById('tmbAge').value);
+            var fatorAtividade = parseFloat(document.getElementById('tmbActivity').value);
+            if (isNaN(altura) || isNaN(peso) || isNaN(idade) || altura === 0) {
+                alert('Preencha sexo, altura, peso e idade!');
+                return;
+            }
+            var tmb;
+            if (sexo === 'male') {
+                tmb = 66.5 + (13.75 * peso) + (5.003 * altura) - (6.75 * idade);
+            } else {
+                tmb = 655.1 + (9.563 * peso) + (1.850 * altura) - (4.676 * idade);
+            }
+            var get = tmb * fatorAtividade;
+            document.getElementById('tmbBasal').textContent = Math.round(tmb) + ' kcal/dia';
+            document.getElementById('tmbTotal').textContent = Math.round(get) + ' kcal/dia';
+            document.getElementById('tmbResult').className = 'imc-result tmb-result visible imc-normal';
+        }
+
+        function limparTMB() {
+            document.getElementById('tmbSex').value = 'male';
+            document.getElementById('tmbHeight').value = '';
+            document.getElementById('tmbWeight').value = '';
+            document.getElementById('tmbAge').value = '';
+            document.getElementById('tmbActivity').value = '1.2';
+            document.getElementById('tmbResult').className = 'imc-result tmb-result';
         }
 
         // ===================================================================
