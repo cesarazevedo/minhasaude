@@ -1451,10 +1451,193 @@
         body.dark-mode .risk-form { background: #2d3748; }
         body.dark-mode .radio-option { color: #e2e8f0; }
 
+        /* --- PLACAR (resumo no topo) --- */
+        .scoreboard {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .scoreboard-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        .scoreboard-sub { font-size: 0.85em; color: #718096; margin-bottom: 16px; }
+        .score-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .score-box {
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+        }
+        .score-box .score-num { font-size: 2em; font-weight: 700; line-height: 1.1; }
+        .score-box .score-label { font-size: 0.82em; font-weight: 600; margin-top: 2px; }
+        .score-box.normal { background: rgba(16,185,129,0.12); color: #059669; }
+        .score-box.warning { background: rgba(245,158,11,0.14); color: #b45309; }
+        .score-box.danger { background: rgba(239,68,68,0.12); color: #dc2626; }
+        .score-attention { margin-top: 18px; }
+        .score-attention-label { font-size: 0.85em; font-weight: 600; color: #4a5568; margin-bottom: 8px; }
+        .score-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .score-chip {
+            border: none;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.82em;
+            font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 20px;
+            transition: transform 0.15s;
+        }
+        .score-chip:hover { transform: translateY(-1px); }
+        .score-chip.warning { background: rgba(245,158,11,0.15); color: #b45309; }
+        .score-chip.danger { background: rgba(239,68,68,0.13); color: #dc2626; }
+        .health-card.card-flash { animation: cardFlash 1.6s ease; }
+        @keyframes cardFlash {
+            0%, 100% { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+            30% { box-shadow: 0 0 0 4px rgba(59,130,246,0.55); }
+        }
+
+        /* --- RÉGUA COLORIDA NOS CARTÕES --- */
+        .range-meter { margin: 4px 0 12px; }
+        .range-track {
+            position: relative;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(245,158,11,0.35);
+            overflow: visible;
+        }
+        .range-ok {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            background: rgba(16,185,129,0.55);
+        }
+        .range-marker {
+            position: absolute;
+            top: 50%;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            transform: translate(-50%, -50%);
+        }
+        .range-marker.normal { background: #059669; }
+        .range-marker.warning { background: #d97706; }
+        .range-marker.danger { background: #dc2626; }
+        .range-ticks { position: relative; height: 16px; font-size: 0.7em; color: #a0aec0; }
+        .range-ticks span { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; }
+
+        /* --- ALERTAS SANFONA --- */
+        .alert-box.is-collapsible .alert-content h4 { cursor: pointer; }
+        .alert-box.is-collapsed .alert-content > :nth-child(2) {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .alert-box.is-collapsed .alert-content > :nth-child(n+3):not(.alert-toggle) { display: none; }
+        .alert-toggle {
+            display: inline-block;
+            margin-top: 8px;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* --- FILTRO "SÓ ATENÇÃO" --- */
+        .focus-toggle {
+            background: none;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #4a5568;
+            padding: 7px 12px;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .focus-toggle:hover { background: #f1f5f9; }
+        .focus-toggle.active { background: #f59e0b; border-color: #f59e0b; color: white; }
+        body.focus-mode .health-card.status-normal,
+        body.focus-mode .alert-box.alert-success,
+        body.focus-mode .cards-grid.all-normal { display: none; }
+        .all-ok-note { display: none; }
+        body.focus-mode .all-ok-note {
+            display: block;
+            font-size: 0.9em;
+            color: #059669;
+            background: rgba(16,185,129,0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 25px;
+        }
+
+        /* --- BARRA DE ATALHOS NO CELULAR --- */
+        .bottom-nav { display: none; }
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 120;
+                background: white;
+                border-top: 1px solid #e2e8f0;
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+                padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+            }
+            .bottom-nav button {
+                flex: 1;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font: inherit;
+                font-size: 0.7em;
+                color: #718096;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+                padding: 4px 0;
+            }
+            .bottom-nav button .bn-icon { font-size: 1.6em; }
+            .bottom-nav button.active { color: var(--primary); font-weight: 600; }
+            .main-area { padding-bottom: 70px; }
+            .btn-top { bottom: 84px; right: 16px; }
+            .focus-toggle .ft-label { display: none; }
+            .score-box .score-num { font-size: 1.6em; }
+            .score-box .score-label { font-size: 0.75em; }
+        }
+
+        body.dark-mode .scoreboard { background: #2d3748; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        body.dark-mode .scoreboard-sub,
+        body.dark-mode .score-attention-label { color: #a0aec0; }
+        body.dark-mode .range-marker { border-color: #2d3748; }
+        body.dark-mode .focus-toggle { border-color: #4a5568; color: #e2e8f0; }
+        body.dark-mode .focus-toggle:hover { background: #334155; }
+        body.dark-mode .focus-toggle.active { background: #f59e0b; color: #1e293b; }
+        body.dark-mode .bottom-nav { background: #1e293b; border-top-color: #334155; }
+
         /* --- PRINT --- */
         @media print {
             body { background: white; font-size: 12pt; }
-            .sidebar, .topbar, .btn-top, .btn-print, .dark-toggle { display: none !important; }
+            .sidebar, .topbar, .btn-top, .btn-print, .dark-toggle, .bottom-nav, .alert-toggle { display: none !important; }
+            .alert-box.is-collapsed .alert-content > :not(.alert-toggle) { display: block !important; -webkit-line-clamp: unset !important; overflow: visible !important; }
+            body.focus-mode .cards-grid.all-normal { display: grid !important; }
+            body.focus-mode .health-card.status-normal { display: block !important; }
+            body.focus-mode .alert-box.alert-success { display: flex !important; }
+            body.focus-mode .all-ok-note { display: none !important; }
             .main-area { margin-left: 0; }
             .tab-content { display: block !important; page-break-inside: avoid; }
             .health-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
@@ -1577,6 +1760,7 @@
                 <div class="topbar-title" id="topbar-title">📊 Visão Geral</div>
             </div>
             <div class="topbar-actions">
+                <button class="focus-toggle" id="focusToggle" title="Mostrar só os resultados que precisam de atenção" aria-pressed="false">🎯 <span class="ft-label">Só atenção</span></button>
                 <button class="dark-toggle" id="darkToggle" title="Modo escuro">🌙</button>
                 <button class="btn-print" onclick="window.print()" title="Imprimir">🖨️</button>
             </div>
@@ -5291,6 +5475,14 @@
 
 </div><!-- end app-layout -->
 
+    <nav class="bottom-nav" id="bottomNav" aria-label="Atalhos">
+        <button data-go="visao-geral"><span class="bn-icon">🏠</span>Início</button>
+        <button data-go="laboratoriais"><span class="bn-icon">🔬</span>Exames</button>
+        <button data-go="hemograma"><span class="bn-icon">🩸</span>Sangue</button>
+        <button data-go="peso"><span class="bn-icon">⚖️</span>Peso</button>
+        <button id="bottomMenu"><span class="bn-icon">☰</span>Mais</button>
+    </nav>
+
     <button class="floating-btn btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">⬆️</button>
 
     <script>
@@ -6166,6 +6358,267 @@
 
         // Chamar ao carregar se a aba de peso estiver visível
         setTimeout(updateWeightChart, 1000);
+    </script>
+    <script>
+        // ===== MELHORIAS VISUAIS: placar, régua, alertas sanfona, filtro e barra do celular =====
+        // Tudo aqui apenas LÊ os cartões e alertas já existentes na página — nenhum dado é alterado.
+        (function() {
+            function statusOf(el) {
+                if (el.classList.contains('status-danger')) return 'danger';
+                if (el.classList.contains('status-warning')) return 'warning';
+                if (el.classList.contains('status-normal')) return 'normal';
+                return null;
+            }
+            function cardTitle(card) {
+                var t = card.querySelector('.card-title');
+                return t ? t.textContent.trim() : '';
+            }
+            function goToTab(id) {
+                var btn = document.querySelector('.sidebar-nav-item[data-target="' + id + '"]');
+                if (btn) btn.click();
+            }
+
+            // Converte número em formato brasileiro ("1,25", "2.843") ou com ponto decimal ("5.7").
+            function parseNum(str) {
+                str = str.trim();
+                if (str.indexOf(',') >= 0) return parseFloat(str.replace(/\./g, '').replace(',', '.'));
+                if (/^\d{1,3}(\.\d{3})+$/.test(str)) return parseFloat(str.replace(/\./g, ''));
+                return parseFloat(str);
+            }
+
+            // Lê a faixa de referência: "70-99", "<190", ">40", "≤30", "≥10%"...
+            function parseRef(text) {
+                if (/previsto/i.test(text)) return null;  // referência em % do previsto (não compara com o valor)
+                text = text.replace(/\([^)]*\)/g, ' ');  // ignora observações entre parênteses
+                var num = '(\\d[\\d.,]*)';
+                var candidates = [];
+                var m;
+                if ((m = new RegExp(num + '\\s*[-–]\\s*' + num).exec(text))) {
+                    candidates.push({ idx: m.index, type: 'range', lo: parseNum(m[1]), hi: parseNum(m[2]) });
+                }
+                if ((m = new RegExp('[<≤]\\s*' + num).exec(text))) {
+                    candidates.push({ idx: m.index, type: 'max', hi: parseNum(m[1]) });
+                }
+                if ((m = new RegExp('[>≥]\\s*' + num).exec(text))) {
+                    candidates.push({ idx: m.index, type: 'min', lo: parseNum(m[1]) });
+                }
+                if (!candidates.length) return null;
+                candidates.sort(function(a, b) { return a.idx - b.idx; });
+                var r = candidates[0];
+                if (r.type === 'range' && !(r.hi > r.lo)) return null;
+                if ((r.lo !== undefined && isNaN(r.lo)) || (r.hi !== undefined && isNaN(r.hi))) return null;
+                return r;
+            }
+
+            // Lê o valor do cartão. "6.870" pode ser 6870 ou 6,87: escolhe o mais coerente com a referência.
+            function parseValue(card, ref) {
+                var v = card.querySelector('.card-value');
+                if (!v) return NaN;
+                var raw = v.getAttribute('data-target') || v.textContent;
+                var m = /-?\d[\d.,]*/.exec(raw);
+                if (!m) return NaN;
+                var s = m[0];
+                if (/^\d{1,3}\.\d{3}$/.test(s)) {
+                    var asThousands = parseFloat(s.replace('.', ''));
+                    var asDecimal = parseFloat(s);
+                    var center = ref.type === 'range' ? (ref.lo + ref.hi) / 2 : (ref.type === 'max' ? ref.hi : ref.lo);
+                    if (center <= 0) return asDecimal;
+                    return Math.abs(Math.log(asThousands / center)) < Math.abs(Math.log(asDecimal / center)) ? asThousands : asDecimal;
+                }
+                return parseNum(s);
+            }
+
+            function fmt(n) {
+                return (Math.round(n * 100) / 100).toLocaleString('pt-BR');
+            }
+
+            // 1) RÉGUA COLORIDA
+            function addRangeMeters() {
+                document.querySelectorAll('.tab-content .health-card').forEach(function(card) {
+                    var status = statusOf(card);
+                    var refEl = card.querySelector('.card-reference');
+                    if (!status || !refEl || card.querySelector('.range-meter')) return;
+                    var ref = parseRef(refEl.textContent);
+                    if (!ref) return;
+                    var val = parseValue(card, ref);
+                    if (isNaN(val)) return;
+
+                    var min, max, okFrom, okTo, ticks;
+                    if (ref.type === 'range') {
+                        var span = ref.hi - ref.lo;
+                        min = Math.max(0, ref.lo - span * 0.5);
+                        max = ref.hi + span * 0.5;
+                        okFrom = ref.lo; okTo = ref.hi; ticks = [ref.lo, ref.hi];
+                    } else if (ref.type === 'max') {
+                        min = 0; max = ref.hi * 1.5;
+                        okFrom = 0; okTo = ref.hi; ticks = [ref.hi];
+                    } else {
+                        min = ref.lo * 0.5; max = ref.lo * 1.5;
+                        okFrom = ref.lo; okTo = max; ticks = [ref.lo];
+                    }
+                    if (!(max > min)) return;
+                    function pct(x) { return Math.min(100, Math.max(0, (x - min) / (max - min) * 100)); }
+
+                    var meter = document.createElement('div');
+                    meter.className = 'range-meter';
+                    meter.title = 'Faixa verde = valor de referência. O círculo mostra o seu resultado.';
+                    var markerPos = Math.min(97, Math.max(3, pct(val)));
+                    meter.innerHTML =
+                        '<div class="range-track">' +
+                            '<div class="range-ok" style="left:' + pct(okFrom) + '%;width:' + (pct(okTo) - pct(okFrom)) + '%"></div>' +
+                            '<div class="range-marker ' + status + '" style="left:' + markerPos + '%"></div>' +
+                        '</div>' +
+                        '<div class="range-ticks">' + ticks.map(function(t) {
+                            return '<span style="left:' + pct(t) + '%">' + fmt(t) + '</span>';
+                        }).join('') + '</div>';
+                    refEl.parentNode.insertBefore(meter, refEl.nextSibling);
+                });
+            }
+
+            // 2) PLACAR NO TOPO DA VISÃO GERAL
+            function addScoreboard() {
+                var home = document.getElementById('visao-geral');
+                if (!home) return;
+                var navIds = {};
+                document.querySelectorAll('.sidebar-nav-item').forEach(function(b) { navIds[b.getAttribute('data-target')] = b; });
+
+                function baseName(t) { return t.replace(/\s*\(.*\)\s*$/, '').trim().toLowerCase(); }
+                var items = [];
+                document.querySelectorAll('.tab-content').forEach(function(sec) {
+                    if (sec.id === 'visao-geral' || !navIds[sec.id]) return;
+                    sec.querySelectorAll('.health-card').forEach(function(card) {
+                        var st = statusOf(card);
+                        if (st) items.push({ card: card, status: st, title: cardTitle(card), tab: sec.id });
+                    });
+                });
+                // Cartões da Visão Geral que não existem em outra aba (ex.: IMC, Gordura no Fígado)
+                home.querySelectorAll('.health-card').forEach(function(card) {
+                    var st = statusOf(card);
+                    if (!st) return;
+                    var name = baseName(cardTitle(card));
+                    var duplicate = items.some(function(it) {
+                        var other = baseName(it.title);
+                        return other === name || other.indexOf(name + ' ') === 0;
+                    });
+                    if (!duplicate) items.push({ card: card, status: st, title: cardTitle(card), tab: 'visao-geral' });
+                });
+
+                var count = { normal: 0, warning: 0, danger: 0 };
+                items.forEach(function(it) { count[it.status]++; });
+                var attention = items.filter(function(it) { return it.status !== 'normal'; })
+                    .sort(function(a, b) { return (a.status === 'danger' ? 0 : 1) - (b.status === 'danger' ? 0 : 1); });
+
+                var box = document.createElement('div');
+                box.className = 'scoreboard';
+                box.innerHTML =
+                    '<div class="scoreboard-title">📋 Resumo dos seus exames</div>' +
+                    '<div class="scoreboard-sub">Uma olhada rápida: quantos resultados estão bons e quantos pedem atenção.</div>' +
+                    '<div class="score-row">' +
+                        '<div class="score-box normal"><div class="score-num">' + count.normal + '</div><div class="score-label">✅ Normais</div></div>' +
+                        '<div class="score-box warning"><div class="score-num">' + count.warning + '</div><div class="score-label">⚠️ Atenção</div></div>' +
+                        '<div class="score-box danger"><div class="score-num">' + count.danger + '</div><div class="score-label">🔴 Alterados</div></div>' +
+                    '</div>' +
+                    (attention.length ? '<div class="score-attention"><div class="score-attention-label">Toque para ver o que precisa de atenção:</div><div class="score-chips"></div></div>' : '');
+                var chips = box.querySelector('.score-chips');
+                attention.forEach(function(it) {
+                    var chip = document.createElement('button');
+                    chip.className = 'score-chip ' + it.status;
+                    chip.textContent = (it.status === 'danger' ? '🔴 ' : '⚠️ ') + it.title;
+                    chip.addEventListener('click', function() {
+                        goToTab(it.tab);
+                        setTimeout(function() {
+                            it.card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            it.card.classList.remove('card-flash');
+                            void it.card.offsetWidth;
+                            it.card.classList.add('card-flash');
+                        }, 60);
+                    });
+                    chips.appendChild(chip);
+                });
+                home.insertBefore(box, home.firstChild);
+            }
+
+            // 3) ALERTAS SANFONA
+            function makeAlertsCollapsible() {
+                document.querySelectorAll('.alert-box').forEach(function(box) {
+                    if (box.classList.contains('alert-danger')) return; // alertas críticos ficam sempre abertos
+                    var content = box.querySelector('.alert-content');
+                    var title = content && content.querySelector(':scope > h4');
+                    if (!title || content.children.length < 2 || content.textContent.trim().length < 180) return;
+                    box.classList.add('is-collapsible', 'is-collapsed');
+                    var btn = document.createElement('button');
+                    btn.className = 'alert-toggle';
+                    btn.textContent = 'Ler mais ▾';
+                    function toggle() {
+                        var collapsed = box.classList.toggle('is-collapsed');
+                        btn.textContent = collapsed ? 'Ler mais ▾' : 'Mostrar menos ▴';
+                    }
+                    btn.addEventListener('click', toggle);
+                    title.addEventListener('click', toggle);
+                    content.appendChild(btn);
+                });
+            }
+
+            // 4) FILTRO "SÓ ATENÇÃO"
+            function setupFocusFilter() {
+                document.querySelectorAll('.cards-grid').forEach(function(grid) {
+                    var cards = grid.querySelectorAll('.health-card');
+                    if (!cards.length) return;
+                    var allNormal = Array.prototype.every.call(cards, function(c) { return statusOf(c) === 'normal'; });
+                    if (!allNormal) return;
+                    grid.classList.add('all-normal');
+                    var note = document.createElement('div');
+                    note.className = 'all-ok-note';
+                    note.textContent = '✅ Todos os ' + cards.length + ' resultados deste grupo estão normais.';
+                    grid.parentNode.insertBefore(note, grid.nextSibling);
+                });
+
+                var btn = document.getElementById('focusToggle');
+                if (!btn) return;
+                function apply(on) {
+                    document.body.classList.toggle('focus-mode', on);
+                    btn.classList.toggle('active', on);
+                    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                }
+                var saved = false;
+                try { saved = localStorage.getItem('focusMode') === '1'; } catch (e) {}
+                apply(saved);
+                btn.addEventListener('click', function() {
+                    var on = !document.body.classList.contains('focus-mode');
+                    apply(on);
+                    try { localStorage.setItem('focusMode', on ? '1' : '0'); } catch (e) {}
+                });
+            }
+
+            // 5) BARRA DE ATALHOS NO CELULAR
+            function setupBottomNav() {
+                var nav = document.getElementById('bottomNav');
+                if (!nav) return;
+                var buttons = nav.querySelectorAll('button[data-go]');
+                function sync(id) {
+                    buttons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-go') === id); });
+                }
+                buttons.forEach(function(b) {
+                    b.addEventListener('click', function() { goToTab(b.getAttribute('data-go')); });
+                });
+                document.querySelectorAll('.sidebar-nav-item').forEach(function(item) {
+                    item.addEventListener('click', function() { sync(item.getAttribute('data-target')); });
+                });
+                var menu = document.getElementById('bottomMenu');
+                if (menu) menu.addEventListener('click', function() {
+                    document.getElementById('sidebar').classList.toggle('open');
+                });
+                sync('visao-geral');
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                addRangeMeters();
+                addScoreboard();
+                makeAlertsCollapsible();
+                setupFocusFilter();
+                setupBottomNav();
+            });
+        })();
     </script>
 </body>
 </html>
