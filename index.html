@@ -2005,6 +2005,71 @@
                     </div>
                 </div>
             </div>
+
+            <div class="imc-calculator tmb-calculator">
+                <h3>📏 Calculadora de Gordura Corporal (Método do Exército Americano)</h3>
+                <p class="sub-text">Estima o percentual de gordura usando só uma fita métrica: altura, pescoço e cintura (e quadril, para mulheres). É a fórmula da Marinha/Exército dos EUA, a mesma do calculator.net. É uma estimativa — como uma "régua de bolso", não substitui a bioimpedância. Meça a cintura na altura do umbigo e o pescoço logo abaixo do pomo de Adão.</p>
+                <div class="form-row mt-15">
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="bfSex" onchange="bfToggleHip()">
+                            <option value="male" selected>Homem</option>
+                            <option value="female">Mulher</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Idade</label>
+                        <input type="number" id="bfAge" step="1" min="10" max="120" placeholder="Anos" value="47">
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" id="bfWeight" step="0.1" min="30" max="300" placeholder="Ex: 103,15" value="103.15">
+                    </div>
+                    <div class="form-group">
+                        <label>Altura (cm)</label>
+                        <input type="number" id="bfHeight" step="0.1" min="100" max="250" placeholder="Ex: 185" value="185">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pescoço (cm)</label>
+                        <input type="number" id="bfNeck" step="0.1" min="20" max="80" placeholder="Ex: 40">
+                    </div>
+                    <div class="form-group">
+                        <label>Cintura (cm)</label>
+                        <input type="number" id="bfWaist" step="0.1" min="40" max="250" placeholder="Ex: 105">
+                    </div>
+                    <div class="form-group" id="bfHipGroup" style="display:none;">
+                        <label>Quadril (cm)</label>
+                        <input type="number" id="bfHip" step="0.1" min="50" max="250" placeholder="Ex: 100">
+                    </div>
+                </div>
+                <div class="form-row mt-15">
+                    <button class="btn-add-weight" onclick="calcBF()">Calcular</button>
+                    <button class="btn-add-weight btn-clear" onclick="limparBF()">Limpar</button>
+                </div>
+                <div class="imc-result tmb-result" id="bfResult">
+                    <div class="tmb-values">
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="bfPercent"></div>
+                            <div class="tmb-label">Gordura corporal</div>
+                        </div>
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="bfCategory"></div>
+                            <div class="tmb-label">Categoria (ACE)</div>
+                        </div>
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="bfFatMass"></div>
+                            <div class="tmb-label">Massa de gordura</div>
+                        </div>
+                        <div class="tmb-value-box">
+                            <div class="tmb-number" id="bfLeanMass"></div>
+                            <div class="tmb-label">Massa magra</div>
+                        </div>
+                    </div>
+                    <div class="imc-class" id="bfBmiLine" style="margin-top:10px;"></div>
+                </div>
+            </div>
         </section>
 
         <!-- ABA: PLANO ALIMENTAR -->
@@ -6019,6 +6084,66 @@
             document.getElementById('tmbAge').value = '';
             document.getElementById('tmbActivity').value = '1.2';
             document.getElementById('tmbResult').className = 'imc-result tmb-result';
+        }
+
+        // CALCULADORA DE GORDURA CORPORAL (método Marinha/Exército dos EUA, medidas em cm)
+        function bfToggleHip() {
+            var f = document.getElementById('bfSex').value === 'female';
+            document.getElementById('bfHipGroup').style.display = f ? '' : 'none';
+        }
+
+        function calcBF() {
+            var sexo = document.getElementById('bfSex').value;
+            var idade = parseFloat(document.getElementById('bfAge').value);
+            var peso = parseFloat(document.getElementById('bfWeight').value);
+            var altura = parseFloat(document.getElementById('bfHeight').value);
+            var pescoco = parseFloat(document.getElementById('bfNeck').value);
+            var cintura = parseFloat(document.getElementById('bfWaist').value);
+            var quadril = parseFloat(document.getElementById('bfHip').value);
+            var fem = sexo === 'female';
+            if (isNaN(altura) || isNaN(pescoco) || isNaN(cintura) || isNaN(peso) || (fem && isNaN(quadril))) {
+                alert('Preencha peso, altura, pescoço, cintura' + (fem ? ' e quadril' : '') + '!');
+                return;
+            }
+            var medida = fem ? cintura + quadril - pescoco : cintura - pescoco;
+            if (medida <= 0) {
+                alert('Confira as medidas: a cintura' + (fem ? ' + quadril' : '') + ' precisa ser maior que o pescoço.');
+                return;
+            }
+            var bf;
+            if (fem) {
+                bf = 163.205 * Math.log10(medida) - 97.684 * Math.log10(altura) - 78.387;
+            } else {
+                bf = 86.010 * Math.log10(medida) - 70.041 * Math.log10(altura) + 36.76;
+            }
+            if (!isFinite(bf) || bf < 2) bf = 2;
+            if (bf > 70) bf = 70;
+            // Categorias do American Council on Exercise
+            var limites = fem ? [13, 20, 24, 31] : [5, 13, 17, 24];
+            var nomes = ['Gordura essencial', 'Atleta', 'Em forma', 'Média', 'Obesidade'];
+            var i = 0;
+            while (i < limites.length && bf > limites[i]) i++;
+            var gordura = peso * bf / 100;
+            document.getElementById('bfPercent').textContent = bf.toFixed(1).replace('.', ',') + '%';
+            document.getElementById('bfCategory').textContent = nomes[i];
+            document.getElementById('bfFatMass').textContent = gordura.toFixed(1).replace('.', ',') + ' kg';
+            document.getElementById('bfLeanMass').textContent = (peso - gordura).toFixed(1).replace('.', ',') + ' kg';
+            var h = altura / 100;
+            var imc = peso / (h * h);
+            var bfImc = fem ? 1.20 * imc + 0.23 * idade - 5.4 : 1.20 * imc + 0.23 * idade - 16.2;
+            document.getElementById('bfBmiLine').textContent = isNaN(idade) ? '' :
+                'Para comparar, pelo método do IMC a estimativa é ' + bfImc.toFixed(1).replace('.', ',') + '%.';
+            var cls = i <= 2 ? 'imc-normal' : (i === 3 ? 'imc-sobrepeso' : 'imc-obeso');
+            document.getElementById('bfResult').className = 'imc-result tmb-result visible ' + cls;
+        }
+
+        function limparBF() {
+            document.getElementById('bfSex').value = 'male';
+            ['bfAge', 'bfWeight', 'bfHeight', 'bfNeck', 'bfWaist', 'bfHip'].forEach(function (id) {
+                document.getElementById(id).value = '';
+            });
+            bfToggleHip();
+            document.getElementById('bfResult').className = 'imc-result tmb-result';
         }
 
         // ===================================================================
