@@ -962,6 +962,10 @@
         body.dark-mode .activity-form { background: #2d3748; }
         body.dark-mode .activity-log-entry { border-bottom-color: #4a5568; }
 
+        .measures-table { width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: center; }
+        .measures-table th, .measures-table td { padding: 8px 6px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+        body.dark-mode .measures-table th, body.dark-mode .measures-table td { border-bottom-color: #4a5568; }
+
         /* --- LEMBRETE DE PESAGEM --- */
         .reminder-banner {
             background: linear-gradient(135deg, var(--warning), #e67e22);
@@ -2033,11 +2037,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Pescoço (cm)</label>
-                        <input type="number" id="bfNeck" step="0.1" min="20" max="80" placeholder="Ex: 40">
+                        <input type="number" id="bfNeck" step="0.1" min="20" max="80" placeholder="Ex: 40" value="44">
                     </div>
                     <div class="form-group">
                         <label>Cintura (cm)</label>
-                        <input type="number" id="bfWaist" step="0.1" min="40" max="250" placeholder="Ex: 105">
+                        <input type="number" id="bfWaist" step="0.1" min="40" max="250" placeholder="Ex: 105" value="102">
                     </div>
                     <div class="form-group" id="bfHipGroup" style="display:none;">
                         <label>Quadril (cm)</label>
@@ -2069,6 +2073,54 @@
                     </div>
                     <div class="imc-class" id="bfBmiLine" style="margin-top:10px;"></div>
                 </div>
+            </div>
+
+            <div class="activity-form">
+                <h3>📐 Registro de Medidas Corporais</h3>
+                <p class="sub-text">Meça com fita métrica e registre de tempos em tempos (por exemplo, a cada mês). Assim você vê a evolução, como numa régua de crescimento.</p>
+                <div class="form-row mt-15">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="msDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Cintura (cm)</label>
+                        <input type="number" id="msWaist" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Pescoço (cm)</label>
+                        <input type="number" id="msNeck" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Bíc. dir. (cm)</label>
+                        <input type="number" id="msBicR" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Bíc. esq. (cm)</label>
+                        <input type="number" id="msBicL" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Coxa dir. (cm)</label>
+                        <input type="number" id="msThighR" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Coxa esq. (cm)</label>
+                        <input type="number" id="msThighL" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Pant. dir. (cm)</label>
+                        <input type="number" id="msCalfR" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <div class="form-group">
+                        <label>Pant. esq. (cm)</label>
+                        <input type="number" id="msCalfL" step="0.1" min="10" max="250" placeholder="cm">
+                    </div>
+                    <button class="btn-add-weight" onclick="addMeasures()">+ Registrar</button>
+                </div>
+                <div class="form-row mt-15">
+                    <button class="btn-export" onclick="exportCSV('measures')">📥 Exportar Medidas (CSV)</button>
+                </div>
+                <div class="activity-log" id="measuresLog" style="overflow-x:auto;"></div>
             </div>
         </section>
 
@@ -6380,6 +6432,73 @@
         document.getElementById('actDate').valueAsDate = new Date();
         loadActivityLog();
 
+        // REGISTRO DE MEDIDAS CORPORAIS
+        var MEASURE_FIELDS = [
+            ['waist', 'Cintura', 'msWaist'], ['neck', 'Pescoço', 'msNeck'],
+            ['bicR', 'Bíc. dir.', 'msBicR'], ['bicL', 'Bíc. esq.', 'msBicL'],
+            ['thighR', 'Coxa dir.', 'msThighR'], ['thighL', 'Coxa esq.', 'msThighL'],
+            ['calfR', 'Pant. dir.', 'msCalfR'], ['calfL', 'Pant. esq.', 'msCalfL']
+        ];
+
+        function getMeasures() {
+            return JSON.parse(localStorage.getItem('measuresLog') || '[]');
+        }
+
+        function loadMeasuresLog() {
+            var log = getMeasures();
+            var container = document.getElementById('measuresLog');
+            if (log.length === 0) {
+                container.innerHTML = '<p class="sub-text mt-10">Nenhuma medida registrada ainda.</p>';
+                return;
+            }
+            log = log.map(function(e, i) { e._i = i; return e; });
+            log.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+            var head = '<tr><th>Data</th>' + MEASURE_FIELDS.map(function(f) { return '<th>' + f[1] + '</th>'; }).join('') + '<th></th></tr>';
+            var rows = log.map(function(e) {
+                var d = new Date(e.date + 'T00:00:00').toLocaleDateString('pt-BR');
+                return '<tr><td>' + d + '</td>' + MEASURE_FIELDS.map(function(f) {
+                    return '<td>' + (typeof e[f[0]] === 'number' ? String(e[f[0]]).replace('.', ',') : '-') + '</td>';
+                }).join('') + '<td><button class="btn-delete-entry" onclick="deleteMeasures(' + e._i + ')" title="Remover">✕</button></td></tr>';
+            }).join('');
+            container.innerHTML = '<table class="measures-table">' + head + rows + '</table>';
+        }
+
+        function addMeasures() {
+            var date = document.getElementById('msDate').value;
+            var entry = { date: date };
+            var any = false;
+            MEASURE_FIELDS.forEach(function(f) {
+                var v = parseFloat(document.getElementById(f[2]).value);
+                if (!isNaN(v) && v > 0) { entry[f[0]] = v; any = true; }
+            });
+            if (!date || !any) {
+                alert('Preencha a data e pelo menos uma medida!');
+                return;
+            }
+            var log = getMeasures();
+            log.push(entry);
+            localStorage.setItem('measuresLog', JSON.stringify(log));
+            MEASURE_FIELDS.forEach(function(f) { document.getElementById(f[2]).value = ''; });
+            loadMeasuresLog();
+        }
+
+        function deleteMeasures(index) {
+            var log = getMeasures();
+            log.splice(index, 1);
+            localStorage.setItem('measuresLog', JSON.stringify(log));
+            loadMeasuresLog();
+        }
+
+        // Primeira medição do usuário (só entra se ainda não existe registro)
+        if (localStorage.getItem('measuresLog') === null) {
+            localStorage.setItem('measuresLog', JSON.stringify([{
+                date: '2026-10-04', waist: 102, neck: 44, bicR: 42, bicL: 42,
+                thighR: 70, thighL: 69, calfR: 41, calfL: 42
+            }]));
+        }
+        document.getElementById('msDate').valueAsDate = new Date();
+        loadMeasuresLog();
+
         // EXPORTAR CSV
         function exportCSV(type) {
             var data, filename, headers;
@@ -6390,6 +6509,14 @@
                 filename = 'pesagens.csv';
                 var csv = headers + data.map(function(e) {
                     return e.date + ',' + e.weight.toFixed(1);
+                }).join('\n');
+            } else if (type === 'measures') {
+                data = getMeasures();
+                if (data.length === 0) { alert('Nenhuma medida para exportar!'); return; }
+                headers = 'Data,' + MEASURE_FIELDS.map(function(f) { return f[1] + ' (cm)'; }).join(',') + '\n';
+                filename = 'medidas.csv';
+                var csv = headers + data.map(function(e) {
+                    return e.date + ',' + MEASURE_FIELDS.map(function(f) { return e[f[0]] === undefined ? '' : e[f[0]]; }).join(',');
                 }).join('\n');
             } else {
                 data = JSON.parse(localStorage.getItem('activityLog') || '[]');
